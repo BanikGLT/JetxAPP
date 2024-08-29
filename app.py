@@ -5,8 +5,8 @@ import os
 
 app = Flask(__name__)
 
-# Используем переменную окружения для токена бота
-BOT_TOKEN = os.getenv('7281342493:AAF6zV24Mhktx1OCeZHnozwbBkOsrKN0Ztk')  # Убедитесь, что переменная окружения установлена на Timeweb Cloud
+# Прямо указываем токен вашего бота
+BOT_TOKEN = '7281342493:AAF6zV24Mhktx1OCeZHnozwbBkOsrKN0Ztk'  # Токен Telegram бота от BotFather
 
 # Инициализация Telegram Bot
 telegram_app = ApplicationBuilder().token(BOT_TOKEN).build()
