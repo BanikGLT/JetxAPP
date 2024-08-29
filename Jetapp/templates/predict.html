@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JetX - Выбор Режима</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            background-image: url('../static/image.png'); /* Указываем изображение как фон */
+            background-size: cover; /* Масштабируем фон, чтобы он покрывал весь экран */
+            background-position: center; /* Центрируем фон */
+            background-repeat: no-repeat; /* Отключаем повторение фона */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.85); /* Полупрозрачный белый фон для текста */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Добавим тень для улучшения видимости */
+        }
+        .button {
+            padding: 15px 25px;
+            font-size: 16px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+        .lite-button {
+            background-color: #28a745; /* Зелёная кнопка */
+        }
+        .rage-button {
+            background-color: #dc3545; /* Красная кнопка */
+        }
+        .calculate-button {
+            background-color: #007bff; /* Голубая кнопка */
+        }
+        .back-button {
+            background-color: #6c757d; /* Серая кнопка для возврата */
+            margin-top: 30px;
+        }
+        .button:disabled {
+            background-color: #888; /* Серый цвет для отключенной кнопки */
+            cursor: not-allowed;
+        }
+        #coefficient {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            display: none; /* Скрываем коэффициент по умолчанию */
+        }
+        #mode-container, #calculate-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+        /* Стили для крутящегося индикатора загрузки */
+        #loading-spinner {
+            display: none; /* Скрываем индикатор по умолчанию */
+            border: 4px solid #f3f3f3; /* Светлый серый */
+            border-top: 4px solid #007bff; /* Синий цвет для верхней части */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite; /* Анимация вращения */
+            margin-top: 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Контейнер для выбора режима -->
+        <div id="mode-container">
+            <button class="button lite-button" onclick="selectMode('lite')">Лайт Режим</button>
+            <button class="button rage-button" onclick="selectMode('rage')">Рейдж Режим</button>
+        </div>
+
+        <!-- Контейнер для вычисления коэффициента -->
+        <div id="calculate-container">
+            <h1>Режим: <span id="selected-mode"></span></h1>
+            <button class="button calculate-button" id="calculate-button" onclick="startLoading()">Вычислить Коэффициент</button>
+            <div id="loading-spinner"></div> <!-- Крутящийся индикатор загрузки -->
+            <div id="coefficient"></div>
+            <button class="button back-button" onclick="showModeSelection()">Назад</button>
+        </div>
+    </div>
+
+    <script>
+        let mode = '';
+
+        function showModeSelection() {
+            document.getElementById('mode-container').style.display = 'flex';
+            document.getElementById('calculate-container').style.display = 'none';
+            document.getElementById('coefficient').style.display = 'none'; // Скрываем коэффициент
+            document.getElementById('loading-spinner').style.display = 'none'; // Скрываем индикатор загрузки
+            const calculateButton = document.getElementById('calculate-button');
+            calculateButton.disabled = false; // Разблокируем кнопку
+            mode = '';
+        }
+
+        function selectMode(selectedMode) {
+            mode = selectedMode;
+            document.getElementById('selected-mode').innerText = selectedMode === 'lite' ? 'Лайт' : 'Рейдж';
+            document.getElementById('mode-container').style.display = 'none';
+            document.getElementById('calculate-container').style.display = 'flex';
+        }
+
+        function startLoading() {
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const calculateButton = document.getElementById('calculate-button');
+            loadingSpinner.style.display = 'block'; // Показываем индикатор загрузки
+            calculateButton.disabled = true; // Блокируем кнопку
+            document.getElementById('coefficient').style.display = 'none'; // Скрываем старый коэффициент
+
+            // Установим случайное время загрузки от 2 до 6 секунд
+            const loadTime = Math.floor(Math.random() * 4000) + 2000;
+
+            // Через заданное время показать коэффициент
+            setTimeout(() => {
+                loadingSpinner.style.display = 'none';
+                calculateButton.disabled = false; // Разблокируем кнопку
+                predictCoefficient();
+            }, loadTime);
+        }
+
+        function predictCoefficient() {
+            if (!mode) {
+                alert('Пожалуйста, выберите режим!');
+                return;
+            }
+            let coefficient;
+            if (mode === 'lite') {
+                coefficient = (1.01 + Math.random() * 1.19).toFixed(2);
+            } else if (mode === 'rage') {
+                coefficient = (1.7 + Math.random() * 5.3).toFixed(2);
+            }
+            document.getElementById('coefficient').innerText = `Предсказанный Коэффициент: ${coefficient}`;
+            document.getElementById('coefficient').style.display = 'block'; // Показать новый коэффициент
+        }
+
+        showModeSelection();
+    </script>
+</body>
+</html>
