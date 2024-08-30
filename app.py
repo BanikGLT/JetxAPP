@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Получение токена бота из переменных окружения
-BOT_TOKEN = os.getenv("6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes")
+BOT_TOKEN = os.getenv(6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes)
 
 # Проверка наличия токена
 if not BOT_TOKEN:
