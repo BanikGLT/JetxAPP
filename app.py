@@ -5,8 +5,8 @@ import os
 
 app = Flask(__name__)
 
-# Токен бота Telegram (укажите напрямую в коде)
-BOT_TOKEN = '7281342493:AAF6zV24Mhktx1OCeZHnozwbBkOsrKN0Ztk'
+# Прямо указываем токен вашего бота
+BOT_TOKEN = '6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes'
 
 # Инициализация Telegram Bot
 telegram_app = ApplicationBuilder().token(BOT_TOKEN).build()
@@ -36,9 +36,9 @@ def calculate_coefficient(mode):
 
 # Роут для вебхука Telegram
 @app.route('/webhook', methods=['POST'])
-def webhook():
+async def webhook():
     update = Update.de_json(request.get_json(force=True), telegram_app.bot)
-    telegram_app.update_queue.put(update)
+    await telegram_app.update_queue.put(update)  # Добавили await здесь
     return 'ok'
 
 # Основной рендеринг HTML страницы
@@ -51,7 +51,9 @@ def main():
     telegram_app.add_handler(CommandHandler('start', start))
     telegram_app.add_handler(CallbackQueryHandler(button))
 
-    port = int(os.getenv("PORT", 8080))  # Убедитесь, что используется переменная PORT
+    # Используем значение порта из окружения
+    port = int(os.getenv("PORT", 8080))  # Включает дефолтное значение для проверки
+    print(f"Application is running on port: {port}")  # Временный вывод для отладки
     app.run(host='0.0.0.0', port=port)
 
 if __name__ == '__main__':
