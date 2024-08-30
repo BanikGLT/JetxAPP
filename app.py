@@ -12,19 +12,19 @@ BOT_TOKEN = '6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes'
 telegram_app = ApplicationBuilder().token(BOT_TOKEN).build()
 
 # Хэндлер для команды /start
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    website_url = "https://banikglt-jetxapp-d85a.twc1.net"  # URL вашего сайта
+def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    website_url = "https://banikglt-jetxapp-d85a.twc1.net"
     keyboard = [
         [InlineKeyboardButton("Зайти в приложение", url=website_url)]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    await update.message.reply_text('Добро пожаловать! Нажмите кнопку ниже, чтобы зайти в приложение.', reply_markup=reply_markup)
+    update.message.reply_text('Добро пожаловать! Нажмите кнопку ниже, чтобы зайти в приложение.', reply_markup=reply_markup)
 
 # Роут для Telegram вебхука
 @app.route('/webhook', methods=['POST'])
-async def webhook():
+def webhook():
     update = Update.de_json(request.get_json(force=True), telegram_app.bot)
-    await telegram_app.update_queue.put(update)
+    telegram_app.update_queue.put(update)
     return 'ok'
 
 # Роут для отображения основного HTML интерфейса
@@ -37,7 +37,7 @@ def main():
     telegram_app.add_handler(CommandHandler('start', start))
 
     # Запуск Flask приложения
-    port = int(os.getenv("PORT", 8080))  # Порт будет установлен Timeweb Cloud
+    port = int(os.getenv("PORT", 8080))
     app.run(host='0.0.0.0', port=port)
 
 if __name__ == '__main__':
