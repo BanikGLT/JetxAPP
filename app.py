@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Получение токена бота из переменных окружения
-BOT_TOKEN = os.getenv(6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes)
+BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 # Проверка наличия токена
 if not BOT_TOKEN:
@@ -43,6 +43,8 @@ async def webhook():
         return "error", 500
 
 # Запуск Flask сервера
-if __name__ == "__main__":
-    telegram_app.initialize()
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 8080)))
+port = int(os.getenv("PORT", 8080))
+    app.run(host='0.0.0.0', port=port)
+
+if __name__ == '__main__':
+    main()
