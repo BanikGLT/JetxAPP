@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
 # Получаем токен бота из переменной окружения
-BOT_TOKEN = os.getenv("BOT_TOKEN")
+BOT_TOKEN = os.getenv("6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes")
 
 if not BOT_TOKEN:
     raise RuntimeError("Необходимо указать токен бота через переменную окружения BOT_TOKEN")
