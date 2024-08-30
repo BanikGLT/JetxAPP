@@ -11,6 +11,10 @@ BOT_TOKEN = '6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes'
 # Инициализация Telegram Bot
 telegram_app = ApplicationBuilder().token(BOT_TOKEN).build()
 
+# Инициализация приложения
+async def initialize_app():
+    await telegram_app.initialize()
+
 # Хэндлер для команды /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     website_url = "https://banikglt-jetxapp-d85a.twc1.net"
@@ -23,8 +27,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Роут для Telegram вебхука
 @app.route('/webhook', methods=['POST'])
 async def webhook():
+    await initialize_app()  # Инициализация приложения
     update = Update.de_json(request.get_json(force=True), telegram_app.bot)
-    await telegram_app.process_update(update)  # Используем await
+    await telegram_app.process_update(update)
     return 'ok'
 
 # Роут для отображения основного HTML интерфейса
