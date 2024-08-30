@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 
-# Прямо указываем токен вашего бота
+# Токен вашего бота
 BOT_TOKEN = '6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes'
 
 # Инициализация Telegram Bot
