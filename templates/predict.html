@@ -26,32 +26,75 @@
             align-items: center;
             width: 100%;
             max-width: 400px;
-            background: rgba(255, 255, 255, 0.85); /* Полупрозрачный белый фон для текста */
+            background: rgba(0, 0, 0, 0.85); /* Темный полупрозрачный фон для улучшения контраста */
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Добавим тень для улучшения видимости */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Добавим тень для улучшения видимости */
+            color: #fff; /* Белый цвет текста */
+        }
+        .title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #ffffff; /* Белый цвет заголовка */
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); /* Мягкое свечение текста */
+            letter-spacing: 2px; /* Расширяем межбуквенное пространство для эффекта */
+            text-transform: uppercase; /* Верхний регистр для заголовка */
+            border-bottom: 2px solid #ffffff; /* Белая линия под заголовком */
+            padding-bottom: 10px;
+            text-align: center;
         }
         .button {
             padding: 15px 25px;
-            font-size: 16px;
+            font-size: 18px;
             margin: 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px; /* Закругленные углы */
             cursor: pointer;
-            color: white;
             width: 100%;
             max-width: 300px;
             text-align: center;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease; /* Анимация для всех изменений */
+            font-weight: bold;
+            text-transform: uppercase; /* Верхний регистр для текста кнопок */
+        }
+        .button:hover {
+            transform: scale(1.05); /* Увеличение при наведении */
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Свечение при наведении */
         }
         .lite-button {
-            background-color: #28a745; /* Зелёная кнопка */
+            background: linear-gradient(45deg, #34d058, #66ff99); /* Мягкий зелёный градиент */
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(52, 208, 88, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2); /* Свечение и тень */
         }
         .rage-button {
-            background-color: #dc3545; /* Красная кнопка */
+            background: linear-gradient(45deg, #ff4b4b, #ff1a1a); /* Агрессивный красный градиент */
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(255, 75, 75, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2); /* Свечение и тень */
         }
         .calculate-button {
-            background-color: #007bff; /* Голубая кнопка */
+            background: linear-gradient(45deg, #ff6a00, #ee0979); /* Градиентный фон */
+            color: #ffffff;
+            box-shadow: 0 4px 10px rgba(255, 105, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2); /* Свечение и тень */
+            animation: pulse 1.5s infinite; /* Эффект пульсации */
+        }
+        .calculate-button:hover {
+            background: linear-gradient(45deg, #ff9a00, #ee2079); /* Изменение градиента при наведении */
+            transform: scale(1.1); /* Немного больше увеличение при наведении */
+            box-shadow: 0 6px 15px rgba(255, 105, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.3); /* Более интенсивное свечение */
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 4px 10px rgba(255, 105, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 5px 15px rgba(255, 105, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.3);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 10px rgba(255, 105, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
         }
         .back-button {
             background-color: #6c757d; /* Серая кнопка для возврата */
@@ -63,11 +106,27 @@
         }
         #coefficient {
             margin-top: 20px;
-            font-size: 24px;
+            font-size: 36px;
             font-weight: bold;
-            color: #333;
             text-align: center;
             display: none; /* Скрываем коэффициент по умолчанию */
+            background: rgba(0, 0, 0, 0.6); /* Полупрозрачный фон для коэффициента */
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid; /* Рамка будет определяться режимом */
+            box-shadow: 0 0 20px rgba(255, 87, 51, 0.7); /* Мягкое свечение, цвет изменяется в зависимости от режима */
+            animation: pop-in 0.5s ease; /* Анимация появления */
+            letter-spacing: 2px; /* Расширяем межбуквенное пространство для эффекта */
+        }
+        @keyframes pop-in {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
         #mode-container, #calculate-container {
             display: none;
@@ -90,20 +149,45 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        #selected-mode {
+            font-size: 32px;
+            font-weight: bold;
+            color: #ffcc00; /* Яркий желтый цвет */
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.8); /* Мягкое свечение */
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            border: 2px solid #ffcc00;
+            padding: 10px 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8); /* Полупрозрачный фон */
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        #selected-mode.lite-mode {
+            color: #34d058;
+            border-color: #34d058;
+            text-shadow: 0 0 15px rgba(52, 208, 88, 0.8);
+        }
+        #selected-mode.rage-mode {
+            color: #ff4b4b;
+            border-color: #ff4b4b;
+            text-shadow: 0 0 15px rgba(255, 75, 75, 0.8);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Контейнер для выбора режима -->
         <div id="mode-container">
-            <button class="button lite-button" onclick="selectMode('lite')">Лайт Режим</button>
-            <button class="button rage-button" onclick="selectMode('rage')">Рейдж Режим</button>
+            <div class="title">Выберите режим</div>
+            <button class="button lite-button" id="lite-button" onclick="selectMode('lite')">Lite</button>
+            <button class="button rage-button" id="rage-button" onclick="selectMode('rage')">Rage</button>
         </div>
 
         <!-- Контейнер для вычисления коэффициента -->
         <div id="calculate-container">
-            <h1>Режим: <span id="selected-mode"></span></h1>
-            <button class="button calculate-button" id="calculate-button" onclick="startLoading()">Вычислить Коэффициент</button>
+            <div id="selected-mode"></div>
+            <button class="button calculate-button" id="calculate-button" onclick="startLoading()">Запуск</button>
             <div id="loading-spinner"></div> <!-- Крутящийся индикатор загрузки -->
             <div id="coefficient"></div>
             <button class="button back-button" onclick="showModeSelection()">Назад</button>
@@ -112,6 +196,7 @@
 
     <script>
         let mode = '';
+        let isCalculating = false;
 
         function showModeSelection() {
             document.getElementById('mode-container').style.display = 'flex';
@@ -124,8 +209,11 @@
         }
 
         function selectMode(selectedMode) {
+            if (isCalculating) return; // Если идёт вычисление, не позволяем сменить режим
             mode = selectedMode;
-            document.getElementById('selected-mode').innerText = selectedMode === 'lite' ? 'Лайт' : 'Рейдж';
+            const selectedModeElement = document.getElementById('selected-mode');
+            selectedModeElement.innerText = selectedMode === 'lite' ? 'Lite Mode' : 'Rage Mode';
+            selectedModeElement.className = selectedMode === 'lite' ? 'lite-mode' : 'rage-mode';
             document.getElementById('mode-container').style.display = 'none';
             document.getElementById('calculate-container').style.display = 'flex';
         }
@@ -133,8 +221,13 @@
         function startLoading() {
             const loadingSpinner = document.getElementById('loading-spinner');
             const calculateButton = document.getElementById('calculate-button');
+            const liteButton = document.getElementById('lite-button');
+            const rageButton = document.getElementById('rage-button');
+            isCalculating = true;
             loadingSpinner.style.display = 'block'; // Показываем индикатор загрузки
             calculateButton.disabled = true; // Блокируем кнопку
+            liteButton.disabled = true; // Блокируем кнопку режима Lite
+            rageButton.disabled = true; // Блокируем кнопку режима Rage
             document.getElementById('coefficient').style.display = 'none'; // Скрываем старый коэффициент
 
             // Установим случайное время загрузки от 2 до 6 секунд
@@ -144,6 +237,9 @@
             setTimeout(() => {
                 loadingSpinner.style.display = 'none';
                 calculateButton.disabled = false; // Разблокируем кнопку
+                liteButton.disabled = false; // Разблокируем кнопку режима Lite
+                rageButton.disabled = false; // Разблокируем кнопку режима Rage
+                isCalculating = false;
                 predictCoefficient();
             }, loadTime);
         }
@@ -154,13 +250,22 @@
                 return;
             }
             let coefficient;
+            const coefficientElement = document.getElementById('coefficient');
+
             if (mode === 'lite') {
                 coefficient = (1.01 + Math.random() * 1.19).toFixed(2);
+                coefficientElement.style.color = '#34d058';
+                coefficientElement.style.borderColor = '#34d058';
+                coefficientElement.style.boxShadow = '0 0 20px rgba(52, 208, 88, 0.7)';
             } else if (mode === 'rage') {
                 coefficient = (1.7 + Math.random() * 5.3).toFixed(2);
+                coefficientElement.style.color = '#ff5733';
+                coefficientElement.style.borderColor = '#ff5733';
+                coefficientElement.style.boxShadow = '0 0 20px rgba(255, 87, 51, 0.7)';
             }
-            document.getElementById('coefficient').innerText = `Предсказанный Коэффициент: ${coefficient}`;
-            document.getElementById('coefficient').style.display = 'block'; // Показать новый коэффициент
+
+            coefficientElement.innerHTML = `<span style="font-size: 48px;">${coefficient}x</span>`;
+            coefficientElement.style.display = 'block'; // Показать новый коэффициент
         }
 
         showModeSelection();
