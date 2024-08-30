@@ -12,19 +12,19 @@ BOT_TOKEN = '6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes'
 telegram_app = ApplicationBuilder().token(BOT_TOKEN).build()
 
 # Хэндлер для команды /start
-def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     website_url = "https://banikglt-jetxapp-d85a.twc1.net"
     keyboard = [
         [InlineKeyboardButton("Зайти в приложение", url=website_url)]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
-    update.message.reply_text('Добро пожаловать! Нажмите кнопку ниже, чтобы зайти в приложение.', reply_markup=reply_markup)
+    await update.message.reply_text('Добро пожаловать! Нажмите кнопку ниже, чтобы зайти в приложение.', reply_markup=reply_markup)
 
 # Роут для Telegram вебхука
 @app.route('/webhook', methods=['POST'])
-def webhook():
+async def webhook():
     update = Update.de_json(request.get_json(force=True), telegram_app.bot)
-    telegram_app.process_update(update)
+    await telegram_app.process_update(update)  # Используем await
     return 'ok'
 
 # Роут для отображения основного HTML интерфейса
