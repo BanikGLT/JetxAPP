@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 # Используем переменную окружения для токена бота
-BOT_TOKEN = os.getenv('BOT_TOKEN')  # Убедитесь, что переменная окружения установлена
+BOT_TOKEN = os.getenv('6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes')  # Убедитесь, что переменная окружения установлена
 
 # Инициализация Telegram Bot
 try:
