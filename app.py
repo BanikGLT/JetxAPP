@@ -24,7 +24,7 @@ def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 @app.route('/webhook', methods=['POST'])
 def webhook():
     update = Update.de_json(request.get_json(force=True), telegram_app.bot)
-    telegram_app.update_queue.put(update)
+    telegram_app.process_update(update)
     return 'ok'
 
 # Роут для отображения основного HTML интерфейса
