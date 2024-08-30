@@ -4,7 +4,7 @@ from telegram.ext import ApplicationBuilder
 
 app = Flask(__name__)
 
-BOT_TOKEN = os.getenv('BOT_TOKEN')
+BOT_TOKEN = os.getenv('6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes')
 if not BOT_TOKEN:
     raise ValueError("No BOT_TOKEN provided")
 
