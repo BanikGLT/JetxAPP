@@ -28,7 +28,7 @@
             justify-content: flex-start;
             width: 90%;
             max-width: 400px;
-            height: 95vh; /* Высота платформы, близкая к полной высоте экрана */
+            height: 95vh;
             background: rgba(34, 34, 34, 0.95);
             padding: 20px;
             border-radius: 25px;
@@ -44,7 +44,7 @@
         }
 
         .header .jetx {
-            font-size: 65px; /* Немного уменьшил размер шрифта для мобильных устройств */
+            font-size: 65px;
             font-weight: bold;
             letter-spacing: 6px;
             display: flex;
@@ -195,6 +195,36 @@
             transform: scale(1.05);
         }
 
+        .referral-button {
+            background: linear-gradient(90deg, #007bff, #00d4ff);
+            color: #ffffff;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-top: auto; /* Позиционирование кнопки внизу */
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            width: 90%;
+            text-align: center;
+            animation: glowPulse 2s infinite;
+        }
+
+        @keyframes glowPulse {
+            0% { box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 8px 20px rgba(0, 123, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.4); }
+            100% { box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3); }
+        }
+
+        .referral-button:hover {
+            transform: scale(1.1);
+            background: linear-gradient(90deg, #0056b3, #00aaff);
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
         .button:disabled {
             background-color: #555;
             cursor: not-allowed;
@@ -302,6 +332,9 @@
             <div id="coefficient"></div>
             <button class="back-button" id="back-button" onclick="showModeSelection()">Назад</button>
         </div>
+
+        <!-- Кнопка реферальной ссылки -->
+        <button class="referral-button" onclick="openReferralLink()">Получить бонус на 1win</button>
     </div>
 
     <script>
@@ -367,6 +400,10 @@
 
             coefficientElement.innerHTML = `<span style="font-size: 48px;">${coefficient}x</span>`;
             coefficientElement.style.display = 'block';
+        }
+
+        function openReferralLink() {
+            window.open('https://www.1win.com', '_blank');
         }
 
         showModeSelection();
