@@ -5,192 +5,272 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JetX - Выбор Режима</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        /* Основные стили */
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
-            background-image: url('../static/image.png'); /* Указываем изображение как фон */
-            background-size: cover; /* Масштабируем фон, чтобы он покрывал весь экран */
-            background-position: center; /* Центрируем фон */
-            background-repeat: no-repeat; /* Отключаем повторение фона */
+            background: linear-gradient(135deg, #1c1c1c 25%, #000000 100%);
+            color: #ffffff;
         }
+
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
             max-width: 400px;
-            background: rgba(0, 0, 0, 0.85); /* Темный полупрозрачный фон для улучшения контраста */
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Добавим тень для улучшения видимости */
-            color: #fff; /* Белый цвет текста */
+            background: rgba(34, 34, 34, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            position: relative;
+            transition: all 0.5s ease;
         }
+
+        /* Эффекты контейнера при наведении */
+        .container:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.9);
+        }
+
         .title {
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 20px;
-            color: #ffffff; /* Белый цвет заголовка */
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); /* Мягкое свечение текста */
-            letter-spacing: 2px; /* Расширяем межбуквенное пространство для эффекта */
-            text-transform: uppercase; /* Верхний регистр для заголовка */
-            border-bottom: 2px solid #ffffff; /* Белая линия под заголовком */
-            padding-bottom: 10px;
+            color: #8cc7ff; /* Изменен цвет текста на красивый голубой */
+            font-family: 'Poppins', sans-serif;
+            text-shadow: 0 0 20px rgba(140, 199, 255, 0.9); /* Голубое свечение */
+            letter-spacing: 3px;
+            text-transform: uppercase;
             text-align: center;
+            animation: fadeIn 1s ease;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .button {
-            padding: 15px 25px;
-            font-size: 18px;
-            margin: 10px;
+            padding: 20px 30px;
+            font-size: 20px;
+            margin: 12px;
             border: none;
-            border-radius: 8px; /* Закругленные углы */
+            border-radius: 40px;
             cursor: pointer;
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
             text-align: center;
-            transition: all 0.3s ease; /* Анимация для всех изменений */
+            transition: all 0.4s ease;
+            font-family: 'Montserrat', sans-serif;
             font-weight: bold;
-            text-transform: uppercase; /* Верхний регистр для текста кнопок */
-        }
-        .button:hover {
-            transform: scale(1.05); /* Увеличение при наведении */
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Свечение при наведении */
-        }
-        .lite-button {
-            background: linear-gradient(45deg, #34d058, #66ff99); /* Мягкий зелёный градиент */
+            text-transform: uppercase;
             color: #ffffff;
-            box-shadow: 0 4px 10px rgba(52, 208, 88, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2); /* Свечение и тень */
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
+            box-shadow: 0 6px 12px rgba(255, 105, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3);
         }
-        .rage-button {
-            background: linear-gradient(45deg, #ff4b4b, #ff1a1a); /* Агрессивный красный градиент */
-            color: #ffffff;
-            box-shadow: 0 4px 10px rgba(255, 75, 75, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2); /* Свечение и тень */
-        }
-        .calculate-button {
-            background: linear-gradient(45deg, #ff6a00, #ee0979); /* Градиентный фон */
-            color: #ffffff;
-            box-shadow: 0 4px 10px rgba(255, 105, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2); /* Свечение и тень */
-            animation: pulse 1.5s infinite; /* Эффект пульсации */
-        }
-        .calculate-button:hover {
-            background: linear-gradient(45deg, #ff9a00, #ee2079); /* Изменение градиента при наведении */
-            transform: scale(1.1); /* Немного больше увеличение при наведении */
-            box-shadow: 0 6px 15px rgba(255, 105, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.3); /* Более интенсивное свечение */
-        }
-        @keyframes pulse {
+
+        @keyframes gradientShift {
             0% {
-                transform: scale(1);
-                box-shadow: 0 4px 10px rgba(255, 105, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
+                background-position: 0% 50%;
             }
             50% {
-                transform: scale(1.05);
-                box-shadow: 0 5px 15px rgba(255, 105, 0, 0.7), 0 2px 6px rgba(0, 0, 0, 0.3);
+                background-position: 100% 50%;
             }
             100% {
-                transform: scale(1);
-                box-shadow: 0 4px 10px rgba(255, 105, 0, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
+                background-position: 0% 50%;
             }
         }
-        .back-button {
-            background-color: #6c757d; /* Серая кнопка для возврата */
-            margin-top: 30px;
+
+        .button:hover:not(:disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 8px 18px rgba(140, 199, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4); /* Голубое свечение при наведении */
         }
+
+        .lite-button {
+            background: linear-gradient(135deg, #34d058, #66ff99);
+            color: #ffffff;
+            box-shadow: 0 6px 18px rgba(52, 208, 88, 0.8), 0 3px 6px rgba(0, 0, 0, 0.3);
+            font-family: 'Poppins', sans-serif;
+            text-shadow: 0 0 10px rgba(52, 208, 88, 0.6);
+            letter-spacing: 1.5px;
+            animation: litePulse 3s infinite;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes litePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .rage-button {
+            background: linear-gradient(135deg, #ff4b4b, #ff1a1a);
+            color: #ffffff;
+            box-shadow: 0 6px 18px rgba(255, 75, 75, 0.8), 0 3px 6px rgba(0, 0, 0, 0.3);
+            font-family: 'Poppins', sans-serif;
+            text-shadow: 0 0 10px rgba(255, 75, 75, 0.6);
+            letter-spacing: 1.5px;
+            animation: ragePulse 3s infinite;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes ragePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .lite-button:hover {
+            background: linear-gradient(135deg, #66ff99, #34d058);
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(52, 208, 88, 0.7);
+            border-color: #34d058; /* Зеленая обводка при наведении */
+            box-shadow: 0 6px 18px rgba(140, 199, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3); /* Голубое свечение при наведении */
+        }
+
+        .rage-button:hover {
+            background: linear-gradient(135deg, #ff1a1a, #ff4b4b);
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 75, 75, 0.7);
+            border-color: #ff4b4b; /* Красная обводка при наведении */
+            box-shadow: 0 6px 18px rgba(140, 199, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3); /* Голубое свечение при наведении */
+        }
+
+        .back-button {
+            background-color: #f0f0f0;
+            color: #333333;
+            padding: 20px 30px;
+            margin-top: 40px;
+            cursor: pointer;
+            border-radius: 40px;
+            font-size: 20px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border: none;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .back-button:hover {
+            background-color: #e0e0e0;
+            transform: scale(1.05);
+        }
+
         .button:disabled {
-            background-color: #888; /* Серый цвет для отключенной кнопки */
+            background-color: #555;
             cursor: not-allowed;
         }
+
         #coefficient {
-            margin-top: 20px;
-            font-size: 36px;
+            margin-top: 25px;
+            font-size: 38px;
+            font-family: 'Poppins', sans-serif;
             font-weight: bold;
             text-align: center;
-            display: none; /* Скрываем коэффициент по умолчанию */
-            background: rgba(0, 0, 0, 0.6); /* Полупрозрачный фон для коэффициента */
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px solid; /* Рамка будет определяться режимом */
-            box-shadow: 0 0 20px rgba(255, 87, 51, 0.7); /* Мягкое свечение, цвет изменяется в зависимости от режима */
-            animation: pop-in 0.5s ease; /* Анимация появления */
-            letter-spacing: 2px; /* Расширяем межбуквенное пространство для эффекта */
+            display: none;
+            background: rgba(34, 34, 34, 0.9);
+            padding: 25px;
+            border-radius: 20px;
+            border: 3px solid;
+            box-shadow: 0 0 25px rgba(255, 87, 51, 0.8);
+            animation: pop-in 0.6s ease;
+            letter-spacing: 2.5px;
         }
+
         @keyframes pop-in {
             0% {
                 transform: scale(0.5);
                 opacity: 0;
             }
-            100% {
+             100% {
                 transform: scale(1);
                 opacity: 1;
             }
         }
+
         #mode-container, #calculate-container {
             display: none;
             flex-direction: column;
             align-items: center;
             width: 100%;
         }
-        /* Стили для крутящегося индикатора загрузки */
+
         #loading-spinner {
-            display: none; /* Скрываем индикатор по умолчанию */
-            border: 4px solid #f3f3f3; /* Светлый серый */
-            border-top: 4px solid #007bff; /* Синий цвет для верхней части */
+            display: none;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007bff;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite; /* Анимация вращения */
-            margin-top: 20px;
+            width: 35px;
+            height: 35px;
+            animation: spin 1s linear infinite;
+            margin-top: 25px;
         }
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
         #selected-mode {
-            font-size: 32px;
+            font-size: 34px;
+            font-family: 'Raleway', sans-serif;
             font-weight: bold;
-            color: #ffcc00; /* Яркий желтый цвет */
-            text-shadow: 0 0 15px rgba(255, 204, 0, 0.8); /* Мягкое свечение */
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-            border: 2px solid #ffcc00;
-            padding: 10px 20px;
-            border-radius: 10px;
-            background: rgba(0, 0, 0, 0.8); /* Полупрозрачный фон */
+            color: #ffffff;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); /* Белое свечение вместо золотистого */
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+            border: 3px solid #ffffff; /* Заменен золотистый цвет на белый */
+            padding: 15px 25px;
+            border-radius: 15px;
+            background: rgba(34, 34, 34, 0.9);
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
+
         #selected-mode.lite-mode {
             color: #34d058;
             border-color: #34d058;
-            text-shadow: 0 0 15px rgba(52, 208, 88, 0.8);
+            text-shadow: 0 0 20px rgba(52, 208, 88, 0.7);
         }
+
         #selected-mode.rage-mode {
             color: #ff4b4b;
             border-color: #ff4b4b;
-            text-shadow: 0 0 15px rgba(255, 75, 75, 0.8);
+            text-shadow: 0 0 20px rgba(255, 75, 75, 0.7);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Контейнер для выбора режима -->
         <div id="mode-container">
             <div class="title">Выберите режим</div>
             <button class="button lite-button" id="lite-button" onclick="selectMode('lite')">Lite</button>
             <button class="button rage-button" id="rage-button" onclick="selectMode('rage')">Rage</button>
         </div>
 
-        <!-- Контейнер для вычисления коэффициента -->
         <div id="calculate-container">
             <div id="selected-mode"></div>
-            <button class="button calculate-button" id="calculate-button" onclick="startLoading()">Запуск</button>
-            <div id="loading-spinner"></div> <!-- Крутящийся индикатор загрузки -->
+            <button class="button" id="calculate-button" onclick="startLoading()">Запуск</button>
+            <div id="loading-spinner"></div>
             <div id="coefficient"></div>
-            <button class="button back-button" onclick="showModeSelection()">Назад</button>
+            <button class="back-button" id="back-button" onclick="showModeSelection()">Назад</button>
         </div>
     </div>
 
@@ -201,15 +281,14 @@
         function showModeSelection() {
             document.getElementById('mode-container').style.display = 'flex';
             document.getElementById('calculate-container').style.display = 'none';
-            document.getElementById('coefficient').style.display = 'none'; // Скрываем коэффициент
-            document.getElementById('loading-spinner').style.display = 'none'; // Скрываем индикатор загрузки
-            const calculateButton = document.getElementById('calculate-button');
-            calculateButton.disabled = false; // Разблокируем кнопку
+            document.getElementById('coefficient').style.display = 'none';
+            document.getElementById('loading-spinner').style.display = 'none';
+            document.getElementById('calculate-button').disabled = false;
             mode = '';
         }
 
         function selectMode(selectedMode) {
-            if (isCalculating) return; // Если идёт вычисление, не позволяем сменить режим
+            if (isCalculating) return;
             mode = selectedMode;
             const selectedModeElement = document.getElementById('selected-mode');
             selectedModeElement.innerText = selectedMode === 'lite' ? 'Lite Mode' : 'Rage Mode';
@@ -221,24 +300,16 @@
         function startLoading() {
             const loadingSpinner = document.getElementById('loading-spinner');
             const calculateButton = document.getElementById('calculate-button');
-            const liteButton = document.getElementById('lite-button');
-            const rageButton = document.getElementById('rage-button');
             isCalculating = true;
-            loadingSpinner.style.display = 'block'; // Показываем индикатор загрузки
-            calculateButton.disabled = true; // Блокируем кнопку
-            liteButton.disabled = true; // Блокируем кнопку режима Lite
-            rageButton.disabled = true; // Блокируем кнопку режима Rage
-            document.getElementById('coefficient').style.display = 'none'; // Скрываем старый коэффициент
+            loadingSpinner.style.display = 'block';
+            calculateButton.disabled = true;
+            document.getElementById('coefficient').style.display = 'none';
 
-            // Установим случайное время загрузки от 2 до 6 секунд
             const loadTime = Math.floor(Math.random() * 4000) + 2000;
 
-            // Через заданное время показать коэффициент
             setTimeout(() => {
                 loadingSpinner.style.display = 'none';
-                calculateButton.disabled = false; // Разблокируем кнопку
-                liteButton.disabled = false; // Разблокируем кнопку режима Lite
-                rageButton.disabled = false; // Разблокируем кнопку режима Rage
+                calculateButton.disabled = false;
                 isCalculating = false;
                 predictCoefficient();
             }, loadTime);
@@ -259,13 +330,13 @@
                 coefficientElement.style.boxShadow = '0 0 20px rgba(52, 208, 88, 0.7)';
             } else if (mode === 'rage') {
                 coefficient = (1.7 + Math.random() * 5.3).toFixed(2);
-                coefficientElement.style.color = '#ff5733';
-                coefficientElement.style.borderColor = '#ff5733';
-                coefficientElement.style.boxShadow = '0 0 20px rgba(255, 87, 51, 0.7)';
+                coefficientElement.style.color = '#ff4b4b';
+                coefficientElement.style.borderColor = '#ff4b4b';
+                coefficientElement.style.boxShadow = '0 0 20px rgba(255, 75, 75, 0.7)';
             }
 
             coefficientElement.innerHTML = `<span style="font-size: 48px;">${coefficient}x</span>`;
-            coefficientElement.style.display = 'block'; // Показать новый коэффициент
+            coefficientElement.style.display = 'block';
         }
 
         showModeSelection();
