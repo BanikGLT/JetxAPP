@@ -3,62 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX - Выбор Режима</title>
+    <title>JetX Progger</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-        /* Основные стили */
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             height: 100vh;
             font-family: 'Montserrat', sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             box-sizing: border-box;
             background: linear-gradient(135deg, #1c1c1c 25%, #000000 100%);
             color: #ffffff;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 20px; /* Подвинем ближе к выделенному месту */
+        }
+
+        .header .jetx {
+            font-size: 60px; /* Увеличен размер для большего акцента */
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(140, 199, 255, 1);
+            position: relative;
+        }
+
+        .header .jetx .x {
+            color: #ffd700; /* Золотая буква X */
+            text-shadow: 0 0 30px rgba(255, 215, 0, 1);
+        }
+
+        .header .progger {
+            font-size: 28px;
+            color: #8cc7ff;
+            font-family: 'Raleway', sans-serif;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(140, 199, 255, 0.9);
+            margin-top: -10px;
+            text-transform: uppercase;
         }
 
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             width: 100%;
             max-width: 400px;
+            height: 100%;
             background: rgba(34, 34, 34, 0.95);
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 25px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-            position: relative;
             transition: all 0.5s ease;
-        }
-
-        /* Эффекты контейнера при наведении */
-        .container:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.9);
         }
 
         .title {
             font-size: 32px;
             margin-bottom: 20px;
-            color: #8cc7ff; /* Изменен цвет текста на красивый голубой */
+            color: #8cc7ff; /* Голубой цвет текста */
             font-family: 'Poppins', sans-serif;
-            text-shadow: 0 0 20px rgba(140, 199, 255, 0.9); /* Голубое свечение */
+            text-shadow: 0 0 20px rgba(140, 199, 255, 0.9);
             letter-spacing: 3px;
             text-transform: uppercase;
             text-align: center;
-            animation: fadeIn 1s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
 
         .button {
@@ -96,7 +115,7 @@
 
         .button:hover:not(:disabled) {
             transform: scale(1.1);
-            box-shadow: 0 8px 18px rgba(140, 199, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4); /* Голубое свечение при наведении */
+            box-shadow: 0 8px 18px rgba(140, 199, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4);
         }
 
         .lite-button {
@@ -139,16 +158,16 @@
             background: linear-gradient(135deg, #66ff99, #34d058);
             color: #ffffff;
             text-shadow: 0 0 15px rgba(52, 208, 88, 0.7);
-            border-color: #34d058; /* Зеленая обводка при наведении */
-            box-shadow: 0 6px 18px rgba(140, 199, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3); /* Голубое свечение при наведении */
+            border-color: #34d058;
+            box-shadow: 0 6px 18px rgba(140, 199, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3);
         }
 
         .rage-button:hover {
             background: linear-gradient(135deg, #ff1a1a, #ff4b4b);
             color: #ffffff;
             text-shadow: 0 0 15px rgba(255, 75, 75, 0.7);
-            border-color: #ff4b4b; /* Красная обводка при наведении */
-            box-shadow: 0 6px 18px rgba(140, 199, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3); /* Голубое свечение при наведении */
+            border-color: #ff4b4b;
+            box-shadow: 0 6px 18px rgba(140, 199, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3);
         }
 
         .back-button {
@@ -199,7 +218,7 @@
                 transform: scale(0.5);
                 opacity: 0;
             }
-             100% {
+            100% {
                 transform: scale(1);
                 opacity: 1;
             }
@@ -233,10 +252,10 @@
             font-family: 'Raleway', sans-serif;
             font-weight: bold;
             color: #ffffff;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); /* Белое свечение вместо золотистого */
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
             letter-spacing: 1.5px;
             margin-bottom: 20px;
-            border: 3px solid #ffffff; /* Заменен золотистый цвет на белый */
+            border: 3px solid #ffffff;
             padding: 15px 25px;
             border-radius: 15px;
             background: rgba(34, 34, 34, 0.9);
@@ -259,6 +278,10 @@
 </head>
 <body>
     <div class="container">
+        <div class="header">
+            <div class="jetx">Jet<span class="x">X</span></div>
+            <div class="progger">Progger</div>
+        </div>
         <div id="mode-container">
             <div class="title">Выберите режим</div>
             <button class="button lite-button" id="lite-button" onclick="selectMode('lite')">Lite</button>
