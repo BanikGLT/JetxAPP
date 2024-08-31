@@ -83,15 +83,29 @@
             text-align: center;
         }
 
+        .block {
+            width: 100%;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .block:hover {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
+        }
+
         .button {
             padding: 15px 25px;
             font-size: 18px;
-            margin: 10px;
+            margin: 10px 0;
             border: none;
             border-radius: 40px;
             cursor: pointer;
             width: 100%;
-            max-width: 300px;
             text-align: center;
             transition: all 0.4s ease;
             font-family: 'Montserrat', sans-serif;
@@ -198,31 +212,61 @@
         .referral-button {
             background: linear-gradient(90deg, #007bff, #00d4ff);
             color: #ffffff;
-            padding: 15px 30px;
-            font-size: 20px;
+            padding: 20px 35px;
+            font-size: 22px;
             font-family: 'Montserrat', sans-serif;
             font-weight: bold;
             text-transform: uppercase;
             border-radius: 40px;
             cursor: pointer;
-            margin-top: auto; /* Позиционирование кнопки внизу */
-            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3);
+            margin-top: 15px;
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3);
             transition: all 0.4s ease;
-            width: 90%;
+            width: 100%;
             text-align: center;
-            animation: glowPulse 2s infinite;
+            animation: pulseGlow 2s infinite;
         }
 
-        @keyframes glowPulse {
-            0% { box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3); }
-            50% { box-shadow: 0 8px 20px rgba(0, 123, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.4); }
-            100% { box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3); }
+        .tg-button {
+            background: linear-gradient(90deg, #0088cc, #00aaff);
+            color: #ffffff;
+            padding: 20px 35px;
+            font-size: 22px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 40px;
+            cursor: pointer;
+            margin-top: 15px;
+            box-shadow: 0 10px 20px rgba(0, 136, 204, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            width: 100%;
+            text-align: center;
+            animation: pulseGlowTg 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 12px 24px rgba(0, 123, 255, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4); }
+            100% { box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3); }
+        }
+
+        @keyframes pulseGlowTg {
+            0% { box-shadow: 0 10px 20px rgba(0, 136, 204, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3); }
+            50% { box-shadow: 0 12px 24px rgba(0, 136, 204, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4); }
+            100% { box-shadow: 0 10px 20px rgba(0, 136, 204, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3); }
         }
 
         .referral-button:hover {
-            transform: scale(1.1);
+            transform: scale(1.15);
             background: linear-gradient(90deg, #0056b3, #00aaff);
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.7), 0 4px 10px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 24px rgba(0, 123, 255, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .tg-button:hover {
+            transform: scale(1.15);
+            background: linear-gradient(90deg, #0077cc, #0088ff);
+            box-shadow: 0 12px 24px rgba(0, 136, 204, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4);
         }
 
         .button:disabled {
@@ -319,22 +363,29 @@
             <div class="progger">Progger</div>
         </div>
         
-        <div id="mode-container">
-            <div class="title">Выберите режим</div>
-            <button class="button lite-button" id="lite-button" onclick="selectMode('lite')">Lite</button>
-            <button class="button rage-button" id="rage-button" onclick="selectMode('rage')">Rage</button>
+        <div class="block">
+            <div id="mode-container">
+                <div class="title">Выберите режим</div>
+                <button class="button lite-button" id="lite-button" onclick="selectMode('lite')">Lite</button>
+                <button class="button rage-button" id="rage-button" onclick="selectMode('rage')">Rage</button>
+            </div>
+
+            <div id="calculate-container">
+                <div id="selected-mode"></div>
+                <button class="button" id="calculate-button" onclick="startLoading()">Запуск</button>
+                <div id="loading-spinner"></div>
+                <div id="coefficient"></div>
+                <button class="back-button" id="back-button" onclick="showModeSelection()">Назад</button>
+            </div>
         </div>
 
-        <div id="calculate-container">
-            <div id="selected-mode"></div>
-            <button class="button" id="calculate-button" onclick="startLoading()">Запуск</button>
-            <div id="loading-spinner"></div>
-            <div id="coefficient"></div>
-            <button class="back-button" id="back-button" onclick="showModeSelection()">Назад</button>
-        </div>
+        <div class="block">
+            <!-- Кнопка реферальной ссылки -->
+            <button class="referral-button" onclick="openReferralLink()">Получить бонус на 1win</button>
 
-        <!-- Кнопка реферальной ссылки -->
-        <button class="referral-button" onclick="openReferralLink()">Получить бонус на 1win</button>
+            <!-- Кнопка перехода на Telegram канал -->
+            <button class="tg-button" onclick="openTelegramLink()">Присоединяйтесь к нашему Telegram каналу</button>
+        </div>
     </div>
 
     <script>
@@ -403,7 +454,11 @@
         }
 
         function openReferralLink() {
-            window.open('https://www.1win.com', '_blank');
+            window.location.href = 'https://www.1win.com';
+        }
+
+        function openTelegramLink() {
+            window.location.href = 'https://t.me/+1mHcVfVmYEBmY2Rh';
         }
 
         showModeSelection();
