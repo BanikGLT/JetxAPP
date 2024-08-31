@@ -6,89 +6,92 @@
     <title>JetX Progger</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@800&display=swap');
 
         body {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: flex-start;
             height: 100vh;
-            font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
             background: linear-gradient(135deg, #1c1c1c 25%, #000000 100%);
             color: #ffffff;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            margin-top: 20px; /* Подвинем ближе к выделенному месту */
-        }
-
-        .header .jetx {
-            font-size: 60px; /* Увеличен размер для большего акцента */
-            color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: bold;
-            letter-spacing: 4px;
-            text-shadow: 0 0 25px rgba(140, 199, 255, 1);
-            position: relative;
-        }
-
-        .header .jetx .x {
-            color: #ffd700; /* Золотая буква X */
-            text-shadow: 0 0 30px rgba(255, 215, 0, 1);
-        }
-
-        .header .progger {
-            font-size: 28px;
-            color: #8cc7ff;
-            font-family: 'Raleway', sans-serif;
-            letter-spacing: 3px;
-            text-shadow: 0 0 15px rgba(140, 199, 255, 0.9);
-            margin-top: -10px;
-            text-transform: uppercase;
+            overflow: hidden;
         }
 
         .container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            width: 100%;
+            justify-content: flex-start;
+            width: 90%;
             max-width: 400px;
-            height: 100%;
+            height: 95vh; /* Высота платформы, близкая к полной высоте экрана */
             background: rgba(34, 34, 34, 0.95);
-            padding: 30px;
+            padding: 20px;
             border-radius: 25px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-            transition: all 0.5s ease;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .header .jetx {
+            font-size: 65px; /* Немного уменьшил размер шрифта для мобильных устройств */
+            font-weight: bold;
+            letter-spacing: 6px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .header .jetx .j, .header .jetx .e, .header .jetx .t {
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        }
+
+        .header .jetx .x {
+            color: #ffd700;
+            text-shadow: 0 0 40px rgba(255, 215, 0, 1);
+        }
+
+        .header .progger {
+            font-size: 30px;
+            color: #ffffff;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 800;
+            letter-spacing: 4px;
+            text-shadow: 0 0 25px rgba(255, 255, 255, 1);
+            margin-top: -15px;
+            text-transform: uppercase;
         }
 
         .title {
-            font-size: 32px;
+            font-size: 28px;
             margin-bottom: 20px;
-            color: #8cc7ff; /* Голубой цвет текста */
+            color: #ffffff;
             font-family: 'Poppins', sans-serif;
-            text-shadow: 0 0 20px rgba(140, 199, 255, 0.9);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
             letter-spacing: 3px;
             text-transform: uppercase;
             text-align: center;
         }
 
         .button {
-            padding: 20px 30px;
-            font-size: 20px;
-            margin: 12px;
+            padding: 15px 25px;
+            font-size: 18px;
+            margin: 10px;
             border: none;
             border-radius: 40px;
             cursor: pointer;
             width: 100%;
-            max-width: 320px;
+            max-width: 300px;
             text-align: center;
             transition: all 0.4s ease;
             font-family: 'Montserrat', sans-serif;
@@ -115,7 +118,7 @@
 
         .button:hover:not(:disabled) {
             transform: scale(1.1);
-            box-shadow: 0 8px 18px rgba(140, 199, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 8px 18px rgba(255, 255, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4);
         }
 
         .lite-button {
@@ -159,7 +162,7 @@
             color: #ffffff;
             text-shadow: 0 0 15px rgba(52, 208, 88, 0.7);
             border-color: #34d058;
-            box-shadow: 0 6px 18px rgba(140, 199, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 18px rgba(255, 255, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3);
         }
 
         .rage-button:hover {
@@ -167,7 +170,7 @@
             color: #ffffff;
             text-shadow: 0 0 15px rgba(255, 75, 75, 0.7);
             border-color: #ff4b4b;
-            box-shadow: 0 6px 18px rgba(140, 199, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 6px 18px rgba(255, 255, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3);
         }
 
         .back-button {
@@ -220,7 +223,7 @@
             }
             100% {
                 transform: scale(1);
-                opacity: 1;
+                opacity: 1);
             }
         }
 
@@ -277,11 +280,15 @@
     </style>
 </head>
 <body>
+
     <div class="container">
         <div class="header">
-            <div class="jetx">Jet<span class="x">X</span></div>
+            <div class="jetx">
+                <span class="j">J</span><span class="e">e</span><span class="t">t</span><span class="x">X</span>
+            </div>
             <div class="progger">Progger</div>
         </div>
+        
         <div id="mode-container">
             <div class="title">Выберите режим</div>
             <button class="button lite-button" id="lite-button" onclick="selectMode('lite')">Lite</button>
