@@ -83,21 +83,6 @@
             text-align: center;
         }
 
-        .block {
-            width: 100%;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-        }
-
-        .block:hover {
-            background: rgba(255, 255, 255, 0.1);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.7);
-        }
-
         .button {
             padding: 15px 25px;
             font-size: 18px;
@@ -207,6 +192,26 @@
         .back-button:hover {
             background-color: #e0e0e0;
             transform: scale(1.05);
+        }
+
+        .separator {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #ffffff, #d3d3d3);
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 1px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
         }
 
         .referral-button {
@@ -363,25 +368,25 @@
             <div class="progger">Progger</div>
         </div>
         
-        <div class="block">
-            <div id="mode-container">
-                <div class="title">Выберите режим</div>
-                <button class="button lite-button" id="lite-button" onclick="selectMode('lite')">Lite</button>
-                <button class="button rage-button" id="rage-button" onclick="selectMode('rage')">Rage</button>
-            </div>
-
-            <div id="calculate-container">
-                <div id="selected-mode"></div>
-                <button class="button" id="calculate-button" onclick="startLoading()">Запуск</button>
-                <div id="loading-spinner"></div>
-                <div id="coefficient"></div>
-                <button class="back-button" id="back-button" onclick="showModeSelection()">Назад</button>
-            </div>
+        <div id="mode-container">
+            <div class="title">Выберите режим</div>
+            <button class="button lite-button" id="lite-button" onclick="selectMode('lite')">Lite</button>
+            <button class="button rage-button" id="rage-button" onclick="selectMode('rage')">Rage</button>
         </div>
 
-        <div class="block">
+        <div id="calculate-container">
+            <div id="selected-mode"></div>
+            <button class="button" id="calculate-button" onclick="startLoading()">Запуск</button>
+            <div id="loading-spinner"></div>
+            <div id="coefficient"></div>
+            <button class="back-button" id="back-button" onclick="showModeSelection()">Назад</button>
+        </div>
+
+        <div class="separator"></div>
+
+        <div id="action-buttons">
             <!-- Кнопка реферальной ссылки -->
-            <button class="referral-button" onclick="openReferralLink()">Получить бонус на 1win</button>
+            <button class="referral-button" onclick="openReferralLink()">Играем в JetX здесь</button>
 
             <!-- Кнопка перехода на Telegram канал -->
             <button class="tg-button" onclick="openTelegramLink()">Присоединяйтесь к нашему Telegram каналу</button>
@@ -398,6 +403,8 @@
             document.getElementById('coefficient').style.display = 'none';
             document.getElementById('loading-spinner').style.display = 'none';
             document.getElementById('calculate-button').disabled = false;
+            document.getElementById('action-buttons').style.display = 'block'; // Показать кнопки на главной странице
+            document.querySelector('.separator').style.display = 'block'; // Показать разделительную линию
             mode = '';
         }
 
@@ -409,6 +416,8 @@
             selectedModeElement.className = selectedMode === 'lite' ? 'lite-mode' : 'rage-mode';
             document.getElementById('mode-container').style.display = 'none';
             document.getElementById('calculate-container').style.display = 'flex';
+            document.getElementById('action-buttons').style.display = 'none'; // Скрыть кнопки на других страницах
+            document.querySelector('.separator').style.display = 'none'; // Скрыть разделительную линию
         }
 
         function startLoading() {
@@ -454,7 +463,7 @@
         }
 
         function openReferralLink() {
-            window.location.href = 'https://www.1win.com';
+            window.open('https://1wxxlb.com/v3/jetx-landing?p=cxp7', '_blank'); // Открытие ссылки в браузере
         }
 
         function openTelegramLink() {
