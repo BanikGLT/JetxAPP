@@ -50,6 +50,12 @@
             letter-spacing: 6px;
             display: flex;
             justify-content: center;
+            animation: jetxFadeIn 2s ease-in-out forwards;
+        }
+
+        @keyframes jetxFadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .header .jetx .j, .header .jetx .e, .header .jetx .t {
@@ -71,6 +77,12 @@
             text-shadow: 0 0 25px rgba(255, 255, 255, 1);
             margin-top: -15px;
             text-transform: uppercase;
+            animation: proggerFadeIn 2.5s ease-in-out forwards;
+        }
+
+        @keyframes proggerFadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .title {
@@ -82,6 +94,12 @@
             letter-spacing: 3px;
             text-transform: uppercase;
             text-align: center;
+            animation: titleFadeIn 3s ease-in-out forwards;
+        }
+
+        @keyframes titleFadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .button {
@@ -100,8 +118,13 @@
             color: #ffffff;
             background: linear-gradient(90deg, #ff8a00, #e52e71);
             background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite;
+            animation: gradientShift 3s ease infinite, buttonFadeIn 2s ease-in-out forwards;
             box-shadow: 0 6px 12px rgba(255, 105, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes buttonFadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes gradientShift {
@@ -344,6 +367,12 @@
             background: rgba(34, 34, 34, 0.9);
             text-align: center;
             transition: all 0.4s ease;
+            animation: selectedModeFadeIn 2s ease-in-out forwards;
+        }
+
+        @keyframes selectedModeFadeIn {
+            0% { opacity: 0; transform: translateY(-20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         #selected-mode.lite-mode {
@@ -356,6 +385,30 @@
             color: #ff4b4b;
             border-color: #ff4b4b;
             text-shadow: 0 0 20px rgba(255, 75, 75, 0.7);
+        }
+
+        /* Секция для отображения процесса поиска */
+        #status-container {
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            color: #ffffff;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(50, 50, 50, 0.9);
+            padding: 10px 20px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        #status-container.show {
+            opacity: 1;
         }
     </style>
 </head>
@@ -392,7 +445,12 @@
             <!-- Кнопка перехода на Telegram канал -->
             <button class="tg-button" onclick="openTelegramLink()">Присоединяйтесь к нашему Telegram каналу</button>
         </div>
+
+        <div class="separator"></div>
+
     </div>
+
+    <div id="status-container"></div> <!-- Секция для отображения процесса поиска -->
 
     <script>
         let mode = '';
@@ -403,10 +461,12 @@
             document.getElementById('calculate-container').style.display = 'none';
             document.getElementById('coefficient').style.display = 'none';
             document.getElementById('loading-spinner').style.display = 'none';
+            document.getElementById('status-container').classList.remove('show'); // Скрыть статус
             document.getElementById('calculate-button').disabled = false;
             document.getElementById('container').style.transform = 'translateY(0)'; // Сброс сдвига вверх
             document.getElementById('action-buttons').style.display = 'block'; // Показать кнопки на главной странице
-            document.querySelector('.separator').style.display = 'block'; // Показать разделительную линию
+            document.querySelectorAll('.separator')[0].style.display = 'block'; // Показать разделительную линию
+            document.querySelectorAll('.separator')[1].style.display = 'block'; // Показать разделительную линию
             mode = '';
         }
 
@@ -420,21 +480,45 @@
             document.getElementById('calculate-container').style.display = 'flex';
             document.getElementById('container').style.transform = 'translateY(70px)'; // Сдвиг контейнера чуть ниже середины
             document.getElementById('action-buttons').style.display = 'none'; // Скрыть кнопки на других страницах
-            document.querySelector('.separator').style.display = 'none'; // Скрыть разделительную линию
+            document.querySelectorAll('.separator')[0].style.display = 'none'; // Скрыть разделительную линию
+            document.querySelectorAll('.separator')[1].style.display = 'none'; // Скрыть разделительную линию
         }
 
         function startLoading() {
             const loadingSpinner = document.getElementById('loading-spinner');
             const calculateButton = document.getElementById('calculate-button');
+            const statusContainer = document.getElementById('status-container');
+            const statusMessages = [
+                "Подключение к 1win...",
+                "Анализируем JetX...",
+                "Поиск скриптов...",
+                "Загрузка данных...",
+                "Определение коэффициентов...",
+                "Верификация данных...",
+                "Обработка информации...",
+                "Генерация прогноза..."
+            ];
+            let currentStatus = 0;
+
             isCalculating = true;
             loadingSpinner.style.display = 'block';
             calculateButton.disabled = true;
-            document.getElementById('coefficient').style.display = 'none';
+            statusContainer.classList.add('show'); // Показать статус
+            statusContainer.innerText = statusMessages[currentStatus];
 
-            const loadTime = Math.floor(Math.random() * 4000) + 2000;
+            const loadTime = Math.floor(Math.random() * 6000) + 6000; // Время загрузки от 6 до 12 секунд
+
+            const statusInterval = setInterval(() => {
+                currentStatus++;
+                if (currentStatus < statusMessages.length) {
+                    statusContainer.innerText = statusMessages[currentStatus];
+                }
+            }, loadTime / statusMessages.length);
 
             setTimeout(() => {
+                clearInterval(statusInterval);
                 loadingSpinner.style.display = 'none';
+                statusContainer.classList.remove('show'); // Скрыть статус после загрузки
                 calculateButton.disabled = false;
                 isCalculating = false;
                 predictCoefficient();
