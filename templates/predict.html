@@ -393,22 +393,23 @@
             font-family: 'Poppins', sans-serif;
             color: #ffffff;
             position: fixed;
-            bottom: 10px;
+            bottom: 70px; /* Увеличено расстояние до кнопки назад */
             left: 50%;
             transform: translateX(-50%);
             background: rgba(50, 50, 50, 0.9);
             padding: 10px 20px;
             border-radius: 15px;
-            width: 80%;
-            max-width: 400px;
+            width: 90%;
+            max-width: 350px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             text-align: center;
             opacity: 0;
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.3s ease-in-out, bottom 0.3s ease-in-out;
         }
 
         #status-container.show {
             opacity: 1;
+            bottom: 80px; /* Слегка поднимаем при показе */
         }
     </style>
 </head>
@@ -464,6 +465,7 @@
             document.getElementById('status-container').classList.remove('show'); // Скрыть статус
             document.getElementById('calculate-button').disabled = false;
             document.getElementById('container').style.transform = 'translateY(0)'; // Сброс сдвига вверх
+            document.getElementById('selected-mode').classList.remove('lite-mode', 'rage-mode');
             document.getElementById('action-buttons').style.display = 'block'; // Показать кнопки на главной странице
             document.querySelectorAll('.separator')[0].style.display = 'block'; // Показать разделительную линию
             document.querySelectorAll('.separator')[1].style.display = 'block'; // Показать разделительную линию
