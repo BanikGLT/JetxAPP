@@ -34,6 +34,7 @@
             border-radius: 25px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
             position: relative;
+            transition: transform 0.5s ease;
         }
 
         .header {
@@ -116,7 +117,7 @@
         }
 
         .button:hover:not(:disabled) {
-            transform: scale(1.1);
+            transform: scale(1.05);
             box-shadow: 0 8px 18px rgba(255, 255, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4);
         }
 
@@ -134,7 +135,7 @@
 
         @keyframes litePulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.03); }
             100% { transform: scale(1); }
         }
 
@@ -152,7 +153,7 @@
 
         @keyframes ragePulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.03); }
             100% { transform: scale(1); }
         }
 
@@ -263,13 +264,13 @@
         }
 
         .referral-button:hover {
-            transform: scale(1.15);
+            transform: scale(1.1);
             background: linear-gradient(90deg, #0056b3, #00aaff);
             box-shadow: 0 12px 24px rgba(0, 123, 255, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4);
         }
 
         .tg-button:hover {
-            transform: scale(1.15);
+            transform: scale(1.1);
             background: linear-gradient(90deg, #0077cc, #0088ff);
             box-shadow: 0 12px 24px rgba(0, 136, 204, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4);
         }
@@ -302,7 +303,7 @@
             }
             100% {
                 transform: scale(1);
-                opacity: 1);
+                opacity: 1;
             }
         }
 
@@ -360,7 +361,7 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="container">
         <div class="header">
             <div class="jetx">
                 <span class="j">J</span><span class="e">e</span><span class="t">t</span><span class="x">X</span>
@@ -403,6 +404,7 @@
             document.getElementById('coefficient').style.display = 'none';
             document.getElementById('loading-spinner').style.display = 'none';
             document.getElementById('calculate-button').disabled = false;
+            document.getElementById('container').style.transform = 'translateY(0)'; // Сброс сдвига вверх
             document.getElementById('action-buttons').style.display = 'block'; // Показать кнопки на главной странице
             document.querySelector('.separator').style.display = 'block'; // Показать разделительную линию
             mode = '';
@@ -416,6 +418,7 @@
             selectedModeElement.className = selectedMode === 'lite' ? 'lite-mode' : 'rage-mode';
             document.getElementById('mode-container').style.display = 'none';
             document.getElementById('calculate-container').style.display = 'flex';
+            document.getElementById('container').style.transform = 'translateY(70px)'; // Сдвиг контейнера чуть ниже середины
             document.getElementById('action-buttons').style.display = 'none'; // Скрыть кнопки на других страницах
             document.querySelector('.separator').style.display = 'none'; // Скрыть разделительную линию
         }
