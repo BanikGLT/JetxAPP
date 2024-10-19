@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JetX Progger</title>
+    <title>Glight Signals Hack</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@800&display=swap');
 
         body {
             display: flex;
@@ -14,552 +13,401 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            padding: 0;
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #1c1c1c 25%, #000000 100%);
-            color: #ffffff;
+            background: #000;
             overflow: hidden;
         }
 
+        /* Контейнер приложения с анимированным фоном */
         .container {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            width: 90%;
-            max-width: 400px;
-            height: 95vh;
-            background: rgba(34, 34, 34, 0.95);
-            padding: 20px;
-            border-radius: 25px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-            position: relative;
-            transition: transform 0.5s ease;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-            margin-top: 10px;
+            justify-content: space-between;
             width: 100%;
+            max-width: 400px;
+            height: 90vh;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 255, 153, 0.8);
+            overflow: hidden;
+            z-index: 1;
         }
 
-        .header .jetx {
-            font-size: 65px;
-            font-weight: bold;
-            letter-spacing: 6px;
+        /* Анимированный фон для контейнера */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Частицы */
+        .particle {
+            position: absolute;
+            background-color: rgba(0, 255, 153, 0.8);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 255, 153, 0.8), 0 0 20px rgba(0, 255, 153, 0.4);
+            animation: moveParticle 10s infinite ease-in-out;
+        }
+
+        /* Анимация для частиц в хаотичном порядке */
+        @keyframes moveParticle {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(
+                    calc(100vw * (random() - 0.5)), 
+                    calc(100vh * (random() - 0.5))
+                ) scale(1);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            font-size: 24px;
+            text-shadow: 0 0 15px rgba(0, 255, 153, 0.8);
+            z-index: 2;
+        }
+
+        .grid-wrapper {
+            position: relative;
+            width: 100%;
             display: flex;
             justify-content: center;
-            animation: jetxFadeIn 2s ease-in-out forwards;
+            align-items: center;
+            margin-top: 20px;
+            z-index: 2;
         }
 
-        @keyframes jetxFadeIn {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
+        .grid {
+            display: grid;
+            gap: 5px;
+            justify-content: center;
+            transition: all 0.3s ease;
         }
 
-        .header .jetx .j, .header .jetx .e, .header .jetx .t {
-            color: #ffffff;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.8);
+        .cell {
+            background-color: #333;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+            transition: all 0.3s ease;
         }
 
-        .header .jetx .x {
-            color: #ffd700;
-            text-shadow: 0 0 40px rgba(255, 215, 0, 1);
+        .cell.active {
+            background-color: #00ff99;
+            box-shadow: 0 0 20px rgba(0, 255, 153, 1);
+            border: 2px solid #fff;
         }
 
-        .header .progger {
-            font-size: 30px;
-            color: #ffffff;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 800;
-            letter-spacing: 4px;
-            text-shadow: 0 0 25px rgba(255, 255, 255, 1);
-            margin-top: -15px;
-            text-transform: uppercase;
-            animation: proggerFadeIn 2.5s ease-in-out forwards;
-        }
-
-        @keyframes proggerFadeIn {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .title {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #ffffff;
-            font-family: 'Poppins', sans-serif;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-align: center;
-            animation: titleFadeIn 3s ease-in-out forwards;
-        }
-
-        @keyframes titleFadeIn {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        .button {
-            padding: 15px 25px;
-            font-size: 18px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 40px;
-            cursor: pointer;
+        .controls {
+            margin-top: 20px;
             width: 100%;
-            text-align: center;
-            transition: all 0.4s ease;
-            font-family: 'Montserrat', sans-serif;
+            display: flex;
+            justify-content: space-around;
+            z-index: 2;
+        }
+
+        .controls button {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 30px;
+            background-color: #00ff99;
+            color: #000;
             font-weight: bold;
-            text-transform: uppercase;
-            color: #ffffff;
-            background: linear-gradient(90deg, #ff8a00, #e52e71);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite, buttonFadeIn 2s ease-in-out forwards;
-            box-shadow: 0 6px 12px rgba(255, 105, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        @keyframes buttonFadeIn {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes gradientShift {
-            0% {
-                background-position: 0% 50%;
-            }
-            50% {
-                background-position: 100% 50%;
-            }
-            100% {
-                background-position: 0% 50%;
-            }
-        }
-
-        .button:hover:not(:disabled) {
-            transform: scale(1.05);
-            box-shadow: 0 8px 18px rgba(255, 255, 255, 0.6), 0 4px 8px rgba(0, 0, 0, 0.4);
-        }
-
-        .lite-button {
-            background: linear-gradient(135deg, #34d058, #66ff99);
-            color: #ffffff;
-            box-shadow: 0 6px 18px rgba(52, 208, 88, 0.8), 0 3px 6px rgba(0, 0, 0, 0.3);
-            font-family: 'Poppins', sans-serif;
-            text-shadow: 0 0 10px rgba(52, 208, 88, 0.6);
-            letter-spacing: 1.5px;
-            animation: litePulse 3s infinite;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        @keyframes litePulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-
-        .rage-button {
-            background: linear-gradient(135deg, #ff4b4b, #ff1a1a);
-            color: #ffffff;
-            box-shadow: 0 6px 18px rgba(255, 75, 75, 0.8), 0 3px 6px rgba(0, 0, 0, 0.3);
-            font-family: 'Poppins', sans-serif;
-            text-shadow: 0 0 10px rgba(255, 75, 75, 0.6);
-            letter-spacing: 1.5px;
-            animation: ragePulse 3s infinite;
-            border: 2px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        @keyframes ragePulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-
-        .lite-button:hover {
-            background: linear-gradient(135deg, #66ff99, #34d058);
-            color: #ffffff;
-            text-shadow: 0 0 15px rgba(52, 208, 88, 0.7);
-            border-color: #34d058;
-            box-shadow: 0 6px 18px rgba(255, 255, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .rage-button:hover {
-            background: linear-gradient(135deg, #ff1a1a, #ff4b4b);
-            color: #ffffff;
-            text-shadow: 0 0 15px rgba(255, 75, 75, 0.7);
-            border-color: #ff4b4b;
-            box-shadow: 0 6px 18px rgba(255, 255, 255, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        .back-button {
-            background-color: #f0f0f0;
-            color: #333333;
-            padding: 20px 30px;
-            margin-top: 40px;
+            font-size: 16px;
             cursor: pointer;
-            border-radius: 40px;
+            transition: background-color 0.3s ease, transform 0.3s;
+        }
+
+        .controls button:hover {
+            background-color: #00cc77;
+            transform: translateY(-3px);
+        }
+
+        .select-field {
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #00ff99;
+            color: #000;
+            font-weight: bold;
+            border: none;
+            font-size: 14px;
+        }
+
+        /* Визуал кнопки Exit to Menu */
+        .exit-button {
+            margin-top: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .exit-button button {
+            padding: 20px 50px;
+            border: none;
+            border-radius: 50px;
+            background-color: #ff4444;
+            color: #fff;
+            font-weight: bold;
             font-size: 20px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 500;
-            text-transform: uppercase;
-            transition: all 0.4s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            border: none;
-            text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-
-        .back-button:hover {
-            background-color: #e0e0e0;
-            transform: scale(1.05);
-        }
-
-        .separator {
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, #ffffff, #d3d3d3);
-            margin: 20px 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 1px;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-in-out forwards;
-        }
-
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        .referral-button {
-            background: linear-gradient(90deg, #007bff, #00d4ff);
-            color: #ffffff;
-            padding: 20px 35px;
-            font-size: 22px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-radius: 40px;
             cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s ease;
+            transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.8), 0 0 60px rgba(255, 68, 68, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exit-button button:hover {
+            background-color: #ff2222;
+            transform: translateY(-5px);
+            box-shadow: 0 0 40px rgba(255, 68, 68, 1), 0 0 80px rgba(255, 68, 68, 0.6);
+        }
+
+        .footer {
             width: 100%;
             text-align: center;
-            animation: pulseGlow 2s infinite;
+            margin-top: 20px;
+            color: #fff;
+            font-size: 12px;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            z-index: 2;
         }
 
-        .tg-button {
-            background: linear-gradient(90deg, #0088cc, #00aaff);
-            color: #ffffff;
-            padding: 20px 35px;
-            font-size: 22px;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: bold;
-            text-transform: uppercase;
-            border-radius: 40px;
-            cursor: pointer;
-            margin-top: 15px;
-            box-shadow: 0 10px 20px rgba(0, 136, 204, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3);
-            transition: all 0.4s ease;
-            width: 100%;
-            text-align: center;
-            animation: pulseGlowTg 2s infinite;
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3); }
-            50% { box-shadow: 0 12px 24px rgba(0, 123, 255, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4); }
-            100% { box-shadow: 0 10px 20px rgba(0, 123, 255, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3); }
-        }
-
-        @keyframes pulseGlowTg {
-            0% { box-shadow: 0 10px 20px rgba(0, 136, 204, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3); }
-            50% { box-shadow: 0 12px 24px rgba(0, 136, 204, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4); }
-            100% { box-shadow: 0 10px 20px rgba(0, 136, 204, 0.5), 0 5px 10px rgba(0, 0, 0, 0.3); }
-        }
-
-        .referral-button:hover {
-            transform: scale(1.1);
-            background: linear-gradient(90deg, #0056b3, #00aaff);
-            box-shadow: 0 12px 24px rgba(0, 123, 255, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4);
-        }
-
-        .tg-button:hover {
-            transform: scale(1.1);
-            background: linear-gradient(90deg, #0077cc, #0088ff);
-            box-shadow: 0 12px 24px rgba(0, 136, 204, 0.7), 0 6px 12px rgba(0, 0, 0, 0.4);
-        }
-
-        .button:disabled {
-            background-color: #555;
-            cursor: not-allowed;
-        }
-
-        #coefficient {
-            margin-top: 25px;
-            font-size: 38px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: bold;
-            text-align: center;
-            display: none;
-            background: rgba(34, 34, 34, 0.9);
-            padding: 25px;
-            border-radius: 20px;
-            border: 3px solid;
-            box-shadow: 0 0 25px rgba(255, 87, 51, 0.8);
-            animation: pop-in 0.6s ease;
-            letter-spacing: 2.5px;
-        }
-
-        @keyframes pop-in {
+        @keyframes explode {
             0% {
                 transform: scale(0.5);
-                opacity: 0;
-            }
-            100% {
-                transform: scale(1);
                 opacity: 1;
             }
-        }
-
-        #mode-container, #calculate-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        #loading-spinner {
-            display: none;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #007bff;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            animation: spin 1s linear infinite;
-            margin-top: 25px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #selected-mode {
-            font-size: 34px;
-            font-family: 'Raleway', sans-serif;
-            font-weight: bold;
-            color: #ffffff;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-            letter-spacing: 1.5px;
-            margin-bottom: 20px;
-            border: 3px solid #ffffff;
-            padding: 15px 25px;
-            border-radius: 15px;
-            background: rgba(34, 34, 34, 0.9);
-            text-align: center;
-            transition: all 0.4s ease;
-            animation: selectedModeFadeIn 2s ease-in-out forwards;
-        }
-
-        @keyframes selectedModeFadeIn {
-            0% { opacity: 0; transform: translateY(-20px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-
-        #selected-mode.lite-mode {
-            color: #34d058;
-            border-color: #34d058;
-            text-shadow: 0 0 20px rgba(52, 208, 88, 0.7);
-        }
-
-        #selected-mode.rage-mode {
-            color: #ff4b4b;
-            border-color: #ff4b4b;
-            text-shadow: 0 0 20px rgba(255, 75, 75, 0.7);
-        }
-
-        /* Секция для отображения процесса поиска */
-        #status-container {
-            font-size: 16px;
-            font-family: 'Poppins', sans-serif;
-            color: #ffffff;
-            position: fixed;
-            bottom: 70px; /* Увеличено расстояние до кнопки назад */
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(50, 50, 50, 0.9);
-            padding: 10px 20px;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 350px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out, bottom 0.3s ease-in-out;
-        }
-
-        #status-container.show {
-            opacity: 1;
-            bottom: 80px; /* Слегка поднимаем при показе */
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="container" id="container">
-        <div class="header">
-            <div class="jetx">
-                <span class="j">J</span><span class="e">e</span><span class="t">t</span><span class="x">X</span>
-            </div>
-            <div class="progger">Progger</div>
-        </div>
-        
-        <div id="mode-container">
-            <div class="title">Выберите режим</div>
-            <button class="button lite-button" id="lite-button" onclick="selectMode('lite')">Lite</button>
-            <button class="button rage-button" id="rage-button" onclick="selectMode('rage')">Rage</button>
+    <div class="container">
+        <!-- Анимированный фон внутри контейнера -->
+        <div class="background" id="particles">
+            <!-- Частицы будут добавлены с помощью JS -->
         </div>
 
-        <div id="calculate-container">
-            <div id="selected-mode"></div>
-            <button class="button" id="calculate-button" onclick="startLoading()">Запуск</button>
-            <div id="loading-spinner"></div>
-            <div id="coefficient"></div>
-            <button class="back-button" id="back-button" onclick="showModeSelection()">Назад</button>
+        <h1>GLIGHT SIGNALS HACK</h1>
+
+        <div class="select-field">
+            <select id="gridSizeSelect">
+                <option value="2x3">Field 2x3</option>
+                <option value="3x6">Field 3x6</option>
+                <option value="4x9">Field 4x9</option>
+                <option value="5x12">Field 5x12</option>
+                <option value="6x15">Field 6x15</option>
+            </select>
         </div>
 
-        <div class="separator"></div>
-
-        <div id="action-buttons">
-            <!-- Кнопка реферальной ссылки -->
-            <button class="referral-button" onclick="openReferralLink()">Играем в JetX здесь</button>
-
-            <!-- Кнопка перехода на Telegram канал -->
-            <button class="tg-button" onclick="openTelegramLink()">Присоединяйтесь к нашему Telegram каналу</button>
+        <div class="grid-wrapper">
+            <div class="grid" id="grid"></div>
         </div>
 
-        <div class="separator"></div>
+        <div class="controls">
+            <button id="playButton">PLAY</button>
+            <button id="resetButton">RESET</button>
+        </div>
 
+        <div class="exit-button">
+            <button id="exitButton">EXIT TO MENU</button>
+        </div>
+
+        <div class="footer">
+            <p>© GLIGHT SIGNALS BOT 2024</p>
+        </div>
     </div>
 
-    <div id="status-container"></div> <!-- Секция для отображения процесса поиска -->
-
     <script>
-        let mode = '';
-        let isCalculating = false;
+        const gridContainer = document.getElementById('grid');
+        const playButton = document.getElementById('playButton');
+        const resetButton = document.getElementById('resetButton');
+        const gridSizeSelect = document.getElementById('gridSizeSelect');
+        const exitButton = document.getElementById('exitButton');
+        const particlesContainer = document.getElementById('particles');
 
-        function showModeSelection() {
-            document.getElementById('mode-container').style.display = 'flex';
-            document.getElementById('calculate-container').style.display = 'none';
-            document.getElementById('coefficient').style.display = 'none';
-            document.getElementById('loading-spinner').style.display = 'none';
-            document.getElementById('status-container').classList.remove('show'); // Скрыть статус
-            document.getElementById('calculate-button').disabled = false;
-            document.getElementById('container').style.transform = 'translateY(0)'; // Сброс сдвига вверх
-            document.getElementById('selected-mode').classList.remove('lite-mode', 'rage-mode');
-            document.getElementById('action-buttons').style.display = 'block'; // Показать кнопки на главной странице
-            document.querySelectorAll('.separator')[0].style.display = 'block'; // Показать разделительную линию
-            document.querySelectorAll('.separator')[1].style.display = 'block'; // Показать разделительную линию
-            mode = '';
+        const gridSizes = {
+            "2x3": { rows: 3, cols: 2 },
+            "3x6": { rows: 6, cols: 3 },
+            "4x9": { rows: 9, cols: 4 },
+            "5x12": { rows: 12, cols: 5 },
+            "6x15": { rows: 15, cols: 6 },
+        };
+
+        let currentGrid = "2x3"; // Текущая сетка
+        let cells = []; // Все клетки
+        let activeRow = gridSizes[currentGrid].rows - 1; // Начальная строка (нижняя)
+        let signalStep = 0;
+        let maxSteps = gridSizes[currentGrid].rows; // Количество строк
+
+        // Создание сетки с адаптацией под экран
+        function createGrid(sizeKey) {
+            gridContainer.innerHTML = ''; // Очистить предыдущую сетку
+            const size = gridSizes[sizeKey];
+            maxSteps = size.rows; // Сброс количества шагов
+            activeRow = size.rows - 1; // Начинаем с нижней строки
+
+            const availableHeight = window.innerHeight * 0.6; // 60% высоты экрана
+            const cellSize = Math.min(80, Math.floor(availableHeight / size.rows) - 5); // Автоматический расчет размера ячеек
+
+            gridContainer.style.gridTemplateColumns = `repeat(${size.cols}, ${cellSize}px)`;
+            gridContainer.style.gridTemplateRows = `repeat(${size.rows}, ${cellSize}px)`;
+
+            cells = [];
+
+            for (let i = 0;  i < size.cols * size.rows; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.style.width = `${cellSize}px`;
+                cell.style.height = `${cellSize}px`;
+                gridContainer.appendChild(cell);
+                cells.push(cell);
+            }
         }
 
-        function selectMode(selectedMode) {
-            if (isCalculating) return;
-            mode = selectedMode;
-            const selectedModeElement = document.getElementById('selected-mode');
-            selectedModeElement.innerText = selectedMode === 'lite' ? 'Lite Mode' : 'Rage Mode';
-            selectedModeElement.className = selectedMode === 'lite' ? 'lite-mode' : 'rage-mode';
-            document.getElementById('mode-container').style.display = 'none';
-            document.getElementById('calculate-container').style.display = 'flex';
-            document.getElementById('container').style.transform = 'translateY(70px)'; // Сдвиг контейнера чуть ниже середины
-            document.getElementById('action-buttons').style.display = 'none'; // Скрыть кнопки на других страницах
-            document.querySelectorAll('.separator')[0].style.display = 'none'; // Скрыть разделительную линию
-            document.querySelectorAll('.separator')[1].style.display = 'none'; // Скрыть разделительную линию
+        // Дополнительная анимация для активных ячеек (сигналов)
+        function addSignalAnimation(cell) {
+            // Анимация сигнала: вспышка и увеличение
+            cell.classList.add('active');
+            cell.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
+            cell.style.transform = 'scale(1.3)';
+            cell.style.boxShadow = '0 0 20px rgba(0, 255, 153, 1), 0 0 30px rgba(0, 255, 153, 0.8)';
+
+            // Плавное исчезновение сигнала
+            setTimeout(() => {
+                cell.style.transform = 'scale(1)';
+                cell.style.boxShadow = '0 0 10px rgba(0, 255, 153, 0.5)';
+            }, 500); // Время эффекта
         }
 
-        function startLoading() {
-            const loadingSpinner = document.getElementById('loading-spinner');
-            const calculateButton = document.getElementById('calculate-button');
-            const statusContainer = document.getElementById('status-container');
-            const statusMessages = [
-                "Подключение к 1win...",
-                "Анализируем JetX...",
-                "Поиск скриптов...",
-                "Загрузка данных...",
-                "Определение коэффициентов...",
-                "Верификация данных...",
-                "Обработка информации...",
-                "Генерация прогноза..."
-            ];
-            let currentStatus = 0;
+        // Функция для добавления небольших частиц на активной ячейке
+        function addSignalParticles(cell) {
+            const particleContainer = document.createElement('div');
+            particleContainer.style.position = 'absolute';
+            particleContainer.style.top = '50%';
+            particleContainer.style.left = '50%';
+            particleContainer.style.transform = 'translate(-50%, -50%)';
+            particleContainer.style.pointerEvents = 'none'; // Частицы не должны перекрывать другие элементы
 
-            isCalculating = true;
-            loadingSpinner.style.display = 'block';
-            calculateButton.disabled = true;
-            statusContainer.classList.add('show'); // Показать статус
-            statusContainer.innerText = statusMessages[currentStatus];
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.position = 'absolute';
+                particle.style.width = '4px';
+                particle.style.height = '4px';
+                particle.style.backgroundColor = 'rgba(0, 255, 153, 0.8)';
+                particle.style.borderRadius = '50%';
+                particle.style.animation = 'explode 0.6s ease-out forwards';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
 
-            const loadTime = Math.floor(Math.random() * 6000) + 6000; // Время загрузки от 6 до 12 секунд
+                particleContainer.appendChild(particle);
+            }
 
-            const statusInterval = setInterval(() => {
-                currentStatus++;
-                if (currentStatus < statusMessages.length) {
-                    statusContainer.innerText = statusMessages[currentStatus];
-                }
-            }, loadTime / statusMessages.length);
+            cell.appendChild(particleContainer);
 
             setTimeout(() => {
-                clearInterval(statusInterval);
-                loadingSpinner.style.display = 'none';
-                statusContainer.classList.remove('show'); // Скрыть статус после загрузки
-                calculateButton.disabled = false;
-                isCalculating = false;
-                predictCoefficient();
-            }, loadTime);
+                cell.removeChild(particleContainer);
+            }, 600);
         }
 
-        function predictCoefficient() {
-            if (!mode) {
-                alert('Пожалуйста, выберите режим!');
-                return;
-            }
-            let coefficient;
-            const coefficientElement = document.getElementById('coefficient');
+        // Логика активации сигнала (улучшенная анимация)
+        function activateRandomSignal() {
+            const size = gridSizes[currentGrid];
 
-            if (mode === 'lite') {
-                coefficient = (1.01 + Math.random() * 1.19).toFixed(2);
-                coefficientElement.style.color = '#34d058';
-                coefficientElement.style.borderColor = '#34d058';
-                coefficientElement.style.boxShadow = '0 0 20px rgba(52, 208, 88, 0.7)';
-            } else if (mode === 'rage') {
-                coefficient = (1.7 + Math.random() * 5.3).toFixed(2);
-                coefficientElement.style.color = '#ff4b4b';
-                coefficientElement.style.borderColor = '#ff4b4b';
-                coefficientElement.style.boxShadow = '0 0 20px rgba(255, 75, 75, 0.7)';
+            // Очищаем текущую строку перед активацией новой
+            for (let col = 0; col < size.cols; col++) {
+                const index = activeRow * size.cols + col;
+                cells[index].classList.remove('active');
             }
 
-            coefficientElement.innerHTML = `<span style="font-size: 48px;">${coefficient}x</span>`;
-            coefficientElement.style.display = 'block';
+            // Генерация случайного сигнала в текущей строке
+            const randomCol = Math.floor(Math.random() * size.cols);
+            const index = activeRow * size.cols + randomCol;
+
+            // Активация и добавление анимации и частиц
+            addSignalAnimation(cells[index]);
+            addSignalParticles(cells[index]);
+
+            // Переход к следующей строке
+            activeRow--;
+
+            if (activeRow < 0) {
+                playButton.disabled = true; // Отключаем кнопку, когда все строки заполнены
+            }
         }
 
-        function openReferralLink() {
-            window.open('https://1wbhk.com/v3/jetx-landing?p=txhk', '_blank'); // Открытие ссылки в браузере
+        // Сброс игры
+        function resetGame() {
+            cells.forEach(cell => cell.classList.remove('active'));
+            signalStep = 0;
+            activeRow = gridSizes[currentGrid].rows - 1; // Сброс активной строки
+            playButton.disabled = false;
         }
 
-        function openTelegramLink() {
-            window.location.href = 'https://t.me/+1mHcVfVmYEBmY2Rh';
+        // Обработчик кнопки "Exit to Menu"
+        exitButton.addEventListener('click', () => {
+            alert('Возвращаемся в меню!'); // Позже подключишь реальную логику
+        });
+
+        // Обработчики событий
+        playButton.addEventListener('click', activateRandomSignal);
+        resetButton.addEventListener('click', resetGame);
+        gridSizeSelect.addEventListener('change', (e) => {
+            currentGrid = e.target.value;
+            resetGame();
+            createGrid(currentGrid);
+        });
+
+        // Функция для добавления частиц, которые двигаются в хаотичном порядке
+        function createParticles(numParticles) {
+            particlesContainer.innerHTML = ''; // Очистить старые частицы
+
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%'; // Стартовые позиции внутри контейнера
+                particle.style.animationDuration = (Math.random() * 10 + 5) + 's'; // Разная продолжительность
+                particle.style.transform = `translate(${Math.random() * 200 - 100}vw, ${Math.random() * 200 - 100}vh)`; // Разные направления полета
+                particlesContainer.appendChild(particle);
+            }
         }
 
-        showModeSelection();
+        // Создание сетки по умолчанию
+        createGrid(currentGrid);
+
+        // Добавление частиц
+        createParticles(150); // Увеличение числа частиц для заполнения экрана
     </script>
 </body>
 </html>
