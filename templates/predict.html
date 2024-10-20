@@ -2,8 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <!-- Обновлённый мета-тег viewport для предотвращения зуминга -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Glight Signals Hack</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
@@ -15,7 +14,7 @@
             height: 100vh;
             margin: 0;
             font-family: 'Montserrat', sans-serif;
-            background: #000;
+            background: #0d0d0d; /* Темный фон для хакерского стиля */
             overflow: hidden;
         }
 
@@ -26,10 +25,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            width: 90%;
+            width: 100%;
             max-width: 400px;
-            height: 90vh;
-            background: rgba(0, 0, 0, 0.8);
+            height: 95vh; /* Увеличенная высота контейнера */
+            background: rgba(13, 13, 13, 0.9); /* Темный полупрозрачный фон */
             padding: 20px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 255, 153, 0.8);
@@ -37,7 +36,34 @@
             z-index: 1;
         }
 
-        /* Анимированный фон для контейнера */
+        /* Медиазапросы для улучшения отображения на мобильных устройствах */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 90%;
+                height: 95vh; /* Сохраняем увеличенную высоту */
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 20px;
+            }
+
+            .controls button, .exit-button button {
+                padding: 12px 18px;
+                font-size: 14px;
+            }
+
+            .exit-button button {
+                padding: 15px 40px;
+                font-size: 18px;
+            }
+
+            .footer {
+                font-size: 10px;
+            }
+        }
+
+        /* Анимированный фон внутри контейнера */
         .background {
             position: absolute;
             top: 0;
@@ -48,33 +74,33 @@
             overflow: hidden;
         }
 
-        /* Частицы */
+        /* Частицы фона */
         .particle {
             position: absolute;
-            background-color: rgba(0, 255, 153, 0.8);
+            background-color: rgba(0, 255, 153, 0.8); /* Неоновый зеленый */
             width: 4px;
             height: 4px;
             border-radius: 50%;
             box-shadow: 0 0 10px rgba(0, 255, 153, 0.8), 0 0 20px rgba(0, 255, 153, 0.4);
             animation: moveParticle 10s infinite ease-in-out;
-            --translateX: 0;
-            --translateY: 0;
         }
 
-        /* Анимация для частиц */
         @keyframes moveParticle {
             0% {
                 transform: translate(0, 0) scale(1);
                 opacity: 1;
             }
             100% {
-                transform: translate(var(--translateX), var(--translateY)) scale(1);
+                transform: translate(
+                    calc(100vw * (random() - 0.5)), 
+                    calc(100vh * (random() - 0.5))
+                ) scale(1);
                 opacity: 1;
             }
         }
 
         h1 {
-            color: #fff;
+            color: #00ff99; /* Неоновый зеленый */
             text-align: center;
             margin: 0;
             font-size: 24px;
@@ -100,21 +126,41 @@
         }
 
         .cell {
-            background-color: #333;
+            background-color: #1a1a1a; /* Темный цвет ячеек */
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
-            transition: all 0.3s ease;
-            position: relative;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative; /* Для позиционирования частиц */
             overflow: hidden;
         }
 
         .cell.active {
-            background-color: #00ff99;
-            box-shadow: 0 0 20px rgba(0, 255, 153, 1);
-            border: 2px solid #fff;
+            background-color: #00ff99; /* Неоновый зеленый */
+            box-shadow: 0 0 30px rgba(0, 255, 153, 1), 0 0 60px rgba(0, 255, 153, 0.6);
+            border: 2px solid #00ff99;
+        }
+
+        /* Новая анимация для сигналов */
+        .cell.active.animate {
+            animation: signalEffect 0.6s forwards;
+        }
+
+        @keyframes signalEffect {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
 
         .controls {
@@ -129,19 +175,39 @@
             padding: 15px 20px;
             border: none;
             border-radius: 30px;
-            background-color: #00ff99;
-            color: #000;
+            background-color: #00ff99; /* Неоновый зеленый */
+            color: #0d0d0d; /* Темный текст для контраста */
             font-weight: bold;
-            font-size: 16px; /* Минимальный размер шрифта */
+            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s;
-            touch-action: manipulation; /* Улучшение взаимодействия на сенсорных устройствах */
-            -webkit-tap-highlight-color: rgba(0,0,0,0); /* Убирает подсветку при нажатии на iOS */
+            transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
         }
 
         .controls button:hover {
-            background-color: #00cc77;
+            background-color: #00cc77; /* Темнее зеленый при наведении */
             transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(0, 255, 153, 0.8), 0 0 40px rgba(0, 255, 153, 0.4);
+        }
+
+        /* Стиль для кнопки NEXT STEP */
+        .controls .next-step {
+            background-color: #00cc77; /* Темно-зеленый для "NEXT STEP" */
+            color: #0d0d0d;
+            animation: pulseButton 1.5s infinite;
+        }
+
+        @keyframes pulseButton {
+            0% {
+                box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(0, 204, 119, 1), 0 0 60px rgba(0, 204, 119, 0.6);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
+            }
         }
 
         .select-field {
@@ -155,18 +221,18 @@
         select {
             padding: 10px;
             border-radius: 10px;
-            background-color: #00ff99;
-            color: #000;
+            background-color: #00ff99; /* Неоновый зеленый */
+            color: #0d0d0d; /* Темный текст */
             font-weight: bold;
             border: none;
-            font-size: 16px; /* Минимальный размер шрифта */
-            appearance: none;
-            cursor: pointer;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: rgba(0,0,0,0);
+            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
 
-        /* Визуал кнопки Exit to Menu */
+        select:hover {
+            background-color: #00cc77; /* Темнее зеленый при наведении */
+        }
+
         .exit-button {
             margin-top: 30px;
             width: 100%;
@@ -179,21 +245,19 @@
             padding: 20px 50px;
             border: none;
             border-radius: 50px;
-            background-color: #ff4444;
-            color: #fff;
+            background-color: #ff4444; /* Яркий красный для кнопки выхода */
+            color: #fff; /* Белый текст */
             font-weight: bold;
-            font-size: 16px; /* Минимальный размер шрифта */
+            font-size: 20px;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s;
             box-shadow: 0 0 30px rgba(255, 68, 68, 0.8), 0 0 60px rgba(255, 68, 68, 0.4);
             position: relative;
             overflow: hidden;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: rgba(0,0,0,0);
         }
 
         .exit-button button:hover {
-            background-color: #ff2222;
+            background-color: #ff2222; /* Темнее красный при наведении */
             transform: translateY(-5px);
             box-shadow: 0 0 40px rgba(255, 68, 68, 1), 0 0 80px rgba(255, 68, 68, 0.6);
         }
@@ -202,9 +266,9 @@
             width: 100%;
             text-align: center;
             margin-top: 20px;
-            color: #fff;
+            color: #00ff99; /* Неоновый зеленый */
             font-size: 12px;
-            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
             z-index: 2;
         }
 
@@ -219,44 +283,21 @@
             }
         }
 
-        /* Медиа-запросы для адаптивности */
-        @media (max-width: 500px) {
-            .container {
-                height: 85vh; /* Уменьшенная высота на мобильных устройствах */
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 20px;
-            }
-
-            .controls button {
-                padding: 10px 15px;
-                font-size: 16px; /* Минимальный размер шрифта */
-            }
-
-            .exit-button button {
-                padding: 15px 40px;
-                font-size: 16px; /* Минимальный размер шрифта */
-            }
-
-            .select-field select {
-                font-size: 16px; /* Увеличен размер шрифта */
-            }
+        /* Дополнительные стили для частиц при активации сигнала */
+        .signal-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: rgba(0, 255, 153, 0.8);
+            border-radius: 50%;
+            animation: explode 0.6s ease-out forwards;
         }
 
-        @media (max-width: 400px) {
-            .container {
-                width: 95%;
-                padding: 10px;
-            }
-
-            .controls button,
-            .exit-button button,
-            select {
-                font-size: 16px; /* Обеспечиваем минимальный размер шрифта */
-            }
+        /* Добавим плавные переходы для кнопок */
+        .controls button, .exit-button button {
+            transition: all 0.3s ease;
         }
+
     </style>
 </head>
 <body>
@@ -269,7 +310,7 @@
         <h1>GLIGHT SIGNALS HACK</h1>
 
         <div class="select-field">
-            <select id="gridSizeSelect" aria-label="Выбор размера сетки">
+            <select id="gridSizeSelect">
                 <option value="2x3">Field 2x3</option>
                 <option value="3x6">Field 3x6</option>
                 <option value="4x9">Field 4x9</option>
@@ -283,12 +324,12 @@
         </div>
 
         <div class="controls">
-            <button id="playButton" aria-label="Начать игру">PLAY</button>
-            <button id="resetButton" aria-label="Сбросить игру">RESET</button>
+            <button id="playButton">PLAY</button>
+            <button id="resetButton">RESET</button>
         </div>
 
         <div class="exit-button">
-            <button id="exitButton" aria-label="Выйти в меню">EXIT TO MENU</button>
+            <button id="exitButton">EXIT TO MENU</button>
         </div>
 
         <div class="footer">
@@ -315,15 +356,12 @@
         let currentGrid = "2x3"; // Текущая сетка
         let cells = []; // Все клетки
         let activeRow = gridSizes[currentGrid].rows - 1; // Начальная строка (нижняя)
-        let signalStep = 0;
-        let maxSteps = gridSizes[currentGrid].rows; // Количество строк
-        let gameInterval = null; // Интервал для автоматической активации сигналов
+        let isAnimating = false; // Флаг анимации
 
         // Создание сетки с адаптацией под экран
         function createGrid(sizeKey) {
             gridContainer.innerHTML = ''; // Очистить предыдущую сетку
             const size = gridSizes[sizeKey];
-            maxSteps = size.rows; // Сброс количества шагов
             activeRow = size.rows - 1; // Начинаем с нижней строки
 
             const availableHeight = window.innerHeight * 0.6; // 60% высоты экрана
@@ -344,23 +382,20 @@
             }
         }
 
-        // Дополнительная анимация для активных ячеек (сигналов)
-        function addSignalAnimation(cell) {
-            // Анимация сигнала: вспышка и увеличение
-            cell.classList.add('active');
-            cell.style.transition = 'transform 0.3s ease, box-shadow 0.3s ease';
-            cell.style.transform = 'scale(1.3)';
-            cell.style.boxShadow = '0 0 20px rgba(0, 255, 153, 1), 0 0 30px rgba(0, 255, 153, 0.8)';
-
-            // Плавное исчезновение сигнала
+        // Функция для добавления сигнала с новой анимацией
+        function addSignal(cell) {
+            cell.classList.add('active', 'animate');
+            // Убедимся, что никакие трансформации не применяются
+            cell.style.transform = 'none';
+            cell.style.boxShadow = '0 0 30px rgba(0, 255, 153, 1), 0 0 60px rgba(0, 255, 153, 0.6)';
+            
+            // Удаляем класс 'animate' после завершения анимации
             setTimeout(() => {
-                cell.style.transform = 'scale(1)';
-                cell.style.boxShadow = '0 0 10px rgba(0, 255, 153, 0.5)';
-                cell.classList.remove('active');
-            }, 500); // Время эффекта
+                cell.classList.remove('animate');
+            }, 600); // Время анимации должно соответствовать длительности 'signalEffect'
         }
 
-        // Функция для добавления небольших частиц на активной ячейке
+        // Функция для добавления частиц на активной ячейке
         function addSignalParticles(cell) {
             const particleContainer = document.createElement('div');
             particleContainer.style.position = 'absolute';
@@ -369,84 +404,108 @@
             particleContainer.style.transform = 'translate(-50%, -50%)';
             particleContainer.style.pointerEvents = 'none'; // Частицы не должны перекрывать другие элементы
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 15; i++) { // Увеличено количество частиц для более яркого эффекта
                 const particle = document.createElement('div');
-                particle.classList.add('particle');
-                particle.style.position = 'absolute';
-                particle.style.width = '4px';
-                particle.style.height = '4px';
-                particle.style.backgroundColor = 'rgba(0, 255, 153, 0.8)';
-                particle.style.borderRadius = '50%';
-                particle.style.animation = 'explode 0.6s ease-out forwards';
+                particle.classList.add('signal-particle');
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.top = Math.random() * 100 + '%';
-
+                particle.style.animationDuration = '0.6s'; // Длительность анимации
+                particle.style.backgroundColor = `rgba(0, 255, 153, ${Math.random() * 0.6 + 0.4})`; // Разная прозрачность
                 particleContainer.appendChild(particle);
             }
 
             cell.appendChild(particleContainer);
 
+            // Удаление контейнера частиц после окончания анимации
             setTimeout(() => {
-                cell.removeChild(particleContainer);
+                if (cell.contains(particleContainer)) {
+                    cell.removeChild(particleContainer);
+                }
             }, 600);
         }
 
-        // Логика активации сигнала (улучшенная анимация)
+        // Логика активации сигнала
         function activateRandomSignal() {
+            if (isAnimating) return; // Предотвращаем запуск, если уже идет анимация
+            isAnimating = true;
+            playButton.disabled = true; // Отключаем кнопку PLAY/Next Step
+
             const size = gridSizes[currentGrid];
 
             if (activeRow < 0) {
-                // Все строки активированы
-                clearInterval(gameInterval);
+                // Все строки уже активированы
                 playButton.disabled = true;
+                playButton.textContent = 'PLAY';
+                playButton.classList.remove('next-step');
+                isAnimating = false;
                 return;
             }
 
             // Генерация случайного сигнала в текущей строке
             const randomCol = Math.floor(Math.random() * size.cols);
             const index = activeRow * size.cols + randomCol;
-
             const cell = cells[index];
-            addSignalAnimation(cell);
-            addSignalParticles(cell);
+
+            // Проверка, если уже активирован, выбираем другой
+            if (cell.classList.contains('active')) {
+                // Найдём первую неактивную ячейку в текущей строке
+                let found = false;
+                for (let col = 0; col < size.cols; col++) {
+                    const currentIndex = activeRow * size.cols + col;
+                    if (!cells[currentIndex].classList.contains('active')) {
+                        addSignal(cells[currentIndex]);
+                        addSignalParticles(cells[currentIndex]);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    // Все ячейки в строке уже активированы
+                }
+            } else {
+                // Активируем выбранную ячейку
+                addSignal(cell);
+                addSignalParticles(cell);
+            }
 
             // Переход к следующей строке
             activeRow--;
-            signalStep++;
 
-            if (signalStep >= maxSteps) {
-                clearInterval(gameInterval);
-                playButton.disabled = true;
-            }
+            // Включаем кнопку NEXT STEP или возвращаем PLAY после окончания всех ходов
+            setTimeout(() => {
+                if (activeRow >= 0) {
+                    playButton.textContent = 'NEXT STEP';
+                    playButton.classList.add('next-step');
+                    playButton.disabled = false;
+                } else {
+                    playButton.textContent = 'PLAY';
+                    playButton.classList.remove('next-step');
+                    playButton.disabled = true;
+                }
+                isAnimating = false;
+            }, 600); // Время анимации
         }
 
         // Сброс игры
         function resetGame() {
             cells.forEach(cell => {
-                cell.classList.remove('active');
-                cell.style.transform = 'scale(1)';
+                cell.classList.remove('active', 'animate');
+                cell.style.transform = 'none';
                 cell.style.boxShadow = '0 0 10px rgba(0, 255, 153, 0.5)';
             });
-            signalStep = 0;
             activeRow = gridSizes[currentGrid].rows - 1; // Сброс активной строки
+            playButton.textContent = 'PLAY';
+            playButton.classList.remove('next-step');
             playButton.disabled = false;
-            clearInterval(gameInterval);
         }
 
         // Обработчик кнопки "Exit to Menu"
         exitButton.addEventListener('click', () => {
-            // Здесь можно добавить реальную логику выхода в меню
-            // Например, перенаправление на другую страницу:
-            // window.location.href = 'menu.html';
-            alert('Возвращаемся в меню!'); // Плейсхолдер
+            window.location.href = 'menu.html'; // Перенаправление на menu.html
         });
 
         // Обработчики событий
-        playButton.addEventListener('click', () => {
-            activateRandomSignal(); // Немедленная активация первого сигнала
-            gameInterval = setInterval(activateRandomSignal, 1000); // Далее сигналы каждую секунду
-            playButton.disabled = true; // Отключаем кнопку, чтобы предотвратить повторный запуск
-        });
+        playButton.addEventListener('click', activateRandomSignal);
         resetButton.addEventListener('click', resetGame);
         gridSizeSelect.addEventListener('change', (e) => {
             currentGrid = e.target.value;
@@ -454,23 +513,17 @@
             createGrid(currentGrid);
         });
 
-        // Функция для добавления частиц, которые двигаются в хаотичном порядке
+        // Функция для добавления частиц фона
         function createParticles(numParticles) {
             particlesContainer.innerHTML = ''; // Очистить старые частицы
 
             for (let i = 0; i < numParticles; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
-                particle.style.left = `${Math.random() * 100}%`;
-                particle.style.top = `${Math.random() * 100}%`;
-                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
-
-                // Генерация случайных трансформаций
-                const translateX = Math.random() * 200 - 100; // от -100 до 100 vw
-                const translateY = Math.random() * 200 - 100; // от -100 до 100 vh
-                particle.style.setProperty('--translateX', `${translateX}vw`);
-                particle.style.setProperty('--translateY', `${translateY}vh`);
-
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%'; // Стартовые позиции внутри контейнера
+                particle.style.animationDuration = (Math.random() * 10 + 5) + 's'; // Разная продолжительность
+                particle.style.transform = `translate(${Math.random() * 200 - 100}vw, ${Math.random() * 200 - 100}vh)`; // Разные направления полета
                 particlesContainer.appendChild(particle);
             }
         }
@@ -478,13 +531,8 @@
         // Создание сетки по умолчанию
         createGrid(currentGrid);
 
-        // Добавление частиц
-        createParticles(100); // Оптимизированное количество частиц для производительности
-
-        // Обработка изменения размера окна для адаптивности
-        window.addEventListener('resize', () => {
-            createGrid(currentGrid);
-        });
+        // Добавление частиц фона
+        createParticles(150); // Увеличение числа частиц для заполнения экрана
     </script>
 </body>
 </html>
