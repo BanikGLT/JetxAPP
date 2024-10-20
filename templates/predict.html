@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Метатег для предотвращения масштабирования -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Glight Signals Hack</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
@@ -30,7 +31,7 @@
             height: 95vh; /* Увеличенная высота контейнера */
             background: rgba(13, 13, 13, 0.9); /* Темный полупрозрачный фон */
             padding: 20px;
-            border-radius: 20px;
+            border-radius: 30px; /* Увеличенный радиус закругления */
             box-shadow: 0 10px 30px rgba(0, 255, 153, 0.8);
             overflow: hidden;
             z-index: 1;
@@ -42,6 +43,7 @@
                 max-width: 90%;
                 height: 95vh; /* Сохраняем увеличенную высоту */
                 padding: 15px;
+                border-radius: 25px; /* Немного уменьшенный радиус для мобильных */
             }
 
             h1 {
@@ -77,11 +79,11 @@
         /* Частицы фона */
         .particle {
             position: absolute;
-            background-color: rgba(0, 255, 153, 0.8); /* Неоновый зеленый */
+            background-color: rgba(0, 204, 119, 0.8); /* Неоновый зеленый */
             width: 4px;
             height: 4px;
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0, 255, 153, 0.8), 0 0 20px rgba(0, 255, 153, 0.4);
+            box-shadow: 0 0 10px rgba(0, 204, 119, 0.8), 0 0 20px rgba(0, 204, 119, 0.4);
             animation: moveParticle 10s infinite ease-in-out;
         }
 
@@ -100,11 +102,11 @@
         }
 
         h1 {
-            color: #00ff99; /* Неоновый зеленый */
+            color: #00cc77; /* Неоновый зеленый */
             text-align: center;
             margin: 0;
             font-size: 24px;
-            text-shadow: 0 0 15px rgba(0, 255, 153, 0.8);
+            text-shadow: 0 0 15px rgba(0, 204, 119, 0.8);
             z-index: 2;
         }
 
@@ -131,16 +133,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+            box-shadow: 0 0 10px rgba(0, 204, 119, 0.5);
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
             position: relative; /* Для позиционирования частиц */
             overflow: hidden;
         }
 
         .cell.active {
-            background-color: #00ff99; /* Неоновый зеленый */
-            box-shadow: 0 0 30px rgba(0, 255, 153, 1), 0 0 60px rgba(0, 255, 153, 0.6);
-            border: 2px solid #00ff99;
+            background-color: #00cc77; /* Неоновый зеленый */
+            box-shadow: 0 0 30px rgba(0, 204, 119, 1), 0 0 60px rgba(0, 204, 119, 0.6);
+            border: 2px solid #00cc77;
         }
 
         /* Новая анимация для сигналов */
@@ -175,7 +177,7 @@
             padding: 15px 20px;
             border: none;
             border-radius: 30px;
-            background-color: #00ff99; /* Неоновый зеленый */
+            background-color: #00cc77; /* Неоновый зеленый */
             color: #0d0d0d; /* Темный текст для контраста */
             font-weight: bold;
             font-size: 16px;
@@ -186,27 +188,27 @@
         }
 
         .controls button:hover {
-            background-color: #00cc77; /* Темнее зеленый при наведении */
+            background-color: #00995c; /* Темнее зеленый при наведении */
             transform: translateY(-3px);
-            box-shadow: 0 0 20px rgba(0, 255, 153, 0.8), 0 0 40px rgba(0, 255, 153, 0.4);
+            box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
         }
 
         /* Стиль для кнопки NEXT STEP */
         .controls .next-step {
-            background-color: #00cc77; /* Темно-зеленый для "NEXT STEP" */
+            background-color: #00995c; /* Темно-зеленый для "NEXT STEP" */
             color: #0d0d0d;
             animation: pulseButton 1.5s infinite;
         }
 
         @keyframes pulseButton {
             0% {
-                box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
+                box-shadow: 0 0 20px rgba(0, 153, 92, 0.8), 0 0 40px rgba(0, 153, 92, 0.4);
             }
             50% {
-                box-shadow: 0 0 30px rgba(0, 204, 119, 1), 0 0 60px rgba(0, 204, 119, 0.6);
+                box-shadow: 0 0 30px rgba(0, 153, 92, 1), 0 0 60px rgba(0, 153, 92, 0.6);
             }
             100% {
-                box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
+                box-shadow: 0 0 20px rgba(0, 153, 92, 0.8), 0 0 40px rgba(0, 153, 92, 0.4);
             }
         }
 
@@ -221,7 +223,7 @@
         select {
             padding: 10px;
             border-radius: 10px;
-            background-color: #00ff99; /* Неоновый зеленый */
+            background-color: #00cc77; /* Неоновый зеленый */
             color: #0d0d0d; /* Темный текст */
             font-weight: bold;
             border: none;
@@ -230,7 +232,7 @@
         }
 
         select:hover {
-            background-color: #00cc77; /* Темнее зеленый при наведении */
+            background-color: #00995c; /* Темнее зеленый при наведении */
         }
 
         .exit-button {
@@ -266,9 +268,9 @@
             width: 100%;
             text-align: center;
             margin-top: 20px;
-            color: #00ff99; /* Неоновый зеленый */
+            color: #00cc77; /* Неоновый зеленый */
             font-size: 12px;
-            text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
+            text-shadow: 0 0 5px rgba(0, 204, 119, 0.5);
             z-index: 2;
         }
 
@@ -288,7 +290,7 @@
             position: absolute;
             width: 4px;
             height: 4px;
-            background-color: rgba(0, 255, 153, 0.8);
+            background-color: rgba(0, 204, 119, 0.8);
             border-radius: 50%;
             animation: explode 0.6s ease-out forwards;
         }
@@ -387,7 +389,7 @@
             cell.classList.add('active', 'animate');
             // Убедимся, что никакие трансформации не применяются
             cell.style.transform = 'none';
-            cell.style.boxShadow = '0 0 30px rgba(0, 255, 153, 1), 0 0 60px rgba(0, 255, 153, 0.6)';
+            cell.style.boxShadow = '0 0 30px rgba(0, 204, 119, 1), 0 0 60px rgba(0, 204, 119, 0.6)';
             
             // Удаляем класс 'animate' после завершения анимации
             setTimeout(() => {
@@ -410,7 +412,7 @@
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.top = Math.random() * 100 + '%';
                 particle.style.animationDuration = '0.6s'; // Длительность анимации
-                particle.style.backgroundColor = `rgba(0, 255, 153, ${Math.random() * 0.6 + 0.4})`; // Разная прозрачность
+                particle.style.backgroundColor = `rgba(0, 204, 119, ${Math.random() * 0.6 + 0.4})`; // Разная прозрачность
                 particleContainer.appendChild(particle);
             }
 
@@ -491,7 +493,7 @@
             cells.forEach(cell => {
                 cell.classList.remove('active', 'animate');
                 cell.style.transform = 'none';
-                cell.style.boxShadow = '0 0 10px rgba(0, 255, 153, 0.5)';
+                cell.style.boxShadow = '0 0 10px rgba(0, 204, 119, 0.5)';
             });
             activeRow = gridSizes[currentGrid].rows - 1; // Сброс активной строки
             playButton.textContent = 'PLAY';
