@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра Мины — Эпичные звёзды</title>
+    
+    <!-- Подключение шрифта Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Общие стили */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+            background: #0d0d0d; /* Темный фон для неонового стиля */
+            overflow: hidden;
+        }
+
+        /* Контейнер приложения с анимированным фоном */
+        .container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 90%;
+            max-width: 400px; /* Сохраняем исходную ширину */
+            height: 95vh; /* Высота контейнера */
+            background: rgba(13, 13, 13, 0.95); /* Темный полупрозрачный фон */
+            padding: 20px;
+            border-radius: 25px; /* Исходный радиус */
+            box-shadow: 0 0 30px rgba(0, 255, 153, 0.6); /* Неоновая тень */
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        /* Медиазапросы для мобильных устройств */
+        @media (max-width: 600px) {
+            .container {
+                max-width: 90%;
+                height: 95vh;
+                padding: 15px;
+            }
+
+            h1, h2 {
+                font-size: 20px;
+            }
+
+            .controls button, .exit-button button, .trap-btn, .btn-signal, .btn-back, .btn-open {
+                padding: 12px 18px;
+                font-size: 14px;
+            }
+
+            .footer {
+                font-size: 10px;
+            }
+
+            .grid {
+                grid-gap: 5px;
+            }
+        }
+
+        /* Анимированный фон внутри контейнера */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        /* Частицы фона */
+        .particle {
+            position: absolute;
+            background-color: rgba(0, 255, 153, 0.8); /* Неоновый зеленый */
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 255, 153, 0.8), 0 0 20px rgba(0, 255, 153, 0.4);
+            animation: moveParticle 10s infinite ease-in-out;
+        }
+
+        @keyframes moveParticle {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(
+                    calc(100vw * (var(--rand-x) - 0.5)), 
+                    calc(100vh * (var(--rand-y) - 0.5))
+                ) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Заголовки */
+        h1, h2 {
+            color: #00ff99; /* Неоновый зеленый */
+            text-align: center;
+            margin: 0;
+            font-size: 26px;
+            text-shadow: 0 0 15px rgba(0, 255, 153, 0.8);
+            z-index: 2;
+        }
+
+        /* Меню и игры */
+        .menu, .game {
+            width: 100%;
+            z-index: 2;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            justify-items: center;
+        }
+
+        .game-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 150px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 153, 0.8);
+        }
+
+        .game-icon {
+            width: 130px;
+            height: 100px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .game-card:hover .game-icon {
+            transform: rotate(5deg);
+        }
+
+        .game-name {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #00ff99;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
+        }
+
+        .btn-open {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            background: linear-gradient(135deg, #34d058, #28a745);
+            color: #fff;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(52, 208, 88, 0.6);
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+        }
+
+        .btn-open:hover {
+            background: linear-gradient(135deg, #28a745, #34d058);
+            box-shadow: 0 8px 16px rgba(52, 208, 88, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Сетка игры */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 10px;
+            width: 100%;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+
+        .cell {
+            width: 100%;
+            padding-bottom: 100%;
+            position: relative;
+            background: linear-gradient(145deg, #67e6dc, #0d7377);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+            z-index: 2;
+        }
+
+        .cell:hover {
+            transform: scale(1.08);
+            background: linear-gradient(145deg, #9fffe3, #50d5d1);
+            box-shadow: 0 12px 24px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Эпичные звёзды */
+        .star {
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, #ff8c00, #ff3f00);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.4s ease-out;
+            z-index: 3;
+        }
+
+        .show-star {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.3);
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0px, 0px); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(3px, -3px); }
+            60% { transform: translate(-3px, 3px); }
+            80% { transform: translate(3px, -3px); }
+            100% { transform: translate(0px, 0px); }
+        }
+
+        .cell.animate {
+            animation: shake 0.3s ease;
+        }
+
+        /* Секция ловушек */
+        .trap-settings {
+            text-align: center;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+
+        .trap-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #ffdf00;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .trap-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .trap-counter {
+            font-size: 22px;
+            margin: 0 20px;
+            color: #ffdf00;
+        }
+
+        .trap-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+            z-index: 2;
+        }
+
+        .trap-btn:hover:not(:disabled) {
+            background-color: #0056b3;
+            transform: scale(1.2);
+        }
+
+        .trap-btn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+
+        /* Кнопка получения сигнала */
+        .btn-signal {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #00ff99, #00cc77); /* Градиентный неоновый зеленый */
+            color: #0d0d0d; /* Темный текст */
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0, 255, 153, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-signal::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+
+        .btn-signal:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .btn-signal:hover {
+            background: linear-gradient(135deg, #00cc77, #00ff99); /* Инвертированный градиент при наведении */
+            box-shadow: 0 8px 20px rgba(0, 255, 153, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Кнопка "Назад в меню" */
+        .btn-back {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ff4444, #ff2222); /* Градиентный яркий красный */
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(255, 68, 68, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-back::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+
+        .btn-back:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .btn-back:hover {
+            background: linear-gradient(135deg, #ff2222, #ff4444); /* Инвертированный градиент при наведении */
+            box-shadow: 0 8px 20px rgba(255, 68, 68, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Загрузка */
+        .loader {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 6px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 6px solid #007bff;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+            z-index: 2;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            color: #00ff99; /* Неоновый зеленый */
+            font-size: 12px;
+            text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
+            z-index: 2;
+        }
+
+        /* Дополнительные стили для частиц при активации сигнала */
+        .signal-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: rgba(0, 255, 153, 0.8);
+            border-radius: 50%;
+            animation: explode 0.6s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Анимация кнопки NEXT STEP */
+        .next-step {
+            animation: pulseButton 1.5s infinite;
+        }
+
+        @keyframes pulseButton {
+            0% {
+                box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(0, 204, 119, 1), 0 0 60px rgba(0, 204, 119, 0.6);
+            }
+            100% {
+                box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Анимированный фон внутри контейнера -->
+        <div class="background" id="particles">
+            <!-- Частицы будут добавлены с помощью JS -->
+        </div>
+
+        <!-- Заголовок -->
+        <h1>Игра Мины — Эпичные звёзды</h1>
+
+        <!-- Экран меню с выбором игры -->
+        <div class="menu" id="menuContainer">
+            <h2>Меню</h2>
+            <div class="games-grid">
+                <!-- Карточка игры Mines -->
+                <div class="game-card" onclick="startGame('mines')">
+                    <div class="game-icon" style="background-image: url('https://imgproxy.v1.bundlecdn.com/unsafe/casino_list_big_1x/plain/https://v1.bundlecdn.com/casino-images/1play/e47f89a4-3663-4c9d-bc45-fe1845d34e1b.png@avif');"></div>
+                    <div class="game-name">Mines</div>
+                    <button class="btn-open">Открыть</button>
+                </div>
+
+                <!-- Карточка игры Bombucks -->
+                <div class="game-card" onclick="redirectToBombucks()">
+                    <div class="game-icon" style="background-image: url('https://imgproxy.v1.bundlecdn.com/unsafe/casino_list_big_1x/plain/https://v1.bundlecdn.com/casino-images/1play/cfbbb3f3-f098-4f61-9800-edf8e8bb592f.png@avif');"></div>
+                    <div class="game-name">Bombucks</div>
+                    <button class="btn-open">Открыть</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Экран игры "Мины" -->
+        <div class="game" id="gameContainer" style="display: none;">
+            <h2>Игра Мины</h2>
+
+            <!-- Секция выбора ловушек -->
+            <div class="trap-settings">
+                <div class="trap-title">Количество ловушек</div>
+                <div class="trap-selector">
+                    <button class="trap-btn" id="decreaseTrap" onclick="decreaseTraps()">-</button>
+                    <div class="trap-counter" id="trapCounter">3</div>
+                    <button class="trap-btn" id="increaseTrap" onclick="increaseTraps()">+</button>
+                </div>
+            </div>
+
+            <!-- Сетка ячеек -->
+            <div class="grid" id="grid"></div>
+
+            <!-- Загрузка -->
+            <div class="loader" id="loader"></div>
+
+            <!-- Кнопка "Получить сигнал" -->
+            <button class="btn-signal" onclick="getSignal()">Получить сигнал</button>
+
+            <!-- Кнопка "Назад в меню" -->
+            <button class="btn-back" onclick="goToMenu()">Назад в меню</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© GLIGHT SIGNALS BOT 2024</p>
+        </div>
+    </div>
+
+    <script>
+        /* Скрипты для анимированного фона */
+        const particlesContainer = document.getElementById('particles');
+
+        // Функция для генерации случайных чисел
+        function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        // Создание частиц фона
+        function createParticles(numParticles) {
+            particlesContainer.innerHTML = ''; // Очистить старые частицы
+
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = getRandom(0, 100) + '%';
+                particle.style.top = getRandom(0, 100) + '%'; // Стартовые позиции внутри контейнера
+                particle.style.animationDuration = getRandom(5, 15) + 's'; // Разная продолжительность
+                particle.style.setProperty('--rand-x', Math.random());
+                particle.style.setProperty('--rand-y', Math.random());
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Добавление частиц фона при загрузке
+        createParticles(100); // Уменьшено количество частиц для оптимизации
+
+        /* Скрипты для игры "Игра Мины — Эпичные звёзды" */
+        const gridSize = 5;
+        const totalCells = gridSize * gridSize;
+        let trapCount = 3;
+        let grid = [];
+
+        // Создание сетки игры
+        function createGrid() {
+            const gridElement = document.getElementById('grid');
+            gridElement.innerHTML = '';
+            grid = [];
+
+            for (let i = 0; i < totalCells; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+
+                const star = document.createElement('div');
+                star.classList.add('star');
+                cell.appendChild(star);
+
+                // Добавляем эффект при клике
+                cell.addEventListener('click', () => {
+                    if (!star.classList.contains('show-star')) {
+                        cell.classList.add('animate');
+                        star.classList.add('show-star');
+                        setTimeout(() => {
+                            cell.classList.remove('animate');
+                        }, 300);
+                    }
+                });
+
+                grid.push(cell);
+                gridElement.appendChild(cell);
+            }
+        }
+
+        // Логика увеличения/уменьшения ловушек
+        function decreaseTraps() {
+            if (trapCount > 1) {
+                trapCount -= 2;
+                document.getElementById('trapCounter').textContent = trapCount;
+            }
+        }
+
+        function increaseTraps() {
+            if (trapCount < 7) {
+                trapCount += 2;
+                document.getElementById('trapCounter').textContent = trapCount;
+            }
+        }
+
+        // Получение сигнала
+        function getSignal() {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block';
+
+            setTimeout(() => {
+                loader.style.display = 'none';
+                revealStars();
+            }, getRandom(1000, 3000)); // Сигналы выдаются в первые 3 секунды
+        }
+
+        // Формула для вычисления количества звёзд на основе ловушек
+        function calculateStars() {
+            const trapPercentMap = {
+                1: [60, 70],
+                2: [45, 60],
+                3: [35, 50],
+                4: [25, 40],
+                5: [20, 30],
+                6: [10, 20],
+                7: [5, 15]
+            };
+
+            const range = trapPercentMap[trapCount] || [5, 10];
+            const randomPercent = Math.floor(getRandom(range[0], range[1] + 1));
+            return Math.floor((randomPercent / 100) * totalCells);
+        }
+
+        // Появление звёзд с учётом ловушек
+        function revealStars() {
+            grid.forEach(cell => {
+                const star = cell.querySelector('.star');
+                star.classList.remove('show-star');
+            });
+
+            let starCount = calculateStars();
+            let revealedStars = 0;
+            const revealInterval = 3000 / starCount; // Всё происходит за 3 секунды
+
+            const intervalId = setInterval(() => {
+                if (revealedStars < starCount) {
+                    const randomIndex = Math.floor(getRandom(0, totalCells));
+                    const cell = grid[randomIndex];
+                    const star = cell.querySelector('.star');
+
+                    if (!star.classList.contains('show-star')) {
+                        cell.classList.add('animate');
+                        star.classList.add('show-star');
+                        revealedStars++;
+
+                        setTimeout(() => {
+                            cell.classList.remove('animate');
+                        }, 500);
+                    }
+                } else {
+                    clearInterval(intervalId);
+                }
+            }, revealInterval);
+        }
+
+        // Возвращение в меню
+        function goToMenu() {
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('menuContainer').style.display = 'block';
+        }
+
+        // Начать игру
+        function startGame(game) {
+            document.getElementById('menuContainer').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'block';
+            createGrid();
+        }
+
+        // Перенаправление на страницу Bombucks
+        function redirectToBombucks() {
+            window.location.href = 'Bombucks.html';
+        }
+
+        // Инициализация игры при загрузке
+        window.onload = () => {
+            createGrid();
+        };
+    </script>
+</body>
+</html>
