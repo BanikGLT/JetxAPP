@@ -37,6 +37,11 @@ async def webhook():
 def index():
     return render_template('predict.html')
 
+# Добавляем новый маршрут для Bombucks.html
+@app.route('/bombucks')
+def bombucks():
+    return render_template('Bombucks.html')
+
 # Главная функция запуска приложения
 def main():
     telegram_app.add_handler(CommandHandler('start', start))
