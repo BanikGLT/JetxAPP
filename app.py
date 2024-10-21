@@ -35,7 +35,7 @@ async def webhook():
 # Роут для отображения основного HTML интерфейса
 @app.route('/')
 def index():
-    return render_template('menu.html')
+    return render_template('predict.html')
 
 # Главная функция запуска приложения
 def main():
