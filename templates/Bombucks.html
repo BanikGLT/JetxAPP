@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en"> <!-- Язык по умолчанию установлен на английский -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glight Signals Hack</title>
+    <title data-i18n="title">Glight Signals Hack</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 
@@ -92,8 +92,8 @@
             }
             100% {
                 transform: translate(
-                    calc(100vw * (random() - 0.5)), 
-                    calc(100vh * (random() - 0.5))
+                    calc(100vw * (var(--rand-x) - 0.5)), 
+                    calc(100vh * (var(--rand-y) - 0.5))
                 ) scale(1);
                 opacity: 1;
             }
@@ -227,6 +227,11 @@
             border: none;
             font-size: 14px;
             transition: background-color 0.3s ease;
+            appearance: none; /* Удаление стандартного стиля селекта */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%230d0d0d"><polygon points="0,0 12,0 6,6" /></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 10px;
         }
 
         select:hover {
@@ -307,15 +312,15 @@
             <!-- Частицы будут добавлены с помощью JS -->
         </div>
 
-        <h1>GLIGHT SIGNALS HACK</h1>
+        <h1 data-i18n="title">Glight Signals Hack</h1>
 
         <div class="select-field">
             <select id="gridSizeSelect">
-                <option value="2x3">Field 2x3</option>
-                <option value="3x6">Field 3x6</option>
-                <option value="4x9">Field 4x9</option>
-                <option value="5x12">Field 5x12</option>
-                <option value="6x15">Field 6x15</option>
+                <option value="2x3" data-i18n="field_2x3">Field 2x3</option>
+                <option value="3x6" data-i18n="field_3x6">Field 3x6</option>
+                <option value="4x9" data-i18n="field_4x9">Field 4x9</option>
+                <option value="5x12" data-i18n="field_5x12">Field 5x12</option>
+                <option value="6x15" data-i18n="field_6x15">Field 6x15</option>
             </select>
         </div>
 
@@ -324,26 +329,116 @@
         </div>
 
         <div class="controls">
-            <button id="playButton">PLAY</button>
-            <button id="resetButton">RESET</button>
+            <button id="playButton" data-i18n="play">PLAY</button>
+            <button id="resetButton" data-i18n="reset">RESET</button>
         </div>
 
         <div class="exit-button">
-            <button id="exitButton">EXIT TO MENU</button>
+            <button id="exitButton" data-i18n="exit_to_menu">EXIT TO MENU</button>
         </div>
 
         <div class="footer">
-            <p>© GLIGHT SIGNALS BOT 2024</p>
+            <p data-i18n="footer_text">© GLIGHT SIGNALS BOT 2024</p>
         </div>
     </div>
 
     <script>
+        // Объект с переводами
+        const translations = {
+            en: {
+                title: "Glight Signals Hack",
+                play: "PLAY",
+                reset: "RESET",
+                exit_to_menu: "EXIT TO MENU",
+                footer_text: "© GLIGHT SIGNALS BOT 2024",
+                field_2x3: "Field 2x3",
+                field_3x6: "Field 3x6",
+                field_4x9: "Field 4x9",
+                field_5x12: "Field 5x12",
+                field_6x15: "Field 6x15"
+            },
+            ru: {
+                title: "Glight Signals Hack", // Название оставлено на английском
+                play: "ИГРАТЬ",
+                reset: "СБРОС",
+                exit_to_menu: "ВЫХОД В МЕНЮ",
+                footer_text: "© GLIGHT SIGNALS BOT 2024",
+                field_2x3: "Поле 2x3",
+                field_3x6: "Поле 3x6",
+                field_4x9: "Поле 4x9",
+                field_5x12: "Поле 5x12",
+                field_6x15: "Поле 6x15"
+            }
+        };
+
+        // Функция для применения перевода
+        function applyTranslations(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // Установка атрибута lang в <html>
+            document.documentElement.lang = lang;
+        }
+
+        // Функция для получения текущего языка из localStorage
+        function getCurrentLanguage() {
+            const savedLang = localStorage.getItem('language');
+            if (savedLang && ['en', 'ru'].includes(savedLang)) {
+                return savedLang;
+            }
+            return 'en'; // Язык по умолчанию
+        }
+
+        // Функция для установки языка в localStorage (может вызываться из основного приложения)
+        function setLanguage(lang) {
+            if (['en', 'ru'].includes(lang)) {
+                localStorage.setItem('language', lang);
+                applyTranslations(lang);
+            }
+        }
+
+        // Применение перевода при загрузке страницы
+        window.onload = () => {
+            const currentLang = getCurrentLanguage();
+            applyTranslations(currentLang);
+            createGrid(currentGrid);
+            createParticles(150); // Увеличение числа частиц для заполнения экрана
+        };
+
+        /* Скрипты для анимированного фона */
+        const particlesContainer = document.getElementById('particles');
+
+        // Функция для генерации случайных чисел
+        function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        // Создание частиц фона
+        function createParticles(numParticles) {
+            particlesContainer.innerHTML = ''; // Очистить старые частицы
+
+            for (let i = 0; i < numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                particle.style.left = getRandom(0, 100) + '%';
+                particle.style.top = getRandom(0, 100) + '%'; // Стартовые позиции внутри контейнера
+                particle.style.animationDuration = getRandom(5, 15) + 's'; // Разная продолжительность
+                particle.style.setProperty('--rand-x', Math.random());
+                particle.style.setProperty('--rand-y', Math.random());
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        /* Скрипты для игры "Glight Signals Hack" */
+        const gridSizeSelect = document.getElementById('gridSizeSelect');
         const gridContainer = document.getElementById('grid');
         const playButton = document.getElementById('playButton');
         const resetButton = document.getElementById('resetButton');
-        const gridSizeSelect = document.getElementById('gridSizeSelect');
         const exitButton = document.getElementById('exitButton');
-        const particlesContainer = document.getElementById('particles');
 
         const gridSizes = {
             "2x3": { rows: 3, cols: 2 },
@@ -435,7 +530,7 @@
             if (activeRow < 0) {
                 // Все строки уже активированы
                 playButton.disabled = true;
-                playButton.textContent = 'PLAY';
+                playButton.textContent = translations[getCurrentLanguage()].play;
                 playButton.classList.remove('next-step');
                 isAnimating = false;
                 return;
@@ -473,12 +568,13 @@
 
             // Включаем кнопку NEXT STEP или возвращаем PLAY после окончания всех ходов
             setTimeout(() => {
+                const lang = getCurrentLanguage();
                 if (activeRow >= 0) {
-                    playButton.textContent = 'NEXT STEP';
+                    playButton.textContent = translations[lang].next_step;
                     playButton.classList.add('next-step');
                     playButton.disabled = false;
                 } else {
-                    playButton.textContent = 'PLAY';
+                    playButton.textContent = translations[lang].play;
                     playButton.classList.remove('next-step');
                     playButton.disabled = true;
                 }
@@ -494,7 +590,8 @@
                 cell.style.boxShadow = '0 0 10px rgba(0, 255, 153, 0.5)';
             });
             activeRow = gridSizes[currentGrid].rows - 1; // Сброс активной строки
-            playButton.textContent = 'PLAY';
+            const lang = getCurrentLanguage();
+            playButton.textContent = translations[lang].play;
             playButton.classList.remove('next-step');
             playButton.disabled = false;
         }
@@ -513,26 +610,31 @@
             createGrid(currentGrid);
         });
 
-        // Функция для добавления частиц фона
-        function createParticles(numParticles) {
-            particlesContainer.innerHTML = ''; // Очистить старые частицы
-
-            for (let i = 0; i < numParticles; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%'; // Стартовые позиции внутри контейнера
-                particle.style.animationDuration = (Math.random() * 10 + 5) + 's'; // Разная продолжительность
-                particle.style.transform = `translate(${Math.random() * 200 - 100}vw, ${Math.random() * 200 - 100}vh)`; // Разные направления полета
-                particlesContainer.appendChild(particle);
+        // Функция для установки языка (может вызываться из основного приложения)
+        function setLanguage(lang) {
+            if (['en', 'ru'].includes(lang)) {
+                localStorage.setItem('language', lang);
+                applyTranslations(lang);
             }
         }
 
-        // Создание сетки по умолчанию
-        createGrid(currentGrid);
+        // Применение перевода при загрузке страницы
+        window.onload = () => {
+            const currentLang = getCurrentLanguage();
+            applyTranslations(currentLang);
+            createGrid(currentGrid);
+            createParticles(150); // Увеличение числа частиц для заполнения экрана
+        };
 
-        // Добавление частиц фона
-        createParticles(150); // Увеличение числа частиц для заполнения экрана
+        // Функция для получения текущего языка из localStorage
+        function getCurrentLanguage() {
+            const savedLang = localStorage.getItem('language');
+            if (savedLang && ['en', 'ru'].includes(savedLang)) {
+                return savedLang;
+            }
+            return 'en'; // Язык по умолчанию
+        }
+
     </script>
 </body>
 </html>
