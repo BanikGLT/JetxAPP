@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en"> <!-- Установлен язык по умолчанию на английский -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Игра Мины — Эпичные звёзды</title>
+    <title data-i18n="title">Mines Game — Epic Stars</title>
     
     <!-- Подключение шрифта Montserrat -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
@@ -19,6 +19,9 @@
             font-family: 'Montserrat', sans-serif;
             background: #0d0d0d; /* Темный фон для неонового стиля */
             overflow: hidden;
+            user-select: none; /* Предотвращение выделения текста */
+            -webkit-user-select: none;
+            -ms-user-select: none;
         }
 
         /* Контейнер приложения с анимированным фоном */
@@ -29,7 +32,7 @@
             align-items: center;
             justify-content: space-between;
             width: 90%;
-            max-width: 400px; /* Сохраняем исходную ширину */
+            max-width: 400px; /* Сохранение узкой ширины */
             height: 95vh; /* Высота контейнера */
             background: rgba(13, 13, 13, 0.95); /* Темный полупрозрачный фон */
             padding: 20px;
@@ -41,17 +44,11 @@
 
         /* Медиазапросы для мобильных устройств */
         @media (max-width: 600px) {
-            .container {
-                max-width: 90%;
-                height: 95vh;
-                padding: 15px;
-            }
-
             h1, h2 {
                 font-size: 20px;
             }
 
-            .controls button, .exit-button button, .trap-btn, .btn-signal, .btn-back, .btn-open {
+            .controls button, .exit-button button, .trap-btn, .btn-signal, .btn-back, .btn-open, .btn-reset {
                 padding: 12px 18px;
                 font-size: 14px;
             }
@@ -60,8 +57,29 @@
                 font-size: 10px;
             }
 
-            .grid {
-                grid-gap: 5px;
+            .games-grid {
+                grid-template-columns: 1fr; /* Одна колонка на мобильных */
+                gap: 15px;
+            }
+
+            .game-card {
+                width: 100%; /* Растягиваем карточки на всю ширину */
+                max-width: 300px;
+            }
+
+            .game-icon {
+                width: 100%;
+                height: auto;
+                padding-top: 56.25%; /* 16:9 соотношение */
+            }
+
+            .btn-open, .btn-signal, .btn-back, .btn-reset {
+                width: 100%; /* Кнопки занимают всю ширину контейнера */
+                max-width: 300px;
+            }
+
+            .trap-selector {
+                flex-direction: row;
             }
         }
 
@@ -123,6 +141,7 @@
             gap: 20px;
             width: 100%;
             justify-items: center;
+            transition: all 0.3s ease;
         }
 
         .game-card {
@@ -130,7 +149,8 @@
             flex-direction: column;
             align-items: center;
             text-align: center;
-            width: 150px;
+            width: 100%; /* Изменено на 100% для лучшего выравнивания */
+            max-width: 180px; /* Ограничение максимальной ширины для равномерности */
             cursor: pointer;
             background: rgba(0, 0, 0, 0.3);
             padding: 15px;
@@ -138,6 +158,7 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-sizing: border-box;
         }
 
         .game-card:hover {
@@ -146,18 +167,33 @@
         }
 
         .game-icon {
-            width: 130px;
-            height: 100px;
+            width: 100%;
+            height: 0;
+            padding-top: 56.25%; /* 16:9 соотношение */
             background-size: cover;
             background-position: center;
             border-radius: 20px;
             box-shadow: 0 8px 15px rgba(0, 0, 0, 0.7);
             margin-bottom: 10px;
             transition: transform 0.3s ease;
+            position: relative;
         }
 
-        .game-card:hover .game-icon {
-            transform: rotate(5deg);
+        .game-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(45deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-card:hover .game-icon::after {
+            opacity: 1;
         }
 
         .game-name {
@@ -173,6 +209,7 @@
             margin-top: 10px;
             padding: 10px;
             width: 100%;
+            max-width: 160px;
             border: none;
             border-radius: 20px;
             font-size: 14px;
@@ -182,6 +219,9 @@
             cursor: pointer;
             box-shadow: 0 6px 12px rgba(52, 208, 88, 0.6);
             transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-open:hover {
@@ -273,6 +313,17 @@
             padding: 10px;
             border-radius: 20px;
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .trap-selector button {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            line-height: 20px;
+            text-align: center;
+            padding: 0;
+            margin: 0 10px;
         }
 
         .trap-counter {
@@ -317,6 +368,8 @@
             box-shadow: 0 4px 10px rgba(0, 255, 153, 0.5);
             position: relative;
             overflow: hidden;
+            width: 100%; /* Сделано шире для мобильных */
+            max-width: 300px; /* Ограничение максимальной ширины */
         }
 
         .btn-signal::before {
@@ -359,6 +412,8 @@
             box-shadow: 0 4px 10px rgba(255, 68, 68, 0.5);
             position: relative;
             overflow: hidden;
+            width: 100%; /* Сделано шире для мобильных */
+            max-width: 300px; /* Ограничение максимальной ширины */
         }
 
         .btn-back::before {
@@ -383,6 +438,50 @@
         .btn-back:hover {
             background: linear-gradient(135deg, #ff2222, #ff4444); /* Инвертированный градиент при наведении */
             box-shadow: 0 8px 20px rgba(255, 68, 68, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Кнопка "Сбросить игру" */
+        .btn-reset {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ff8800, #ff6600); /* Градиентный оранжевый */
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(255, 136, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            width: 100%; /* Сделано шире для мобильных */
+            max-width: 300px; /* Ограничение максимальной ширины */
+        }
+
+        .btn-reset::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+
+        .btn-reset:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(135deg, #ff6600, #ff8800); /* Инвертированный градиент при наведении */
+            box-shadow: 0 8px 20px rgba(255, 136, 0, 0.8);
             transform: translateY(-2px);
         }
 
@@ -452,6 +551,91 @@
                 box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
             }
         }
+
+        /* Language Selection Modal Styles */
+        #languageModal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        #languageContainer {
+            background: rgba(13, 13, 13, 0.8);
+            padding: 30px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 340px; /* Увеличена ширина */
+            height: 180px; /* Увеличена высота */
+            box-shadow: 0 0 30px rgba(0, 255, 153, 0.5);
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        .language-option {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .language-option:hover {
+            transform: scale(1.1);
+        }
+
+        .flag-container {
+            width: 100px; /* Увеличен размер контейнера для флага */
+            height: 70px; /* Увеличен размер контейнера для флага */
+            background: linear-gradient(135deg, rgba(0, 255, 153, 0.2), rgba(0, 255, 153, 0.4));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 255, 153, 0.5);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .language-option:hover .flag-container {
+            box-shadow: 0 0 30px rgba(0, 255, 153, 0.8);
+        }
+
+        .flag {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .language-label {
+            color: #00ff99;
+            font-size: 18px; /* Увеличен размер шрифта */
+            margin-top: 10px;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+        }
+
+        /* Language Selection Modal Visible State */
+        #languageModal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #languageContainer.show {
+            opacity: 1;
+            transform: scale(1);
+        }
     </style>
 </head>
 <body>
@@ -462,39 +646,39 @@
         </div>
 
         <!-- Заголовок -->
-        <h1>Игра Мины — Эпичные звёзды</h1>
+        <h1 data-i18n="title">Mines Game — Epic Stars</h1>
 
         <!-- Экран меню с выбором игры -->
         <div class="menu" id="menuContainer">
-            <h2>Меню</h2>
+            <h2 data-i18n="menu">Menu</h2>
             <div class="games-grid">
                 <!-- Карточка игры Mines -->
                 <div class="game-card" onclick="startGame('mines')">
                     <div class="game-icon" style="background-image: url('https://imgproxy.v1.bundlecdn.com/unsafe/casino_list_big_1x/plain/https://v1.bundlecdn.com/casino-images/1play/e47f89a4-3663-4c9d-bc45-fe1845d34e1b.png@avif');"></div>
-                    <div class="game-name">Mines</div>
-                    <button class="btn-open">Открыть</button>
+                    <div class="game-name" data-i18n="mines">Mines</div>
+                    <button class="btn-open" data-i18n="open">Open</button>
                 </div>
 
                 <!-- Карточка игры Bombucks -->
                 <div class="game-card" onclick="redirectToBombucks()">
                     <div class="game-icon" style="background-image: url('https://imgproxy.v1.bundlecdn.com/unsafe/casino_list_big_1x/plain/https://v1.bundlecdn.com/casino-images/1play/cfbbb3f3-f098-4f61-9800-edf8e8bb592f.png@avif');"></div>
-                    <div class="game-name">Bombucks</div>
-                    <button class="btn-open">Открыть</button>
+                    <div class="game-name" data-i18n="bombucks">Bombucks</div>
+                    <button class="btn-open" data-i18n="open">Open</button>
                 </div>
             </div>
         </div>
 
-        <!-- Экран игры "Мины" -->
+        <!-- Экран игры "Mines Game — Epic Stars" -->
         <div class="game" id="gameContainer" style="display: none;">
-            <h2>Игра Мины</h2>
+            <h2 data-i18n="mines_game">Mines Game</h2>
 
             <!-- Секция выбора ловушек -->
             <div class="trap-settings">
-                <div class="trap-title">Количество ловушек</div>
+                <div class="trap-title" data-i18n="trap_title">Number of Traps</div>
                 <div class="trap-selector">
-                    <button class="trap-btn" id="decreaseTrap" onclick="decreaseTraps()">-</button>
+                    <button class="trap-btn" id="decreaseTrap" onclick="decreaseTraps()" data-i18n="decrease_trap">-</button>
                     <div class="trap-counter" id="trapCounter">3</div>
-                    <button class="trap-btn" id="increaseTrap" onclick="increaseTraps()">+</button>
+                    <button class="trap-btn" id="increaseTrap" onclick="increaseTraps()" data-i18n="increase_trap">+</button>
                 </div>
             </div>
 
@@ -505,19 +689,157 @@
             <div class="loader" id="loader"></div>
 
             <!-- Кнопка "Получить сигнал" -->
-            <button class="btn-signal" onclick="getSignal()">Получить сигнал</button>
+            <button class="btn-signal" onclick="getSignal()" data-i18n="get_signal">Get Signal</button>
 
             <!-- Кнопка "Назад в меню" -->
-            <button class="btn-back" onclick="goToMenu()">Назад в меню</button>
+            <button class="btn-back" onclick="goToMenu()" data-i18n="back_menu">Back to Menu</button>
+
+            <!-- Кнопка "Сбросить игру" -->
+            <button class="btn-reset" onclick="resetGame()" data-i18n="reset_game">Reset Game</button>
         </div>
 
         <!-- Footer -->
         <div class="footer">
-            <p>© GLIGHT SIGNALS BOT 2024</p>
+            <p data-i18n="footer_text">© GLIGHT SIGNALS BOT 2024</p>
+            <!-- Кнопка смены языка -->
+            <button onclick="showLanguageModal()" style="
+                margin-top: 10px;
+                padding: 5px 10px;
+                border: none;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #00ff99, #00cc77);
+                color: #0d0d0d;
+                cursor: pointer;
+                box-shadow: 0 2px 5px rgba(0, 255, 153, 0.5);
+            " data-i18n="change_language">Change Language</button>
+        </div>
+    </div>
+
+    <!-- Language Selection Modal -->
+    <div id="languageModal">
+        <div id="languageContainer">
+            <!-- Кнопка для выбора русского языка -->
+            <div class="language-option" onclick="setLanguage('ru')">
+                <div class="flag-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="RU" class="flag">
+                </div>
+                <p class="language-label" data-i18n="russian">RU</p>
+            </div>
+            
+            <!-- Кнопка для выбора английского языка -->
+            <div class="language-option" onclick="setLanguage('en')">
+                <div class="flag-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="EN" class="flag">
+                </div>
+                <p class="language-label" data-i18n="english">ENG</p>
+            </div>
         </div>
     </div>
 
     <script>
+        // Мультиязычная поддержка
+        const translations = {
+            ru: {
+                title: "Игра Мины — Эпичные звёзды",
+                menu: "Меню",
+                mines: "Мины",
+                bombucks: "Бомбакс",
+                open: "Открыть",
+                mines_game: "Игра Мины",
+                trap_title: "Количество ловушек",
+                decrease_trap: "-",
+                increase_trap: "+",
+                get_signal: "Получить сигнал",
+                back_menu: "Назад в меню",
+                reset_game: "Сбросить игру",
+                footer_text: "© GLIGHT SIGNALS BOT 2024",
+                change_language: "Сменить язык",
+                russian: "RU",
+                english: "ENG"
+            },
+            en: {
+                title: "Mines Game — Epic Stars",
+                menu: "Menu",
+                mines: "Mines",
+                bombucks: "Bombucks",
+                open: "Open",
+                mines_game: "Mines Game",
+                trap_title: "Number of Traps",
+                decrease_trap: "-",
+                increase_trap: "+",
+                get_signal: "Get Signal",
+                back_menu: "Back to Menu",
+                reset_game: "Reset Game",
+                footer_text: "© GLIGHT SIGNALS BOT 2024",
+                change_language: "Change Language",
+                russian: "RU",
+                english: "ENG"
+            }
+        };
+
+        // Функция для установки языка
+        function setLanguage(lang) {
+            if (!translations[lang]) {
+                console.error(`Unsupported language: ${lang}`);
+                return;
+            }
+            localStorage.setItem('language', lang);
+            applyLanguage(lang);
+            hideLanguageModal();
+        }
+
+        // Функция для применения перевода
+        function applyLanguage(lang) {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                if (translations[lang] && translations[lang][key]) {
+                    // Если элемент является <title>, обновляем document.title
+                    if (element.tagName.toLowerCase() === 'title') {
+                        document.title = translations[lang][key];
+                    }
+                    // Если элемент является <button>, обновляем его текст
+                    else if (element.tagName.toLowerCase() === 'button') {
+                        element.textContent = translations[lang][key];
+                    }
+                    // Для остальных элементов просто обновляем текст
+                    else {
+                        element.textContent = translations[lang][key];
+                    }
+                }
+            });
+
+            // Обновление атрибута lang в теге html
+            document.documentElement.lang = lang;
+        }
+
+        // Функция для показа модального окна выбора языка
+        function showLanguageModal() {
+            const languageModal = document.getElementById('languageModal');
+            const languageContainer = document.getElementById('languageContainer');
+            languageModal.classList.add('show');
+            languageContainer.classList.add('show');
+        }
+
+        // Функция для скрытия модального окна выбора языка
+        function hideLanguageModal() {
+            const languageModal = document.getElementById('languageModal');
+            const languageContainer = document.getElementById('languageContainer');
+            languageContainer.classList.remove('show');
+            setTimeout(() => {
+                languageModal.classList.remove('show');
+            }, 400); // Время должно соответствовать CSS transition
+        }
+
+        // Проверка выбранного языка при загрузке
+        window.onload = () => {
+            const savedLang = localStorage.getItem('language') || 'en'; // Установлен язык по умолчанию на английский
+            applyLanguage(savedLang);
+            // Не показываем модальное окно автоматически
+            createGrid();
+            createParticles(100); // Уменьшено количество частиц для оптимизации
+            initializeEventListeners();
+        };
+
         /* Скрипты для анимированного фона */
         const particlesContainer = document.getElementById('particles');
 
@@ -542,10 +864,7 @@
             }
         }
 
-        // Добавление частиц фона при загрузке
-        createParticles(100); // Уменьшено количество частиц для оптимизации
-
-        /* Скрипты для игры "Игра Мины — Эпичные звёзды" */
+        /* Скрипты для игры "Mines Game — Epic Stars" */
         const gridSize = 5;
         const totalCells = gridSize * gridSize;
         let trapCount = 3;
@@ -674,10 +993,38 @@
             window.location.href = '/bombucks';
         }
 
-        // Инициализация игры при загрузке
-        window.onload = () => {
-            createGrid();
-        };
+        // Сброс игры
+        function resetGame() {
+            grid.forEach(cell => {
+                const star = cell.querySelector('.star');
+                star.classList.remove('show-star');
+                cell.classList.remove('animate');
+            });
+            trapCount = 3;
+            document.getElementById('trapCounter').textContent = trapCount;
+        }
+
+        // Обработчики событий
+        function initializeEventListeners() {
+            document.getElementById('decreaseTrap').addEventListener('click', decreaseTraps);
+            document.getElementById('increaseTrap').addEventListener('click', increaseTraps);
+
+            // Обработчик для кнопки "Получить сигнал"
+            const signalButton = document.querySelector('.btn-signal');
+            signalButton.addEventListener('click', getSignal);
+
+            // Обработчики для кнопок "Назад в меню" и "Сбросить игру"
+            const backButtons = document.querySelectorAll('.btn-back, .btn-reset');
+            backButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.getAttribute('data-i18n') === 'back_menu') {
+                        goToMenu();
+                    } else if (this.getAttribute('data-i18n') === 'reset_game') {
+                        resetGame();
+                    }
+                });
+            });
+        }
     </script>
 </body>
 </html>
