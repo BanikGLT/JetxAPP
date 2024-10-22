@@ -2,7 +2,7 @@
 <html lang="en"> <!-- Язык по умолчанию установлен на английский -->
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Предотвращение масштабирования -->
     <title data-i18n="title">Glight Signals Hack</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
@@ -16,6 +16,7 @@
             font-family: 'Montserrat', sans-serif;
             background: #0d0d0d; /* Темный фон для хакерского стиля */
             overflow: hidden;
+            touch-action: manipulation; /* Предотвращение нежелательных жестов */
         }
 
         /* Контейнер приложения с анимированным фоном */
@@ -60,6 +61,10 @@
 
             .footer {
                 font-size: 10px;
+            }
+
+            select {
+                font-size: 12px; /* Уменьшение размера шрифта на мобильных */
             }
         }
 
@@ -135,6 +140,8 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
             position: relative; /* Для позиционирования частиц */
             overflow: hidden;
+            word-break: break-word; /* Перенос длинных слов */
+            text-align: center; /* Выравнивание текста по центру */
         }
 
         .cell.active {
@@ -183,6 +190,8 @@
             transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s;
             position: relative;
             overflow: hidden;
+            text-align: center; /* Выравнивание текста по центру */
+            word-break: break-word; /* Перенос длинных слов */
         }
 
         .controls button:hover {
@@ -219,7 +228,7 @@
         }
 
         select {
-            padding: 10px;
+            padding: 10px 40px 10px 10px; /* Увеличен правый отступ для стрелочки */
             border-radius: 10px;
             background-color: #00ff99; /* Неоновый зеленый */
             color: #0d0d0d; /* Темный текст */
@@ -232,6 +241,9 @@
             background-repeat: no-repeat;
             background-position: right 10px center;
             background-size: 10px;
+            text-align: center; /* Выравнивание текста по центру */
+            word-break: break-word; /* Перенос длинных слов */
+            cursor: pointer; /* Изменение курсора при наведении */
         }
 
         select:hover {
@@ -259,6 +271,8 @@
             box-shadow: 0 0 30px rgba(255, 68, 68, 0.8), 0 0 60px rgba(255, 68, 68, 0.4);
             position: relative;
             overflow: hidden;
+            text-align: center; /* Выравнивание текста по центру */
+            word-break: break-word; /* Перенос длинных слов */
         }
 
         .exit-button button:hover {
@@ -355,7 +369,8 @@
                 field_3x6: "Field 3x6",
                 field_4x9: "Field 4x9",
                 field_5x12: "Field 5x12",
-                field_6x15: "Field 6x15"
+                field_6x15: "Field 6x15",
+                next_step: "NEXT STEP"
             },
             ru: {
                 title: "Glight Signals Hack", // Название оставлено на английском
@@ -367,7 +382,8 @@
                 field_3x6: "Поле 3x6",
                 field_4x9: "Поле 4x9",
                 field_5x12: "Поле 5x12",
-                field_6x15: "Поле 6x15"
+                field_6x15: "Поле 6x15",
+                next_step: "ДАЛЕЕ"
             }
         };
 
@@ -400,14 +416,6 @@
                 applyTranslations(lang);
             }
         }
-
-        // Применение перевода при загрузке страницы
-        window.onload = () => {
-            const currentLang = getCurrentLanguage();
-            applyTranslations(currentLang);
-            createGrid(currentGrid);
-            createParticles(150); // Увеличение числа частиц для заполнения экрана
-        };
 
         /* Скрипты для анимированного фона */
         const particlesContainer = document.getElementById('particles');
@@ -598,7 +606,7 @@
 
         // Обработчик кнопки "Exit to Menu"
         exitButton.addEventListener('click', () => {
-            window.location.href = 'menu.html'; // Перенаправление на menu.html
+            window.location.href = 'predict.html'; // Перенаправление на predict.html
         });
 
         // Обработчики событий
@@ -608,32 +616,62 @@
             currentGrid = e.target.value;
             resetGame();
             createGrid(currentGrid);
+            saveGameState(); // Сохранение состояния при изменении сетки
         });
 
-        // Функция для установки языка (может вызываться из основного приложения)
-        function setLanguage(lang) {
-            if (['en', 'ru'].includes(lang)) {
-                localStorage.setItem('language', lang);
-                applyTranslations(lang);
+        /* Предотвращение увеличения изображения при двойном нажатии (на мобильных устройствах) */
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+
+        // Функция для сохранения состояния игры в localStorage
+        function saveGameState() {
+            const gameState = {
+                currentGrid: currentGrid,
+                activeRow: activeRow,
+                cells: cells.map(cell => cell.classList.contains('active'))
+            };
+            localStorage.setItem('gameState', JSON.stringify(gameState));
+        }
+
+        // Функция для загрузки состояния игры из localStorage
+        function loadGameState() {
+            const savedState = localStorage.getItem('gameState');
+            if (savedState) {
+                const gameState = JSON.parse(savedState);
+                if (gridSizes[gameState.currentGrid]) {
+                    currentGrid = gameState.currentGrid;
+                    createGrid(currentGrid);
+                    gameState.cells.forEach((isActive, index) => {
+                        if (isActive && index < cells.length) {
+                            addSignal(cells[index]);
+                            addSignalParticles(cells[index]);
+                        }
+                    });
+                    activeRow = gameState.activeRow;
+                }
             }
         }
 
-        // Применение перевода при загрузке страницы
+        // Обработка событий видимости страницы для сохранения/загрузки состояния
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                // Сохранение состояния при сворачивании
+                saveGameState();
+            } else {
+                // Загрузка состояния при разворачивании
+                loadGameState();
+            }
+        });
+
+        // Применение перевода и инициализация при загрузке страницы
         window.onload = () => {
             const currentLang = getCurrentLanguage();
             applyTranslations(currentLang);
             createGrid(currentGrid);
             createParticles(150); // Увеличение числа частиц для заполнения экрана
+            loadGameState(); // Загрузка сохранённого состояния игры
         };
-
-        // Функция для получения текущего языка из localStorage
-        function getCurrentLanguage() {
-            const savedLang = localStorage.getItem('language');
-            if (savedLang && ['en', 'ru'].includes(savedLang)) {
-                return savedLang;
-            }
-            return 'en'; // Язык по умолчанию
-        }
 
     </script>
 </body>
