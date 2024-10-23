@@ -32,7 +32,7 @@
             align-items: center;
             justify-content: space-between;
             width: 90%;
-            max-width: 400px; /* Сохранение узкой ширины */
+            max-width: 400px; /* Восстановлена исходная максимальная ширина */
             height: 95vh; /* Высота контейнера */
             background: rgba(13, 13, 13, 0.95); /* Темный полупрозрачный фон */
             padding: 20px;
@@ -81,6 +81,15 @@
             .trap-selector {
                 flex-direction: row;
             }
+
+            .promo-code {
+                font-size: 24px; /* Увеличен размер шрифта */
+            }
+
+            .language-button {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
         }
 
         /* Анимированный фон внутри контейнера */
@@ -119,6 +128,37 @@
             }
         }
 
+        /* Промокод (заменяет заголовок) */
+        .promo-code {
+            position: relative;
+            width: 100%;
+            height: 60px; /* Увеличен размер контейнера */
+            overflow: hidden;
+            background: #0d0d0d; /* Фон для промокода */
+            border-radius: 10px;
+            margin-bottom: 30px; /* Отступ снизу для разделения от меню */
+        }
+
+        .promo-code-inner {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            color: #00ff99; /* Неоновый зеленый */
+            font-size: 24px; /* Увеличен размер шрифта */
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.8);
+            animation: scrollPromo 10s linear infinite; /* Уменьшена длительность анимации */
+        }
+
+        @keyframes scrollPromo {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
         /* Заголовки */
         h1, h2 {
             color: #00ff99; /* Неоновый зеленый */
@@ -133,6 +173,14 @@
         .menu, .game {
             width: 100%;
             z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .menu h2 {
+            margin-top: 10px; /* Поднятие надписи меню */
+            margin-bottom: 15px;
         }
 
         .games-grid {
@@ -636,6 +684,27 @@
             opacity: 1;
             transform: scale(1);
         }
+
+        /* Language Button Styles */
+        .language-button {
+            margin-top: 20px; /* Увеличен отступ сверху */
+            padding: 12px 30px; /* Увеличены размеры кнопки */
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #00ff99, #00cc77);
+            color: #0d0d0d;
+            font-size: 18px; /* Увеличен размер шрифта */
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 255, 153, 0.5);
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+        }
+
+        .language-button:hover {
+            background: linear-gradient(135deg, #00cc77, #00ff99);
+            box-shadow: 0 6px 15px rgba(0, 255, 153, 0.8);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -645,8 +714,18 @@
             <!-- Частицы будут добавлены с помощью JS -->
         </div>
 
-        <!-- Заголовок -->
-        <h1 data-i18n="title">Mines Game — Epic Stars</h1>
+        <!-- Промокод (заменяет заголовок) -->
+        <div class="promo-code" id="promoCode">
+            <div class="promo-code-inner">
+                <span class="promo-en">PROMOCODE: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="promo-ru">ПРОМОКОД: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <!-- Повторяем текст для бесконечной прокрутки -->
+                <span class="promo-en">PROMOCODE: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="promo-ru">ПРОМОКОД: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="promo-en">PROMOCODE: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="promo-ru">ПРОМОКОД: EZHACK</span>
+            </div>
+        </div>
 
         <!-- Экран меню с выбором игры -->
         <div class="menu" id="menuContainer">
@@ -666,6 +745,8 @@
                     <button class="btn-open" data-i18n="open">Open</button>
                 </div>
             </div>
+            <!-- Кнопка смены языка под выбором режима -->
+            <button class="language-button" onclick="showLanguageModal()" data-i18n="change_language">Change Language</button>
         </div>
 
         <!-- Экран игры "Mines Game — Epic Stars" -->
@@ -701,17 +782,6 @@
         <!-- Footer -->
         <div class="footer">
             <p data-i18n="footer_text">© GLIGHT SIGNALS BOT 2024</p>
-            <!-- Кнопка смены языка -->
-            <button onclick="showLanguageModal()" style="
-                margin-top: 10px;
-                padding: 5px 10px;
-                border: none;
-                border-radius: 10px;
-                background: linear-gradient(135deg, #00ff99, #00cc77);
-                color: #0d0d0d;
-                cursor: pointer;
-                box-shadow: 0 2px 5px rgba(0, 255, 153, 0.5);
-            " data-i18n="change_language">Change Language</button>
         </div>
     </div>
 
@@ -755,7 +825,8 @@
                 footer_text: "© GLIGHT SIGNALS BOT 2024",
                 change_language: "Сменить язык",
                 russian: "RU",
-                english: "ENG"
+                english: "ENG",
+                promo_code_ru: "ПРОМОКОД: EZHACK"
             },
             en: {
                 title: "Mines Game — Epic Stars",
@@ -773,7 +844,8 @@
                 footer_text: "© GLIGHT SIGNALS BOT 2024",
                 change_language: "Change Language",
                 russian: "RU",
-                english: "ENG"
+                english: "ENG",
+                promo_code_en: "PROMOCODE: EZHACK"
             }
         };
 
@@ -810,6 +882,23 @@
 
             // Обновление атрибута lang в теге html
             document.documentElement.lang = lang;
+
+            // Обновление промокода
+            updatePromoCode(lang);
+        }
+
+        // Функция для обновления промокода
+        function updatePromoCode(lang) {
+            const promoCodeElement = document.getElementById('promoCode');
+            const promoText = lang === 'ru' ? translations[lang].promo_code_ru : translations[lang].promo_code_en;
+            const promoInner = document.querySelector('.promo-code-inner');
+            // Обновляем все повторения промокода
+            promoInner.innerHTML = `<span class="promo-en">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-ru">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-en">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-ru">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-en">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-ru">${promoText}</span>`;
         }
 
         // Функция для показа модального окна выбора языка
@@ -978,13 +1067,13 @@
         // Возвращение в меню
         function goToMenu() {
             document.getElementById('gameContainer').style.display = 'none';
-            document.getElementById('menuContainer').style.display = 'block';
+            document.getElementById('menuContainer').style.display = 'flex';
         }
 
         // Начать игру
         function startGame(game) {
             document.getElementById('menuContainer').style.display = 'none';
-            document.getElementById('gameContainer').style.display = 'block';
+            document.getElementById('gameContainer').style.display = 'flex';
             createGrid();
         }
 
