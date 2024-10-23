@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- Язык по умолчанию установлен на английский -->
+<html lang="en"> <!-- Установлен язык по умолчанию на английский -->
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"> <!-- Предотвращение масштабирования -->
-    <title data-i18n="title">Glight Signals Hack</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="title">Mines Game — Epic Stars</title>
+    
+    <!-- Подключение шрифта Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
 
+    <style>
+        /* Общие стили */
         body {
             display: flex;
             justify-content: center;
@@ -14,9 +17,11 @@
             height: 100vh;
             margin: 0;
             font-family: 'Montserrat', sans-serif;
-            background: #0d0d0d; /* Темный фон для хакерского стиля */
+            background: #0d0d0d; /* Темный фон для неонового стиля */
             overflow: hidden;
-            touch-action: manipulation; /* Предотвращение нежелательных жестов */
+            user-select: none; /* Предотвращение выделения текста */
+            -webkit-user-select: none;
+            -ms-user-select: none;
         }
 
         /* Контейнер приложения с анимированным фоном */
@@ -26,45 +31,64 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            width: 100%;
-            max-width: 400px;
-            height: 95vh; /* Увеличенная высота контейнера */
-            background: rgba(13, 13, 13, 0.9); /* Темный полупрозрачный фон */
+            width: 90%;
+            max-width: 400px; /* Восстановлена исходная максимальная ширина */
+            height: 95vh; /* Высота контейнера */
+            background: rgba(13, 13, 13, 0.95); /* Темный полупрозрачный фон */
             padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 255, 153, 0.8);
+            border-radius: 25px; /* Исходный радиус */
+            box-shadow: 0 0 30px rgba(0, 255, 153, 0.6); /* Неоновая тень */
             overflow: hidden;
             z-index: 1;
         }
 
-        /* Медиазапросы для улучшения отображения на мобильных устройствах */
+        /* Медиазапросы для мобильных устройств */
         @media (max-width: 600px) {
-            .container {
-                max-width: 90%;
-                height: 95vh; /* Сохраняем увеличенную высоту */
-                padding: 15px;
-            }
-
-            h1 {
+            h1, h2 {
                 font-size: 20px;
             }
 
-            .controls button, .exit-button button {
+            .controls button, .exit-button button, .trap-btn, .btn-signal, .btn-back, .btn-open, .btn-reset {
                 padding: 12px 18px;
                 font-size: 14px;
-            }
-
-            .exit-button button {
-                padding: 15px 40px;
-                font-size: 18px;
             }
 
             .footer {
                 font-size: 10px;
             }
 
-            select {
-                font-size: 12px; /* Уменьшение размера шрифта на мобильных */
+            .games-grid {
+                grid-template-columns: 1fr; /* Одна колонка на мобильных */
+                gap: 15px;
+            }
+
+            .game-card {
+                width: 100%; /* Растягиваем карточки на всю ширину */
+                max-width: 300px;
+            }
+
+            .game-icon {
+                width: 100%;
+                height: auto;
+                padding-top: 56.25%; /* 16:9 соотношение */
+            }
+
+            .btn-open, .btn-signal, .btn-back, .btn-reset {
+                width: 100%; /* Кнопки занимают всю ширину контейнера */
+                max-width: 300px;
+            }
+
+            .trap-selector {
+                flex-direction: row;
+            }
+
+            .promo-code {
+                font-size: 24px; /* Увеличен размер шрифта */
+            }
+
+            .language-button {
+                padding: 12px 25px;
+                font-size: 16px;
             }
         }
 
@@ -104,106 +128,463 @@
             }
         }
 
-        h1 {
+        /* Промокод (заменяет заголовок) */
+        .promo-code {
+            position: relative;
+            width: 100%;
+            height: 60px; /* Увеличен размер контейнера */
+            overflow: hidden;
+            background: #0d0d0d; /* Фон для промокода */
+            border-radius: 10px;
+            margin-bottom: 30px; /* Отступ снизу для разделения от меню */
+        }
+
+        .promo-code-inner {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            color: #00ff99; /* Неоновый зеленый */
+            font-size: 24px; /* Увеличен размер шрифта */
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.8);
+            animation: scrollPromo 10s linear infinite; /* Уменьшена длительность анимации */
+        }
+
+        @keyframes scrollPromo {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Заголовки */
+        h1, h2 {
             color: #00ff99; /* Неоновый зеленый */
             text-align: center;
             margin: 0;
-            font-size: 24px;
+            font-size: 26px;
             text-shadow: 0 0 15px rgba(0, 255, 153, 0.8);
             z-index: 2;
         }
 
-        .grid-wrapper {
-            position: relative;
+        /* Меню и игры */
+        .menu, .game {
             width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
             z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .grid {
+        .menu h2 {
+            margin-top: 10px; /* Поднятие надписи меню */
+            margin-bottom: 15px;
+        }
+
+        .games-grid {
             display: grid;
-            gap: 5px;
-            justify-content: center;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            width: 100%;
+            justify-items: center;
             transition: all 0.3s ease;
         }
 
-        .cell {
-            background-color: #1a1a1a; /* Темный цвет ячеек */
-            border-radius: 10px;
+        .game-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%; /* Изменено на 100% для лучшего выравнивания */
+            max-width: 180px; /* Ограничение максимальной ширины для равномерности */
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .game-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(0, 255, 153, 0.8);
+        }
+
+        .game-icon {
+            width: 100%;
+            height: 0;
+            padding-top: 56.25%; /* 16:9 соотношение */
+            background-size: cover;
+            background-position: center;
+            border-radius: 20px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.7);
+            margin-bottom: 10px;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+
+        .game-icon::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: linear-gradient(45deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.5) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-card:hover .game-icon::after {
+            opacity: 1;
+        }
+
+        .game-name {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #00ff99;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
+        }
+
+        .btn-open {
+            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
+            max-width: 160px;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            background: linear-gradient(135deg, #34d058, #28a745);
+            color: #fff;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(52, 208, 88, 0.6);
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            position: relative; /* Для позиционирования частиц */
-            overflow: hidden;
-            word-break: break-word; /* Перенос длинных слов */
-            text-align: center; /* Выравнивание текста по центру */
         }
 
-        .cell.active {
-            background-color: #00ff99; /* Неоновый зеленый */
-            box-shadow: 0 0 30px rgba(0, 255, 153, 1), 0 0 60px rgba(0, 255, 153, 0.6);
-            border: 2px solid #00ff99;
+        .btn-open:hover {
+            background: linear-gradient(135deg, #28a745, #34d058);
+            box-shadow: 0 8px 16px rgba(52, 208, 88, 0.8);
+            transform: translateY(-2px);
         }
 
-        /* Новая анимация для сигналов */
-        .cell.active.animate {
-            animation: signalEffect 0.6s forwards;
-        }
-
-        @keyframes signalEffect {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.3);
-                opacity: 0.7;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .controls {
-            margin-top: 20px;
+        /* Сетка игры */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-gap: 10px;
             width: 100%;
-            display: flex;
-            justify-content: space-around;
+            margin-bottom: 20px;
             z-index: 2;
         }
 
-        .controls button {
-            padding: 15px 20px;
+        .cell {
+            width: 100%;
+            padding-bottom: 100%;
+            position: relative;
+            background: linear-gradient(145deg, #67e6dc, #0d7377);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease;
+            z-index: 2;
+        }
+
+        .cell:hover {
+            transform: scale(1.08);
+            background: linear-gradient(145deg, #9fffe3, #50d5d1);
+            box-shadow: 0 12px 24px rgba(0, 255, 255, 0.5);
+        }
+
+        /* Эпичные звёзды */
+        .star {
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, #ff8c00, #ff3f00);
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0;
+            transition: opacity 0.2s ease, transform 0.4s ease-out;
+            z-index: 3;
+        }
+
+        .show-star {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.3);
+        }
+
+        @keyframes shake {
+            0% { transform: translate(0px, 0px); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(3px, -3px); }
+            60% { transform: translate(-3px, 3px); }
+            80% { transform: translate(3px, -3px); }
+            100% { transform: translate(0px, 0px); }
+        }
+
+        .cell.animate {
+            animation: shake 0.3s ease;
+        }
+
+        /* Секция ловушек */
+        .trap-settings {
+            text-align: center;
+            margin-bottom: 20px;
+            z-index: 2;
+        }
+
+        .trap-title {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #ffdf00;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .trap-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .trap-selector button {
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            line-height: 20px;
+            text-align: center;
+            padding: 0;
+            margin: 0 10px;
+        }
+
+        .trap-counter {
+            font-size: 22px;
+            margin: 0 20px;
+            color: #ffdf00;
+        }
+
+        .trap-btn {
+            padding: 10px 20px;
+            font-size: 18px;
             border: none;
-            border-radius: 30px;
-            background-color: #00ff99; /* Неоновый зеленый */
-            color: #0d0d0d; /* Темный текст для контраста */
-            font-weight: bold;
+            border-radius: 50%;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s;
+            z-index: 2;
+        }
+
+        .trap-btn:hover:not(:disabled) {
+            background-color: #0056b3;
+            transform: scale(1.2);
+        }
+
+        .trap-btn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+
+        /* Кнопка получения сигнала */
+        .btn-signal {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #00ff99, #00cc77); /* Градиентный неоновый зеленый */
+            color: #0d0d0d; /* Темный текст */
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s;
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(0, 255, 153, 0.5);
             position: relative;
             overflow: hidden;
-            text-align: center; /* Выравнивание текста по центру */
-            word-break: break-word; /* Перенос длинных слов */
+            width: 100%; /* Сделано шире для мобильных */
+            max-width: 300px; /* Ограничение максимальной ширины */
         }
 
-        .controls button:hover {
-            background-color: #00cc77; /* Темнее зеленый при наведении */
-            transform: translateY(-3px);
-            box-shadow: 0 0 20px rgba(0, 255, 153, 0.8), 0 0 40px rgba(0, 255, 153, 0.4);
+        .btn-signal::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
         }
 
-        /* Стиль для кнопки NEXT STEP */
-        .controls .next-step {
-            background-color: #00cc77; /* Темно-зеленый для "NEXT STEP" */
-            color: #0d0d0d;
+        .btn-signal:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .btn-signal:hover {
+            background: linear-gradient(135deg, #00cc77, #00ff99); /* Инвертированный градиент при наведении */
+            box-shadow: 0 8px 20px rgba(0, 255, 153, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Кнопка "Назад в меню" */
+        .btn-back {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ff4444, #ff2222); /* Градиентный яркий красный */
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(255, 68, 68, 0.5);
+            position: relative;
+            overflow: hidden;
+            width: 100%; /* Сделано шире для мобильных */
+            max-width: 300px; /* Ограничение максимальной ширины */
+        }
+
+        .btn-back::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+
+        .btn-back:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .btn-back:hover {
+            background: linear-gradient(135deg, #ff2222, #ff4444); /* Инвертированный градиент при наведении */
+            box-shadow: 0 8px 20px rgba(255, 68, 68, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Кнопка "Сбросить игру" */
+        .btn-reset {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #ff8800, #ff6600); /* Градиентный оранжевый */
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+            z-index: 2;
+            box-shadow: 0 4px 10px rgba(255, 136, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            width: 100%; /* Сделано шире для мобильных */
+            max-width: 300px; /* Ограничение максимальной ширины */
+        }
+
+        .btn-reset::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+
+        .btn-reset:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+
+        .btn-reset:hover {
+            background: linear-gradient(135deg, #ff6600, #ff8800); /* Инвертированный градиент при наведении */
+            box-shadow: 0 8px 20px rgba(255, 136, 0, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Загрузка */
+        .loader {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 6px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 6px solid #007bff;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+            z-index: 2;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+            color: #00ff99; /* Неоновый зеленый */
+            font-size: 12px;
+            text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
+            z-index: 2;
+        }
+
+        /* Дополнительные стили для частиц при активации сигнала */
+        .signal-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background-color: rgba(0, 255, 153, 0.8);
+            border-radius: 50%;
+            animation: explode 0.6s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Анимация кнопки NEXT STEP */
+        .next-step {
             animation: pulseButton 1.5s infinite;
         }
 
@@ -219,104 +600,111 @@
             }
         }
 
-        .select-field {
-            margin-top: 10px;
+        /* Language Selection Modal Styles */
+        #languageModal {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
             display: flex;
             justify-content: center;
-            z-index: 2;
+            align-items: center;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease-in-out;
         }
 
-        select {
-            padding: 10px 40px 10px 10px; /* Увеличен правый отступ для стрелочки */
-            border-radius: 10px;
-            background-color: #00ff99; /* Неоновый зеленый */
-            color: #0d0d0d; /* Темный текст */
-            font-weight: bold;
-            border: none;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
-            appearance: none; /* Удаление стандартного стиля селекта */
-            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="%230d0d0d"><polygon points="0,0 12,0 6,6" /></svg>');
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 10px;
-            text-align: center; /* Выравнивание текста по центру */
-            word-break: break-word; /* Перенос длинных слов */
-            cursor: pointer; /* Изменение курсора при наведении */
-        }
-
-        select:hover {
-            background-color: #00cc77; /* Темнее зеленый при наведении */
-        }
-
-        .exit-button {
-            margin-top: 30px;
-            width: 100%;
+        #languageContainer {
+            background: rgba(13, 13, 13, 0.8);
+            padding: 30px;
+            border-radius: 20px;
             display: flex;
-            justify-content: center;
-            z-index: 2;
+            justify-content: space-around;
+            align-items: center;
+            width: 340px; /* Увеличена ширина */
+            height: 180px; /* Увеличена высота */
+            box-shadow: 0 0 30px rgba(0, 255, 153, 0.5);
+            transition: transform 0.4s ease, opacity 0.4s ease;
+            opacity: 0;
+            transform: scale(0.8);
         }
 
-        .exit-button button {
-            padding: 20px 50px;
-            border: none;
-            border-radius: 50px;
-            background-color: #ff4444; /* Яркий красный для кнопки выхода */
-            color: #fff; /* Белый текст */
-            font-weight: bold;
-            font-size: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 0 30px rgba(255, 68, 68, 0.8), 0 0 60px rgba(255, 68, 68, 0.4);
-            position: relative;
-            overflow: hidden;
-            text-align: center; /* Выравнивание текста по центру */
-            word-break: break-word; /* Перенос длинных слов */
-        }
-
-        .exit-button button:hover {
-            background-color: #ff2222; /* Темнее красный при наведении */
-            transform: translateY(-5px);
-            box-shadow: 0 0 40px rgba(255, 68, 68, 1), 0 0 80px rgba(255, 68, 68, 0.6);
-        }
-
-        .footer {
-            width: 100%;
+        .language-option {
             text-align: center;
-            margin-top: 20px;
-            color: #00ff99; /* Неоновый зеленый */
-            font-size: 12px;
-            text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
-            z-index: 2;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        @keyframes explode {
-            0% {
-                transform: scale(0.5);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(2);
-                opacity: 0;
-            }
+        .language-option:hover {
+            transform: scale(1.1);
         }
 
-        /* Дополнительные стили для частиц при активации сигнала */
-        .signal-particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background-color: rgba(0, 255, 153, 0.8);
-            border-radius: 50%;
-            animation: explode 0.6s ease-out forwards;
+        .flag-container {
+            width: 100px; /* Увеличен размер контейнера для флага */
+            height: 70px; /* Увеличен размер контейнера для флага */
+            background: linear-gradient(135deg, rgba(0, 255, 153, 0.2), rgba(0, 255, 153, 0.4));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(0, 255, 153, 0.5);
+            transition: box-shadow 0.3s ease;
         }
 
-        /* Добавим плавные переходы для кнопок */
-        .controls button, .exit-button button {
-            transition: all 0.3s ease;
+        .language-option:hover .flag-container {
+            box-shadow: 0 0 30px rgba(0, 255, 153, 0.8);
         }
 
+        .flag {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .language-label {
+            color: #00ff99;
+            font-size: 18px; /* Увеличен размер шрифта */
+            margin-top: 10px;
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.5);
+        }
+
+        /* Language Selection Modal Visible State */
+        #languageModal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        #languageContainer.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Language Button Styles */
+        .language-button {
+            margin-top: 20px; /* Увеличен отступ сверху */
+            padding: 12px 30px; /* Увеличены размеры кнопки */
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #00ff99, #00cc77);
+            color: #0d0d0d;
+            font-size: 18px; /* Увеличен размер шрифта */
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 255, 153, 0.5);
+            transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.3s;
+        }
+
+        .language-button:hover {
+            background: linear-gradient(135deg, #00cc77, #00ff99);
+            box-shadow: 0 6px 15px rgba(0, 255, 153, 0.8);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -326,96 +714,220 @@
             <!-- Частицы будут добавлены с помощью JS -->
         </div>
 
-        <h1 data-i18n="title">Glight Signals Hack</h1>
-
-        <div class="select-field">
-            <select id="gridSizeSelect">
-                <option value="2x3" data-i18n="field_2x3">Field 2x3</option>
-                <option value="3x6" data-i18n="field_3x6">Field 3x6</option>
-                <option value="4x9" data-i18n="field_4x9">Field 4x9</option>
-                <option value="5x12" data-i18n="field_5x12">Field 5x12</option>
-                <option value="6x15" data-i18n="field_6x15">Field 6x15</option>
-            </select>
+        <!-- Промокод (заменяет заголовок) -->
+        <div class="promo-code" id="promoCode">
+            <div class="promo-code-inner">
+                <span class="promo-en">PROMOCODE: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="promo-ru">ПРОМОКОД: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <!-- Повторяем текст для бесконечной прокрутки -->
+                <span class="promo-en">PROMOCODE: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="promo-ru">ПРОМОКОД: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="promo-en">PROMOCODE: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="promo-ru">ПРОМОКОД: EZHACK</span>
+            </div>
         </div>
 
-        <div class="grid-wrapper">
+        <!-- Экран меню с выбором игры -->
+        <div class="menu" id="menuContainer">
+            <h2 data-i18n="menu">Menu</h2>
+            <div class="games-grid">
+                <!-- Карточка игры Mines -->
+                <div class="game-card" onclick="startGame('mines')">
+                    <div class="game-icon" style="background-image: url('https://imgproxy.v1.bundlecdn.com/unsafe/casino_list_big_1x/plain/https://v1.bundlecdn.com/casino-images/1play/e47f89a4-3663-4c9d-bc45-fe1845d34e1b.png@avif');"></div>
+                    <div class="game-name" data-i18n="mines">Mines</div>
+                    <button class="btn-open" data-i18n="open">Open</button>
+                </div>
+
+                <!-- Карточка игры Bombucks -->
+                <div class="game-card" onclick="redirectToBombucks()">
+                    <div class="game-icon" style="background-image: url('https://imgproxy.v1.bundlecdn.com/unsafe/casino_list_big_1x/plain/https://v1.bundlecdn.com/casino-images/1play/cfbbb3f3-f098-4f61-9800-edf8e8bb592f.png@avif');"></div>
+                    <div class="game-name" data-i18n="bombucks">Bombucks</div>
+                    <button class="btn-open" data-i18n="open">Open</button>
+                </div>
+            </div>
+            <!-- Кнопка смены языка под выбором режима -->
+            <button class="language-button" onclick="showLanguageModal()" data-i18n="change_language">Change Language</button>
+        </div>
+
+        <!-- Экран игры "Mines Game — Epic Stars" -->
+        <div class="game" id="gameContainer" style="display: none;">
+            <h2 data-i18n="mines_game">Mines Game</h2>
+
+            <!-- Секция выбора ловушек -->
+            <div class="trap-settings">
+                <div class="trap-title" data-i18n="trap_title">Number of Traps</div>
+                <div class="trap-selector">
+                    <button class="trap-btn" id="decreaseTrap" onclick="decreaseTraps()" data-i18n="decrease_trap">-</button>
+                    <div class="trap-counter" id="trapCounter">3</div>
+                    <button class="trap-btn" id="increaseTrap" onclick="increaseTraps()" data-i18n="increase_trap">+</button>
+                </div>
+            </div>
+
+            <!-- Сетка ячеек -->
             <div class="grid" id="grid"></div>
+
+            <!-- Загрузка -->
+            <div class="loader" id="loader"></div>
+
+            <!-- Кнопка "Получить сигнал" -->
+            <button class="btn-signal" onclick="getSignal()" data-i18n="get_signal">Get Signal</button>
+
+            <!-- Кнопка "Назад в меню" -->
+            <button class="btn-back" onclick="goToMenu()" data-i18n="back_menu">Back to Menu</button>
+
+            <!-- Кнопка "Сбросить игру" -->
+            <button class="btn-reset" onclick="resetGame()" data-i18n="reset_game">Reset Game</button>
         </div>
 
-        <div class="controls">
-            <button id="playButton" data-i18n="play">PLAY</button>
-            <button id="resetButton" data-i18n="reset">RESET</button>
-        </div>
-
-        <div class="exit-button">
-            <button id="exitButton" data-i18n="exit_to_menu">EXIT TO MENU</button>
-        </div>
-
+        <!-- Footer -->
         <div class="footer">
             <p data-i18n="footer_text">© GLIGHT SIGNALS BOT 2024</p>
         </div>
     </div>
 
+    <!-- Language Selection Modal -->
+    <div id="languageModal">
+        <div id="languageContainer">
+            <!-- Кнопка для выбора русского языка -->
+            <div class="language-option" onclick="setLanguage('ru')">
+                <div class="flag-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/f/f3/Flag_of_Russia.svg" alt="RU" class="flag">
+                </div>
+                <p class="language-label" data-i18n="russian">RU</p>
+            </div>
+            
+            <!-- Кнопка для выбора английского языка -->
+            <div class="language-option" onclick="setLanguage('en')">
+                <div class="flag-container">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg" alt="EN" class="flag">
+                </div>
+                <p class="language-label" data-i18n="english">ENG</p>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Объект с переводами
+        // Мультиязычная поддержка
         const translations = {
-            en: {
-                title: "Glight Signals Hack",
-                play: "PLAY",
-                reset: "RESET",
-                exit_to_menu: "EXIT TO MENU",
-                footer_text: "© GLIGHT SIGNALS BOT 2024",
-                field_2x3: "Field 2x3",
-                field_3x6: "Field 3x6",
-                field_4x9: "Field 4x9",
-                field_5x12: "Field 5x12",
-                field_6x15: "Field 6x15",
-                next_step: "NEXT STEP"
-            },
             ru: {
-                title: "Glight Signals Hack", // Название оставлено на английском
-                play: "ИГРАТЬ",
-                reset: "СБРОС",
-                exit_to_menu: "ВЫХОД В МЕНЮ",
+                title: "Игра Мины — Эпичные звёзды",
+                menu: "Меню",
+                mines: "Мины",
+                bombucks: "Бомбакс",
+                open: "Открыть",
+                mines_game: "Игра Мины",
+                trap_title: "Количество ловушек",
+                decrease_trap: "-",
+                increase_trap: "+",
+                get_signal: "Получить сигнал",
+                back_menu: "Назад в меню",
+                reset_game: "Сбросить игру",
                 footer_text: "© GLIGHT SIGNALS BOT 2024",
-                field_2x3: "Поле 2x3",
-                field_3x6: "Поле 3x6",
-                field_4x9: "Поле 4x9",
-                field_5x12: "Поле 5x12",
-                field_6x15: "Поле 6x15",
-                next_step: "ДАЛЕЕ"
+                change_language: "Сменить язык",
+                russian: "RU",
+                english: "ENG",
+                promo_code_ru: "ПРОМОКОД: EZHACK"
+            },
+            en: {
+                title: "Mines Game — Epic Stars",
+                menu: "Menu",
+                mines: "Mines",
+                bombucks: "Bombucks",
+                open: "Open",
+                mines_game: "Mines Game",
+                trap_title: "Number of Traps",
+                decrease_trap: "-",
+                increase_trap: "+",
+                get_signal: "Get Signal",
+                back_menu: "Back to Menu",
+                reset_game: "Reset Game",
+                footer_text: "© GLIGHT SIGNALS BOT 2024",
+                change_language: "Change Language",
+                russian: "RU",
+                english: "ENG",
+                promo_code_en: "PROMOCODE: EZHACK"
             }
         };
 
+        // Функция для установки языка
+        function setLanguage(lang) {
+            if (!translations[lang]) {
+                console.error(`Unsupported language: ${lang}`);
+                return;
+            }
+            localStorage.setItem('language', lang);
+            applyLanguage(lang);
+            hideLanguageModal();
+        }
+
         // Функция для применения перевода
-        function applyTranslations(lang) {
+        function applyLanguage(lang) {
             document.querySelectorAll('[data-i18n]').forEach(element => {
                 const key = element.getAttribute('data-i18n');
                 if (translations[lang] && translations[lang][key]) {
-                    element.textContent = translations[lang][key];
+                    // Если элемент является <title>, обновляем document.title
+                    if (element.tagName.toLowerCase() === 'title') {
+                        document.title = translations[lang][key];
+                    }
+                    // Если элемент является <button>, обновляем его текст
+                    else if (element.tagName.toLowerCase() === 'button') {
+                        element.textContent = translations[lang][key];
+                    }
+                    // Для остальных элементов просто обновляем текст
+                    else {
+                        element.textContent = translations[lang][key];
+                    }
                 }
             });
 
-            // Установка атрибута lang в <html>
+            // Обновление атрибута lang в теге html
             document.documentElement.lang = lang;
+
+            // Обновление промокода
+            updatePromoCode(lang);
         }
 
-        // Функция для получения текущего языка из localStorage
-        function getCurrentLanguage() {
-            const savedLang = localStorage.getItem('language');
-            if (savedLang && ['en', 'ru'].includes(savedLang)) {
-                return savedLang;
-            }
-            return 'en'; // Язык по умолчанию
+        // Функция для обновления промокода
+        function updatePromoCode(lang) {
+            const promoCodeElement = document.getElementById('promoCode');
+            const promoText = lang === 'ru' ? translations[lang].promo_code_ru : translations[lang].promo_code_en;
+            const promoInner = document.querySelector('.promo-code-inner');
+            // Обновляем все повторения промокода
+            promoInner.innerHTML = `<span class="promo-en">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-ru">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-en">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-ru">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-en">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
+                                   `<span class="promo-ru">${promoText}</span>`;
         }
 
-        // Функция для установки языка в localStorage (может вызываться из основного приложения)
-        function setLanguage(lang) {
-            if (['en', 'ru'].includes(lang)) {
-                localStorage.setItem('language', lang);
-                applyTranslations(lang);
-            }
+        // Функция для показа модального окна выбора языка
+        function showLanguageModal() {
+            const languageModal = document.getElementById('languageModal');
+            const languageContainer = document.getElementById('languageContainer');
+            languageModal.classList.add('show');
+            languageContainer.classList.add('show');
         }
+
+        // Функция для скрытия модального окна выбора языка
+        function hideLanguageModal() {
+            const languageModal = document.getElementById('languageModal');
+            const languageContainer = document.getElementById('languageContainer');
+            languageContainer.classList.remove('show');
+            setTimeout(() => {
+                languageModal.classList.remove('show');
+            }, 400); // Время должно соответствовать CSS transition
+        }
+
+        // Проверка выбранного языка при загрузке
+        window.onload = () => {
+            const savedLang = localStorage.getItem('language') || 'en'; // Установлен язык по умолчанию на английский
+            applyLanguage(savedLang);
+            // Не показываем модальное окно автоматически
+            createGrid();
+            createParticles(100); // Уменьшено количество частиц для оптимизации
+            initializeEventListeners();
+        };
 
         /* Скрипты для анимированного фона */
         const particlesContainer = document.getElementById('particles');
@@ -441,238 +953,167 @@
             }
         }
 
-        /* Скрипты для игры "Glight Signals Hack" */
-        const gridSizeSelect = document.getElementById('gridSizeSelect');
-        const gridContainer = document.getElementById('grid');
-        const playButton = document.getElementById('playButton');
-        const resetButton = document.getElementById('resetButton');
-        const exitButton = document.getElementById('exitButton');
+        /* Скрипты для игры "Mines Game — Epic Stars" */
+        const gridSize = 5;
+        const totalCells = gridSize * gridSize;
+        let trapCount = 3;
+        let grid = [];
 
-        const gridSizes = {
-            "2x3": { rows: 3, cols: 2 },
-            "3x6": { rows: 6, cols: 3 },
-            "4x9": { rows: 9, cols: 4 },
-            "5x12": { rows: 12, cols: 5 },
-            "6x15": { rows: 15, cols: 6 },
-        };
+        // Создание сетки игры
+        function createGrid() {
+            const gridElement = document.getElementById('grid');
+            gridElement.innerHTML = '';
+            grid = [];
 
-        let currentGrid = "2x3"; // Текущая сетка
-        let cells = []; // Все клетки
-        let activeRow = gridSizes[currentGrid].rows - 1; // Начальная строка (нижняя)
-        let isAnimating = false; // Флаг анимации
-
-        // Создание сетки с адаптацией под экран
-        function createGrid(sizeKey) {
-            gridContainer.innerHTML = ''; // Очистить предыдущую сетку
-            const size = gridSizes[sizeKey];
-            activeRow = size.rows - 1; // Начинаем с нижней строки
-
-            const availableHeight = window.innerHeight * 0.6; // 60% высоты экрана
-            const cellSize = Math.min(80, Math.floor(availableHeight / size.rows) - 5); // Автоматический расчет размера ячеек
-
-            gridContainer.style.gridTemplateColumns = `repeat(${size.cols}, ${cellSize}px)`;
-            gridContainer.style.gridTemplateRows = `repeat(${size.rows}, ${cellSize}px)`;
-
-            cells = [];
-
-            for (let i = 0;  i < size.cols * size.rows; i++) {
+            for (let i = 0; i < totalCells; i++) {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
-                cell.style.width = `${cellSize}px`;
-                cell.style.height = `${cellSize}px`;
-                gridContainer.appendChild(cell);
-                cells.push(cell);
-            }
-        }
 
-        // Функция для добавления сигнала с новой анимацией
-        function addSignal(cell) {
-            cell.classList.add('active', 'animate');
-            // Убедимся, что никакие трансформации не применяются
-            cell.style.transform = 'none';
-            cell.style.boxShadow = '0 0 30px rgba(0, 255, 153, 1), 0 0 60px rgba(0, 255, 153, 0.6)';
-            
-            // Удаляем класс 'animate' после завершения анимации
-            setTimeout(() => {
-                cell.classList.remove('animate');
-            }, 600); // Время анимации должно соответствовать длительности 'signalEffect'
-        }
+                const star = document.createElement('div');
+                star.classList.add('star');
+                cell.appendChild(star);
 
-        // Функция для добавления частиц на активной ячейке
-        function addSignalParticles(cell) {
-            const particleContainer = document.createElement('div');
-            particleContainer.style.position = 'absolute';
-            particleContainer.style.top = '50%';
-            particleContainer.style.left = '50%';
-            particleContainer.style.transform = 'translate(-50%, -50%)';
-            particleContainer.style.pointerEvents = 'none'; // Частицы не должны перекрывать другие элементы
-
-            for (let i = 0; i < 15; i++) { // Увеличено количество частиц для более яркого эффекта
-                const particle = document.createElement('div');
-                particle.classList.add('signal-particle');
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDuration = '0.6s'; // Длительность анимации
-                particle.style.backgroundColor = `rgba(0, 255, 153, ${Math.random() * 0.6 + 0.4})`; // Разная прозрачность
-                particleContainer.appendChild(particle);
-            }
-
-            cell.appendChild(particleContainer);
-
-            // Удаление контейнера частиц после окончания анимации
-            setTimeout(() => {
-                if (cell.contains(particleContainer)) {
-                    cell.removeChild(particleContainer);
-                }
-            }, 600);
-        }
-
-        // Логика активации сигнала
-        function activateRandomSignal() {
-            if (isAnimating) return; // Предотвращаем запуск, если уже идет анимация
-            isAnimating = true;
-            playButton.disabled = true; // Отключаем кнопку PLAY/Next Step
-
-            const size = gridSizes[currentGrid];
-
-            if (activeRow < 0) {
-                // Все строки уже активированы
-                playButton.disabled = true;
-                playButton.textContent = translations[getCurrentLanguage()].play;
-                playButton.classList.remove('next-step');
-                isAnimating = false;
-                return;
-            }
-
-            // Генерация случайного сигнала в текущей строке
-            const randomCol = Math.floor(Math.random() * size.cols);
-            const index = activeRow * size.cols + randomCol;
-            const cell = cells[index];
-
-            // Проверка, если уже активирован, выбираем другой
-            if (cell.classList.contains('active')) {
-                // Найдём первую неактивную ячейку в текущей строке
-                let found = false;
-                for (let col = 0; col < size.cols; col++) {
-                    const currentIndex = activeRow * size.cols + col;
-                    if (!cells[currentIndex].classList.contains('active')) {
-                        addSignal(cells[currentIndex]);
-                        addSignalParticles(cells[currentIndex]);
-                        found = true;
-                        break;
+                // Добавляем эффект при клике
+                cell.addEventListener('click', () => {
+                    if (!star.classList.contains('show-star')) {
+                        cell.classList.add('animate');
+                        star.classList.add('show-star');
+                        setTimeout(() => {
+                            cell.classList.remove('animate');
+                        }, 300);
                     }
-                }
-                if (!found) {
-                    // Все ячейки в строке уже активированы
-                }
-            } else {
-                // Активируем выбранную ячейку
-                addSignal(cell);
-                addSignalParticles(cell);
+                });
+
+                grid.push(cell);
+                gridElement.appendChild(cell);
             }
+        }
 
-            // Переход к следующей строке
-            activeRow--;
+        // Логика увеличения/уменьшения ловушек
+        function decreaseTraps() {
+            if (trapCount > 1) {
+                trapCount -= 2;
+                document.getElementById('trapCounter').textContent = trapCount;
+            }
+        }
 
-            // Включаем кнопку NEXT STEP или возвращаем PLAY после окончания всех ходов
+        function increaseTraps() {
+            if (trapCount < 7) {
+                trapCount += 2;
+                document.getElementById('trapCounter').textContent = trapCount;
+            }
+        }
+
+        // Получение сигнала
+        function getSignal() {
+            const loader = document.getElementById('loader');
+            loader.style.display = 'block';
+
             setTimeout(() => {
-                const lang = getCurrentLanguage();
-                if (activeRow >= 0) {
-                    playButton.textContent = translations[lang].next_step;
-                    playButton.classList.add('next-step');
-                    playButton.disabled = false;
+                loader.style.display = 'none';
+                revealStars();
+            }, getRandom(1000, 3000)); // Сигналы выдаются в первые 3 секунды
+        }
+
+        // Формула для вычисления количества звёзд на основе ловушек
+        function calculateStars() {
+            const trapPercentMap = {
+                1: [60, 70],
+                2: [45, 60],
+                3: [35, 50],
+                4: [25, 40],
+                5: [20, 30],
+                6: [10, 20],
+                7: [5, 15]
+            };
+
+            const range = trapPercentMap[trapCount] || [5, 10];
+            const randomPercent = Math.floor(getRandom(range[0], range[1] + 1));
+            return Math.floor((randomPercent / 100) * totalCells);
+        }
+
+        // Появление звёзд с учётом ловушек
+        function revealStars() {
+            grid.forEach(cell => {
+                const star = cell.querySelector('.star');
+                star.classList.remove('show-star');
+            });
+
+            let starCount = calculateStars();
+            let revealedStars = 0;
+            const revealInterval = 3000 / starCount; // Всё происходит за 3 секунды
+
+            const intervalId = setInterval(() => {
+                if (revealedStars < starCount) {
+                    const randomIndex = Math.floor(getRandom(0, totalCells));
+                    const cell = grid[randomIndex];
+                    const star = cell.querySelector('.star');
+
+                    if (!star.classList.contains('show-star')) {
+                        cell.classList.add('animate');
+                        star.classList.add('show-star');
+                        revealedStars++;
+
+                        setTimeout(() => {
+                            cell.classList.remove('animate');
+                        }, 500);
+                    }
                 } else {
-                    playButton.textContent = translations[lang].play;
-                    playButton.classList.remove('next-step');
-                    playButton.disabled = true;
+                    clearInterval(intervalId);
                 }
-                isAnimating = false;
-            }, 600); // Время анимации
+            }, revealInterval);
+        }
+
+        // Возвращение в меню
+        function goToMenu() {
+            document.getElementById('gameContainer').style.display = 'none';
+            document.getElementById('menuContainer').style.display = 'flex';
+        }
+
+        // Начать игру
+        function startGame(game) {
+            document.getElementById('menuContainer').style.display = 'none';
+            document.getElementById('gameContainer').style.display = 'flex';
+            createGrid();
+        }
+
+        // Перенаправление на страницу Bombucks
+        function redirectToBombucks() {
+            window.location.href = '/bombucks';
         }
 
         // Сброс игры
         function resetGame() {
-            cells.forEach(cell => {
-                cell.classList.remove('active', 'animate');
-                cell.style.transform = 'none';
-                cell.style.boxShadow = '0 0 10px rgba(0, 255, 153, 0.5)';
+            grid.forEach(cell => {
+                const star = cell.querySelector('.star');
+                star.classList.remove('show-star');
+                cell.classList.remove('animate');
             });
-            activeRow = gridSizes[currentGrid].rows - 1; // Сброс активной строки
-            const lang = getCurrentLanguage();
-            playButton.textContent = translations[lang].play;
-            playButton.classList.remove('next-step');
-            playButton.disabled = false;
+            trapCount = 3;
+            document.getElementById('trapCounter').textContent = trapCount;
         }
-
-        // Обработчик кнопки "Exit to Menu"
-        exitButton.addEventListener('click', () => {
-            window.location.href = 'predict.html'; // Перенаправление на predict.html
-        });
 
         // Обработчики событий
-        playButton.addEventListener('click', activateRandomSignal);
-        resetButton.addEventListener('click', resetGame);
-        gridSizeSelect.addEventListener('change', (e) => {
-            currentGrid = e.target.value;
-            resetGame();
-            createGrid(currentGrid);
-            saveGameState(); // Сохранение состояния при изменении сетки
-        });
+        function initializeEventListeners() {
+            document.getElementById('decreaseTrap').addEventListener('click', decreaseTraps);
+            document.getElementById('increaseTrap').addEventListener('click', increaseTraps);
 
-        /* Предотвращение увеличения изображения при двойном нажатии (на мобильных устройствах) */
-        document.addEventListener('gesturestart', function (e) {
-            e.preventDefault();
-        });
+            // Обработчик для кнопки "Получить сигнал"
+            const signalButton = document.querySelector('.btn-signal');
+            signalButton.addEventListener('click', getSignal);
 
-        // Функция для сохранения состояния игры в localStorage
-        function saveGameState() {
-            const gameState = {
-                currentGrid: currentGrid,
-                activeRow: activeRow,
-                cells: cells.map(cell => cell.classList.contains('active'))
-            };
-            localStorage.setItem('gameState', JSON.stringify(gameState));
+            // Обработчики для кнопок "Назад в меню" и "Сбросить игру"
+            const backButtons = document.querySelectorAll('.btn-back, .btn-reset');
+            backButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (this.getAttribute('data-i18n') === 'back_menu') {
+                        goToMenu();
+                    } else if (this.getAttribute('data-i18n') === 'reset_game') {
+                        resetGame();
+                    }
+                });
+            });
         }
-
-        // Функция для загрузки состояния игры из localStorage
-        function loadGameState() {
-            const savedState = localStorage.getItem('gameState');
-            if (savedState) {
-                const gameState = JSON.parse(savedState);
-                if (gridSizes[gameState.currentGrid]) {
-                    currentGrid = gameState.currentGrid;
-                    createGrid(currentGrid);
-                    gameState.cells.forEach((isActive, index) => {
-                        if (isActive && index < cells.length) {
-                            addSignal(cells[index]);
-                            addSignalParticles(cells[index]);
-                        }
-                    });
-                    activeRow = gameState.activeRow;
-                }
-            }
-        }
-
-        // Обработка событий видимости страницы для сохранения/загрузки состояния
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                // Сохранение состояния при сворачивании
-                saveGameState();
-            } else {
-                // Загрузка состояния при разворачивании
-                loadGameState();
-            }
-        });
-
-        // Применение перевода и инициализация при загрузке страницы
-        window.onload = () => {
-            const currentLang = getCurrentLanguage();
-            applyTranslations(currentLang);
-            createGrid(currentGrid);
-            createParticles(150); // Увеличение числа частиц для заполнения экрана
-            loadGameState(); // Загрузка сохранённого состояния игры
-        };
-
     </script>
 </body>
 </html>
