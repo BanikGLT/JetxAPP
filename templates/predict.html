@@ -48,7 +48,13 @@
                 font-size: 20px;
             }
 
-            .controls button, .exit-button button, .trap-btn, .btn-signal, .btn-back, .btn-open, .btn-reset {
+            .controls button,
+            .exit-button button,
+            .trap-btn,
+            .btn-signal,
+            .btn-back,
+            .btn-open,
+            .btn-reset {
                 padding: 12px 18px;
                 font-size: 14px;
             }
@@ -73,7 +79,10 @@
                 padding-top: 56.25%; /* 16:9 соотношение */
             }
 
-            .btn-open, .btn-signal, .btn-back, .btn-reset {
+            .btn-open,
+            .btn-signal,
+            .btn-back,
+            .btn-reset {
                 width: 100%; /* Кнопки занимают всю ширину контейнера */
                 max-width: 300px;
             }
@@ -121,14 +130,14 @@
             }
             100% {
                 transform: translate(
-                    calc(100vw * (var(--rand-x) - 0.5)), 
+                    calc(100vw * (var(--rand-x) - 0.5)),
                     calc(100vh * (var(--rand-y) - 0.5))
                 ) scale(1);
                 opacity: 1;
             }
         }
 
-        /* Промокод (заменяет заголовок) */
+        /* Промокод (разделен на два элемента) */
         .promo-code {
             position: relative;
             width: 100%;
@@ -137,25 +146,42 @@
             background: #0d0d0d; /* Фон для промокода */
             border-radius: 10px;
             margin-bottom: 30px; /* Отступ снизу для разделения от меню */
-        }
-
-        .promo-code-inner {
             display: flex;
             align-items: center;
-            white-space: nowrap;
-            color: #00ff99; /* Неоновый зеленый */
-            font-size: 24px; /* Увеличен размер шрифта */
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(0, 255, 153, 0.8);
-            animation: scrollPromo 10s linear infinite; /* Уменьшена длительность анимации */
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 255, 153, 0.3); /* Умеренное свечение */
         }
 
-        @keyframes scrollPromo {
+        /* Статичный текст промокода */
+        .promo-label {
+            color: #00ff99;
+            font-size: 28px;
+            font-weight: bold;
+            margin-right: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.5); /* Лёгкое свечение */
+        }
+
+        /* Промокод с плавным градиентным переливом */
+        .promo-code-inner {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00ff99, #00ccff, #ff00ff, #00ff99);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: subtleGradient 10s ease infinite;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.5); /* Лёгкое свечение */
+        }
+
+        @keyframes subtleGradient {
             0% {
-                transform: translateX(0%);
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
             }
             100% {
-                transform: translateX(-50%);
+                background-position: 0% 50%;
             }
         }
 
@@ -714,17 +740,10 @@
             <!-- Частицы будут добавлены с помощью JS -->
         </div>
 
-        <!-- Промокод (заменяет заголовок) -->
+        <!-- Промокод (разделен на два элемента) -->
         <div class="promo-code" id="promoCode">
-            <div class="promo-code-inner">
-                <span class="promo-en">PROMOCODE: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="promo-ru">ПРОМОКОД: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <!-- Повторяем текст для бесконечной прокрутки -->
-                <span class="promo-en">PROMOCODE: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="promo-ru">ПРОМОКОД: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="promo-en">PROMOCODE: EZHACK</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="promo-ru">ПРОМОКОД: EZHACK</span>
-            </div>
+            <span class="promo-label" data-i18n="promo_label">PROMOCODE:</span>
+            <span class="promo-code-inner">EZHACK</span>
         </div>
 
         <!-- Экран меню с выбором игры -->
@@ -826,7 +845,8 @@
                 change_language: "Сменить язык",
                 russian: "RU",
                 english: "ENG",
-                promo_code_ru: "ПРОМОКОД: EZHACK"
+                promo_label_ru: "ПРОМОКОД:",
+                promo_code_ru: "EZHACK"
             },
             en: {
                 title: "Mines Game — Epic Stars",
@@ -845,7 +865,8 @@
                 change_language: "Change Language",
                 russian: "RU",
                 english: "ENG",
-                promo_code_en: "PROMOCODE: EZHACK"
+                promo_label_en: "PROMOCODE:",
+                promo_code_en: "EZHACK"
             }
         };
 
@@ -889,16 +910,15 @@
 
         // Функция для обновления промокода
         function updatePromoCode(lang) {
-            const promoCodeElement = document.getElementById('promoCode');
-            const promoText = lang === 'ru' ? translations[lang].promo_code_ru : translations[lang].promo_code_en;
+            const promoLabel = document.querySelector('.promo-label');
             const promoInner = document.querySelector('.promo-code-inner');
-            // Обновляем все повторения промокода
-            promoInner.innerHTML = `<span class="promo-en">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
-                                   `<span class="promo-ru">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
-                                   `<span class="promo-en">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
-                                   `<span class="promo-ru">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
-                                   `<span class="promo-en">${promoText}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` +
-                                   `<span class="promo-ru">${promoText}</span>`;
+            if (lang === 'ru') {
+                promoLabel.textContent = translations[lang].promo_label_ru;
+                promoInner.textContent = translations[lang].promo_code_ru;
+            } else {
+                promoLabel.textContent = translations[lang].promo_label_en;
+                promoInner.textContent = translations[lang].promo_code_en;
+            }
         }
 
         // Функция для показа модального окна выбора языка
