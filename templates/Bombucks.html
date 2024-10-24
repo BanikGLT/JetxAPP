@@ -45,10 +45,6 @@
                 padding: 15px;
             }
 
-            h1 {
-                font-size: 20px;
-            }
-
             .controls button, .exit-button button {
                 padding: 12px 18px;
                 font-size: 14px;
@@ -65,6 +61,17 @@
 
             select {
                 font-size: 12px; /* Уменьшение размера шрифта на мобильных */
+            }
+
+            /* Промокод адаптация для мобильных */
+            .promo-code {
+                flex-direction: column;
+                height: auto;
+                padding: 10px;
+            }
+
+            .promo-label, .promo-code-inner {
+                font-size: 20px;
             }
         }
 
@@ -104,13 +111,54 @@
             }
         }
 
-        h1 {
-            color: #00ff99; /* Неоновый зеленый */
-            text-align: center;
-            margin: 0;
+        /* Промокод (разделен на два элемента) */
+        .promo-code {
+            position: relative;
+            width: 100%;
+            height: 60px; /* Увеличен размер контейнера */
+            overflow: hidden;
+            background: #0d0d0d; /* Фон для промокода */
+            border-radius: 10px;
+            margin-bottom: 20px; /* Отступ снизу для разделения от остальных элементов */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 20px rgba(0, 255, 153, 0.3); /* Умеренное свечение */
+        }
+
+        /* Статичный текст промокода */
+        .promo-label {
+            color: #00ff99;
             font-size: 24px;
-            text-shadow: 0 0 15px rgba(0, 255, 153, 0.8);
-            z-index: 2;
+            font-weight: bold;
+            margin-right: 10px;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.5); /* Лёгкое свечение */
+            white-space: nowrap;
+        }
+
+        /* Промокод с плавным градиентным переливом */
+        .promo-code-inner {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00ff99, #00ccff, #ff00ff, #00ff99);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: subtleGradient 10s ease infinite;
+            text-shadow: 0 0 10px rgba(0, 255, 153, 0.5); /* Лёгкое свечение */
+            white-space: nowrap;
+        }
+
+        @keyframes subtleGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         .grid-wrapper {
@@ -142,6 +190,7 @@
             overflow: hidden;
             word-break: break-word; /* Перенос длинных слов */
             text-align: center; /* Выравнивание текста по центру */
+            aspect-ratio: 1 / 1; /* Обеспечение квадратной формы */
         }
 
         .cell.active {
@@ -317,6 +366,8 @@
             transition: all 0.3s ease;
         }
 
+        /* Language Selection Modal Styles */
+        /* Можно добавить стили для модального окна, если требуется */
     </style>
 </head>
 <body>
@@ -326,7 +377,13 @@
             <!-- Частицы будут добавлены с помощью JS -->
         </div>
 
-        <h1 data-i18n="title">Glight Signals Hack</h1>
+        <!-- Промокод (разделен на два элемента) -->
+        <div class="promo-code" id="promoCode">
+            <span class="promo-label" data-i18n="promo_label">PROMOCODE:</span>
+            <span class="promo-code-inner">EZHACK</span>
+        </div>
+
+        <!-- Удалён заголовок <h1> -->
 
         <div class="select-field">
             <select id="gridSizeSelect">
@@ -370,7 +427,8 @@
                 field_4x9: "Field 4x9",
                 field_5x12: "Field 5x12",
                 field_6x15: "Field 6x15",
-                next_step: "NEXT STEP"
+                next_step: "NEXT STEP",
+                promo_label: "PROMOCODE:"
             },
             ru: {
                 title: "Glight Signals Hack", // Название оставлено на английском
@@ -383,7 +441,8 @@
                 field_4x9: "Поле 4x9",
                 field_5x12: "Поле 5x12",
                 field_6x15: "Поле 6x15",
-                next_step: "ДАЛЕЕ"
+                next_step: "ДАЛЕЕ",
+                promo_label: "ПРОМОКОД:"
             }
         };
 
@@ -398,6 +457,9 @@
 
             // Установка атрибута lang в <html>
             document.documentElement.lang = lang;
+
+            // Обновление промокода
+            updatePromoCode(lang);
         }
 
         // Функция для получения текущего языка из localStorage
@@ -456,7 +518,7 @@
             "6x15": { rows: 15, cols: 6 },
         };
 
-        let currentGrid = "2x3"; // Текущая сетка
+        let currentGrid = "2x3"; // Текущая сетка по умолчанию
         let cells = []; // Все клетки
         let activeRow = gridSizes[currentGrid].rows - 1; // Начальная строка (нижняя)
         let isAnimating = false; // Флаг анимации
@@ -467,7 +529,7 @@
             const size = gridSizes[sizeKey];
             activeRow = size.rows - 1; // Начинаем с нижней строки
 
-            const availableHeight = window.innerHeight * 0.6; // 60% высоты экрана
+            const availableHeight = window.innerHeight * 0.4; // 40% высоты экрана для сетки
             const cellSize = Math.min(80, Math.floor(availableHeight / size.rows) - 5); // Автоматический расчет размера ячеек
 
             gridContainer.style.gridTemplateColumns = `repeat(${size.cols}, ${cellSize}px)`;
@@ -475,7 +537,7 @@
 
             cells = [];
 
-            for (let i = 0;  i < size.cols * size.rows; i++) {
+            for (let i = 0; i < size.cols * size.rows; i++) {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
                 cell.style.width = `${cellSize}px`;
@@ -617,6 +679,7 @@
             resetGame();
             createGrid(currentGrid);
             saveGameState(); // Сохранение состояния при изменении сетки
+            saveGridSize(currentGrid); // Сохранение выбранного размера сетки
         });
 
         /* Предотвращение увеличения изображения при двойном нажатии (на мобильных устройствах) */
@@ -642,6 +705,7 @@
                 if (gridSizes[gameState.currentGrid]) {
                     currentGrid = gameState.currentGrid;
                     createGrid(currentGrid);
+                    gridSizeSelect.value = currentGrid; // Установка выбранного значения в селекте
                     gameState.cells.forEach((isActive, index) => {
                         if (isActive && index < cells.length) {
                             addSignal(cells[index]);
@@ -650,29 +714,57 @@
                     });
                     activeRow = gameState.activeRow;
                 }
+            } else {
+                // Если состояние игры не сохранено, установить размер сетки по умолчанию
+                currentGrid = "2x3";
+                gridSizeSelect.value = currentGrid;
+                createGrid(currentGrid);
             }
         }
 
-        // Обработка событий видимости страницы для сохранения/загрузки состояния
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                // Сохранение состояния при сворачивании
-                saveGameState();
-            } else {
-                // Загрузка состояния при разворачивании
-                loadGameState();
-            }
-        });
+        // Функция для сохранения выбранного размера сетки в localStorage
+        function saveGridSize(sizeKey) {
+            localStorage.setItem('selectedGridSize', sizeKey);
+        }
 
-        // Применение перевода и инициализация при загрузке страницы
+        // Функция для загрузки выбранного размера сетки из localStorage
+        function loadGridSize() {
+            const savedSize = localStorage.getItem('selectedGridSize');
+            if (savedSize && gridSizes[savedSize]) {
+                return savedSize;
+            }
+            return "2x3"; // Размер сетки по умолчанию
+        }
+
+        // Функция для обновления промокода
+        function updatePromoCode(lang) {
+            const promoLabel = document.querySelector('.promo-label');
+            const promoInner = document.querySelector('.promo-code-inner');
+            if (lang === 'ru') {
+                promoLabel.textContent = translations[lang].promo_label;
+                promoInner.textContent = "EZHACK"; // Промокод остаётся без перевода
+            } else {
+                promoLabel.textContent = translations[lang].promo_label;
+                promoInner.textContent = "EZHACK"; // Промокод остаётся без перевода
+            }
+        }
+
+        // Функция для применения перевода и инициализации при загрузке страницы
         window.onload = () => {
             const currentLang = getCurrentLanguage();
             applyTranslations(currentLang);
+            const savedGridSize = loadGridSize();
+            currentGrid = savedGridSize;
+            gridSizeSelect.value = currentGrid;
             createGrid(currentGrid);
             createParticles(150); // Увеличение числа частиц для заполнения экрана
             loadGameState(); // Загрузка сохранённого состояния игры
         };
 
+        // Функция для сохранения состояния игры при закрытии страницы или обновлении
+        window.onbeforeunload = () => {
+            saveGameState();
+        };
     </script>
 </body>
 </html>
