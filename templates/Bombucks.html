@@ -12,7 +12,6 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            width: 100vw; /* Полная ширина */
             margin: 0;
             padding: 0;
             font-family: 'Montserrat', sans-serif;
@@ -27,28 +26,29 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-between;
-            width: 100vw; /* Полная ширина */
-            height: 100vh; /* Полная высота */
+            width: 100%;
+            max-width: 400px;
+            height: 95vh;
             background: rgba(13, 13, 13, 0.9);
             padding: 20px;
-            border-radius: 0; /* Убраны закругления */
+            border-radius: 0; /* Убрали закругление */
             box-shadow: 0 10px 30px rgba(0, 255, 153, 0.8);
             overflow: hidden;
             z-index: 1;
         }
 
-        /* Анимированный фон */
+        /* Анимированный фон, расширенный для покрытия всего экрана */
         .background {
             position: absolute;
-            top: -10%; /* Расширение */
+            top: -10%; /* Поднято выше контейнера */
             left: -10%;
-            width: 120%; /* Расширенная ширина */
-            height: 120%; /* Расширенная высота */
+            width: 120%;
+            height: 120%;
             z-index: 0;
             overflow: hidden;
         }
 
-        /* Частицы фона */
+        /* Частицы для анимированного фона */
         .particle {
             position: absolute;
             background-color: rgba(0, 255, 153, 0.8);
@@ -73,7 +73,9 @@
             }
         }
 
-        /* Стили интерфейса */
+        /* Остальной ваш код для интерфейса и функционала */
+        
+        /* Стили для интерфейса */
         .grid-wrapper {
             position: relative;
             width: 100%;
@@ -93,7 +95,7 @@
 
         .cell {
             background-color: #1a1a1a;
-            border-radius: 10px; /* Будет переопределен через JS */
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -112,7 +114,6 @@
             border: 2px solid #00ff99;
         }
 
-        /* Анимация сигнала */
         .cell.active.animate {
             animation: signalEffect 0.6s forwards;
         }
@@ -162,7 +163,6 @@
             box-shadow: 0 0 20px rgba(0, 255, 153, 0.8), 0 0 40px rgba(0, 255, 153, 0.4);
         }
 
-        /* Стили для кнопки NEXT STEP */
         .controls .next-step {
             background-color: #00cc77;
             color: #0d0d0d;
@@ -251,27 +251,6 @@
             font-size: 12px;
             text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
             z-index: 2;
-        }
-
-        /* Дополнительные стили для частиц сигнала */
-        .signal-particle {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            border-radius: 50%;
-            opacity: 0;
-            animation: signalMove 0.6s forwards;
-        }
-
-        @keyframes signalMove {
-            from {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            to {
-                transform: translate(calc(var(--rand-x) * 20px), calc(var(--rand-y) * 20px)) scale(0.5);
-                opacity: 0;
-            }
         }
     </style>
 </head>
@@ -417,9 +396,6 @@
                 cell.classList.add('cell');
                 cell.style.width = `${cellSize}px`;
                 cell.style.height = `${cellSize}px`;
-                // Устанавливаем динамический border-radius
-                const borderRadius = Math.max(2, Math.floor(cellSize / 4)); // Минимум 2px
-                cell.style.borderRadius = `${borderRadius}px`;
                 gridContainer.appendChild(cell);
                 cells.push(cell);
             }
@@ -447,8 +423,6 @@
                 particle.style.top = Math.random() * 100 + '%';
                 particle.style.animationDuration = '0.6s';
                 particle.style.backgroundColor = `rgba(0, 255, 153, ${Math.random() * 0.6 + 0.4})`;
-                particle.style.setProperty('--rand-x', Math.random());
-                particle.style.setProperty('--rand-y', Math.random());
                 particleContainer.appendChild(particle);
             }
 
@@ -519,11 +493,7 @@
         }
 
         exitButton.addEventListener('click', () => {
-            // Если вы используете серверный фреймворк, создайте маршрут для predict.html
-            // Например, для Flask:
-            // window.location.href = '/predict';
-            // Для статического сайта:
-            window.location.href = 'templates/predict.html';
+            window.location.href = 'predict.html';
         });
 
         playButton.addEventListener('click', activateRandomSignal);
