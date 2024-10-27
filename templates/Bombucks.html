@@ -93,7 +93,7 @@
 
         .cell {
             background-color: #1a1a1a;
-            border-radius: 10px;
+            border-radius: 10px; /* Будет переопределен через JS */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -252,6 +252,27 @@
             text-shadow: 0 0 5px rgba(0, 255, 153, 0.5);
             z-index: 2;
         }
+
+        /* Дополнительные стили для частиц сигнала */
+        .signal-particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            opacity: 0;
+            animation: signalMove 0.6s forwards;
+        }
+
+        @keyframes signalMove {
+            from {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            to {
+                transform: translate(calc(var(--rand-x) * 20px), calc(var(--rand-y) * 20px)) scale(0.5);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -396,6 +417,9 @@
                 cell.classList.add('cell');
                 cell.style.width = `${cellSize}px`;
                 cell.style.height = `${cellSize}px`;
+                // Устанавливаем динамический border-radius
+                const borderRadius = Math.max(2, Math.floor(cellSize / 4)); // Минимум 2px
+                cell.style.borderRadius = `${borderRadius}px`;
                 gridContainer.appendChild(cell);
                 cells.push(cell);
             }
@@ -423,6 +447,8 @@
                 particle.style.top = Math.random() * 100 + '%';
                 particle.style.animationDuration = '0.6s';
                 particle.style.backgroundColor = `rgba(0, 255, 153, ${Math.random() * 0.6 + 0.4})`;
+                particle.style.setProperty('--rand-x', Math.random());
+                particle.style.setProperty('--rand-y', Math.random());
                 particleContainer.appendChild(particle);
             }
 
@@ -493,7 +519,11 @@
         }
 
         exitButton.addEventListener('click', () => {
-            window.location.href = 'predict.html';
+            // Если вы используете серверный фреймворк, создайте маршрут для predict.html
+            // Например, для Flask:
+            // window.location.href = '/predict';
+            // Для статического сайта:
+            window.location.href = 'templates/predict.html';
         });
 
         playButton.addEventListener('click', activateRandomSignal);
