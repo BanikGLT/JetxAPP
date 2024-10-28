@@ -5,8 +5,8 @@ import os
 
 app = Flask(__name__)
 
-# Токен вашего бота
-BOT_TOKEN = '6630264932:AAFf9zYIgAlSTAp4AzCgikGKKXgWg44mIes'
+# Токен вашего бота (ВАЖНО: не публикуйте токен публично)
+BOT_TOKEN = 'YOUR_NEW_BOT_TOKEN_HERE'  # Смените токен после публикации
 
 # Инициализация Telegram Bot
 telegram_app = ApplicationBuilder().token(BOT_TOKEN).build()
@@ -35,9 +35,14 @@ async def webhook():
 # Роут для отображения основного HTML интерфейса
 @app.route('/')
 def index():
+    return render_template('predict.html')  # Или 'Bombucks.html', если нужно
+
+# Дополнительный маршрут для '/predict.html'
+@app.route('/predict.html')
+def predict_html_route():
     return render_template('predict.html')
 
-# Добавляем новый маршрут для Bombucks.html
+# Роут для Bombucks.html
 @app.route('/bombucks')
 def bombucks():
     return render_template('Bombucks.html')
