@@ -11,21 +11,15 @@
     
     <style>
         /* Общие стили */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
             display: flex;
             justify-content: center;
-            align-items: center; /* Центрирование по вертикали и горизонтали */
-            width: 100%;
-            height: 100%;
+            align-items: center; /* Вертикальное центрирование контейнера */
+            min-height: 100vh;
+            margin: 0;
             font-family: 'Montserrat', sans-serif;
             background: #0d0d0d;
-            overflow: hidden; /* Предотвращает появление полос прокрутки */
+            overflow-x: hidden;
             user-select: none;
         }
 
@@ -36,11 +30,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start; /* Выравнивание содержимого сверху */
-            width: 100%;
-            height: 100%;
+            width: 90%;
+            max-width: 400px; /* Исходное значение */
             background: rgba(13, 13, 13, 0.95);
             padding: 20px;
-            /* Удалены закругления */
+            border-radius: 25px;
             box-shadow: 0 0 30px rgba(0, 255, 153, 0.6);
             overflow: hidden;
             z-index: 1;
@@ -484,7 +478,7 @@
 
         /* Новый стиль для Хакерского Loader */
         .loader {
-            display: none; /* По умолчанию скрыт */
+            display: none;
             position: fixed;
             top: 50%;
             left: 50%;
@@ -709,45 +703,6 @@
                 box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
             }
         }
-
-        /* Медиа-запросы для адаптивности */
-        @media (max-width: 600px) {
-            .promo-code {
-                height: 60px;
-            }
-
-            .promo-label, .promo-code-inner {
-                font-size: 20px;
-            }
-
-            .trap-title, .trap-counter, .trap-selector button {
-                font-size: 20px;
-            }
-
-            .btn-signal, .btn-back, .btn-open {
-                font-size: 16px;
-                padding: 10px 20px;
-            }
-
-            .language-button {
-                padding: 10px 25px;
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .games-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .game-card {
-                max-width: 300px;
-            }
-
-            .language-container {
-                flex-direction: column;
-            }
-        }
     </style>
 </head>
 <body>
@@ -857,7 +812,6 @@
                 english: "ENG",
                 promo_code_label: "ПРОМОКОД:", // Добавлено для промокода
                 loader_messages: [
-                    "Запуск HACK AI...",
                     "Инициализация системы...",
                     "Установка защищённого соединения...",
                     "Анализ минного поля...",
@@ -884,7 +838,6 @@
                 english: "ENG",
                 promo_code_label: "PROMOCODE:", // Добавлено для промокода
                 loader_messages: [
-                    "Launching HACK AI...",
                     "Initializing system...",
                     "Establishing secure connection...",
                     "Analyzing minefield...",
@@ -1027,56 +980,27 @@
             disableButtons(true);
 
             const messagesPool = translations[localStorage.getItem('language') || 'en'].loader_messages;
-            // Используем первые `messagesPool.length` сообщений для последовательности
-            displayLoaderMessagesSequentially(messagesPool).then(() => {
+            const selectedMessages = getRandomMessages(messagesPool, 7);
+            displayLoaderMessagesSequentially(selectedMessages).then(() => {
                 loader.classList.remove('active');
                 revealStarsSequentially();
                 disableButtons(false);
             });
         }
 
-        // Функция для выбора сообщений в логичном порядке
-        async function displayLoaderMessagesSequentially(messages) {
-            const loaderMessagesContainer = document.getElementById('loaderMessages');
-            for (let i = 0; i < messages.length; i++) {
-                const message = messages[i];
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('loader-message');
-                loaderMessagesContainer.appendChild(messageElement);
-                
-                // Запускаем функцию печати
-                await typeWriter(message, messageElement);
-                
-                // Ограничение на количество отображаемых сообщений (максимум 4)
-                if (loaderMessagesContainer.children.length > 4) {
-                    loaderMessagesContainer.removeChild(loaderMessagesContainer.firstChild);
-                }
-
-                // Пауза перед началом печати следующего сообщения
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
-
-            // Общее время выполнения: (7 сообщений * ~0.3 сек) + задержки = около 3 секунд
+        // Функция для выбора случайных уникальных сообщений
+        function getRandomMessages(pool, count) {
+            // В данном случае, сообщения уже логично отсортированы,
+            // поэтому будем просто использовать первые `count` сообщений
+            return pool.slice(0, count);
         }
 
-        /* Функция для эффекта печати текста */
-        function typeWriter(text, element) {
-            return new Promise(resolve => {
-                let i = 0;
-                const typingSpeed = 30; // Скорость печати (мс на символ)
-
-                function type() {
-                    if (i < text.length) {
-                        element.textContent += text.charAt(i);
-                        i++;
-                        setTimeout(type, typingSpeed);
-                    } else {
-                        // Завершение печати сообщения
-                        resolve();
-                    }
-                }
-                type();
-            });
+        function calculateStars() {
+            // Независимо от количества ловушек выдаём от 3 до 7 звёздочек
+            const minStars = 3;
+            const maxStars = 7;
+            const starCount = Math.floor(getRandom(minStars, maxStars + 1));
+            return starCount;
         }
 
         async function revealStarsSequentially() {
@@ -1155,6 +1079,49 @@
             backButton.addEventListener('click', goToMenu);
         }
 
+        /* Функция для отображения сообщений загрузчика по очереди с эффектом печати */
+        async function displayLoaderMessagesSequentially(messages) {
+            const loaderMessagesContainer = document.getElementById('loaderMessages');
+            for (let i = 0; i < messages.length; i++) {
+                const message = messages[i];
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('loader-message');
+                loaderMessagesContainer.appendChild(messageElement);
+                
+                // Запускаем функцию печати
+                await typeWriter(message, messageElement);
+                
+                // Ограничение на количество отображаемых сообщений (максимум 4)
+                if (loaderMessagesContainer.children.length > 4) {
+                    loaderMessagesContainer.removeChild(loaderMessagesContainer.firstChild);
+                }
+
+                // Пауза перед началом печати следующего сообщения
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            // Общее время выполнения: (7 сообщений * ~0.3 сек) + задержки = около 3 секунд
+        }
+
+        /* Функция для эффекта печати текста */
+        function typeWriter(text, element) {
+            return new Promise(resolve => {
+                let i = 0;
+                const typingSpeed = 30; // Скорость печати (мс на символ)
+
+                function type() {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(type, typingSpeed);
+                    } else {
+                        // Завершение печати сообщения
+                        resolve();
+                    }
+                }
+                type();
+            });
+        }
     </script>
 </body>
 </html>
