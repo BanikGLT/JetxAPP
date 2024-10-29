@@ -1,25 +1,31 @@
 <!DOCTYPE html>
-<html lang="en"> <!-- Установлен язык по умолчанию на английский -->
+<html lang="en">
 <head>
+    <!-- Мета-теги и подключение стилей -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-i18n="title">Mines Game — Epic Stars</title>
-    
     <!-- Подключение шрифта Montserrat и Font Awesome для иконок -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    
+
     <style>
         /* Общие стили */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
             display: flex;
             justify-content: center;
-            align-items: center; /* Вертикальное центрирование контейнера */
-            min-height: 100vh;
-            margin: 0;
+            align-items: center; /* Центрирование по вертикали и горизонтали */
+            width: 100vw; /* Полная ширина */
+            height: 100vh; /* Полная высота */
             font-family: 'Montserrat', sans-serif;
             background: #0d0d0d;
-            overflow-x: hidden;
+            overflow: hidden; /* Предотвращает появление полос прокрутки */
             user-select: none;
         }
 
@@ -29,12 +35,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start; /* Выравнивание содержимого сверху */
-            width: 90%;
-            max-width: 400px; /* Исходное значение */
+            width: 100%;
+            height: 100%;
             background: rgba(13, 13, 13, 0.95);
             padding: 20px;
-            border-radius: 25px;
             box-shadow: 0 0 30px rgba(0, 255, 153, 0.6);
             overflow: hidden;
             z-index: 1;
@@ -79,38 +83,38 @@
         /* Промокод */
         .promo-code {
             position: relative;
-            width: 90%; /* Уменьшаем ширину до 90% от основного контейнера */
-            max-width: 380px; /* Немного уменьшаем max-width для отступов */
-            height: 70px; /* Увеличиваем высоту с 60px до 70px */
+            width: 90%;
+            max-width: 380px;
+            height: 70px;
             overflow: hidden;
             background: #0d0d0d;
-            border-radius: 12px; /* Немного увеличиваем радиус скругления */
-            margin-bottom: 20px; /* Отступ снизу для разделения с меню */
+            border-radius: 12px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 22px rgba(0, 255, 153, 0.3); /* Легкое усиление тени */
-            padding: 10px 15px; /* Добавляем внутренние отступы */
-            z-index: 2; /* Поверх фона */
+            box-shadow: 0 0 22px rgba(0, 255, 153, 0.3);
+            padding: 10px 15px;
+            z-index: 2;
         }
 
         .promo-label {
             color: #00ff99;
-            font-size: 24px; /* Уменьшен размер шрифта для гармонии */
+            font-size: 24px;
             font-weight: bold;
-            margin-right: 8px; /* Уменьшен отступ справа */
-            text-shadow: 0 0 12px rgba(0, 255, 153, 0.5); /* Усилен эффект тени */
+            margin-right: 8px;
+            text-shadow: 0 0 12px rgba(0, 255, 153, 0.5);
         }
 
         .promo-code-inner {
-            font-size: 24px; /* Уменьшен размер шрифта для гармонии */
+            font-size: 24px;
             font-weight: bold;
             background: linear-gradient(90deg, #00ff99, #00ccff, #ff00ff, #00ff99);
             background-size: 400% 400%;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: subtleGradient 5s ease infinite; /* Уменьшено время анимации */
-            text-shadow: 0 0 12px rgba(0, 255, 153, 0.5); /* Усилен эффект тени */
+            animation: subtleGradient 5s ease infinite;
+            text-shadow: 0 0 12px rgba(0, 255, 153, 0.5);
         }
 
         @keyframes subtleGradient {
@@ -155,11 +159,16 @@
 
         /* Меню и игры */
         .menu, .game {
-            width: 100%;
-            z-index: 2;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center; /* Центрирование по вертикали */
+            width: 100%;
+            z-index: 2;
+        }
+
+        .game {
+            flex: 0 0 auto; /* Предотвращаем растягивание */
         }
 
         .menu h2 {
@@ -281,14 +290,15 @@
             grid-template-columns: repeat(5, 1fr);
             grid-gap: 10px;
             width: 100%;
+            max-width: 500px; /* Ограничиваем максимальную ширину */
             margin-bottom: 20px;
             z-index: 2;
         }
 
         .cell {
-            width: 100%;
-            padding-bottom: 100%;
             position: relative;
+            width: 100%;
+            padding-bottom: 100%; /* Сохраняем квадратную форму ячеек */
             background: linear-gradient(145deg, #67e6dc, #0d7377);
             border-radius: 15px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
@@ -328,7 +338,7 @@
             text-align: center;
             margin-bottom: 20px;
             z-index: 2;
-            color: #00ff99; /* Сделано зелёным */
+            color: #00ff99;
         }
 
         .trap-title {
@@ -401,7 +411,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px; /* Добавлен отступ снизу */
+            margin-bottom: 20px;
         }
 
         .btn-signal::before {
@@ -478,7 +488,7 @@
 
         /* Новый стиль для Хакерского Loader */
         .loader {
-            display: none;
+            display: none; /* По умолчанию скрыт */
             position: fixed;
             top: 50%;
             left: 50%;
@@ -687,20 +697,42 @@
             transform: translateY(-2px);
         }
 
-        /* Анимация кнопки NEXT STEP */
-        .next-step {
-            animation: pulseButton 1.5s infinite;
+        /* Медиа-запросы для адаптивности */
+        @media (max-width: 600px) {
+            .promo-code {
+                height: 60px;
+            }
+
+            .promo-label, .promo-code-inner {
+                font-size: 20px;
+            }
+
+            .trap-title, .trap-counter, .trap-selector button {
+                font-size: 20px;
+            }
+
+            .btn-signal, .btn-back, .btn-open {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+
+            .language-button {
+                padding: 10px 25px;
+                font-size: 16px;
+            }
         }
 
-        @keyframes pulseButton {
-            0% {
-                box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
+        @media (max-width: 400px) {
+            .games-grid {
+                grid-template-columns: 1fr;
             }
-            50% {
-                box-shadow: 0 0 30px rgba(0, 204, 119, 1), 0 0 60px rgba(0, 204, 119, 0.6);
+
+            .game-card {
+                max-width: 300px;
             }
-            100% {
-                box-shadow: 0 0 20px rgba(0, 204, 119, 0.8), 0 0 40px rgba(0, 204, 119, 0.4);
+
+            #languageContainer {
+                flex-direction: column;
             }
         }
     </style>
@@ -812,6 +844,7 @@
                 english: "ENG",
                 promo_code_label: "ПРОМОКОД:", // Добавлено для промокода
                 loader_messages: [
+                    "Запуск HACK AI...",
                     "Инициализация системы...",
                     "Установка защищённого соединения...",
                     "Анализ минного поля...",
@@ -838,6 +871,7 @@
                 english: "ENG",
                 promo_code_label: "PROMOCODE:", // Добавлено для промокода
                 loader_messages: [
+                    "Launching HACK AI...",
                     "Initializing system...",
                     "Establishing secure connection...",
                     "Analyzing minefield...",
@@ -900,6 +934,7 @@
             applyLanguage(savedLang);
             createGrid();
             createParticles(100); // Увеличено количество частиц для лучшего фона
+            loadGameState();
             initializeEventListeners();
         };
 
@@ -946,8 +981,6 @@
 
                 // Отключаем клики по сетке
                 cell.style.cursor = 'default';
-                // Убираем обработчик клика
-                // cell.addEventListener('click', () => {}); // Удалён
 
                 grid.push(cell);
                 gridElement.appendChild(cell);
@@ -980,27 +1013,56 @@
             disableButtons(true);
 
             const messagesPool = translations[localStorage.getItem('language') || 'en'].loader_messages;
-            const selectedMessages = getRandomMessages(messagesPool, 7);
-            displayLoaderMessagesSequentially(selectedMessages).then(() => {
+            // Используем первые `messagesPool.length` сообщений для последовательности
+            displayLoaderMessagesSequentially(messagesPool).then(() => {
                 loader.classList.remove('active');
                 revealStarsSequentially();
                 disableButtons(false);
             });
         }
 
-        // Функция для выбора случайных уникальных сообщений
-        function getRandomMessages(pool, count) {
-            // В данном случае, сообщения уже логично отсортированы,
-            // поэтому будем просто использовать первые `count` сообщений
-            return pool.slice(0, count);
+        // Функция для выбора сообщений в логичном порядке
+        async function displayLoaderMessagesSequentially(messages) {
+            const loaderMessagesContainer = document.getElementById('loaderMessages');
+            for (let i = 0; i < messages.length; i++) {
+                const message = messages[i];
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('loader-message');
+                loaderMessagesContainer.appendChild(messageElement);
+                
+                // Запускаем функцию печати
+                await typeWriter(message, messageElement);
+                
+                // Ограничение на количество отображаемых сообщений (максимум 4)
+                if (loaderMessagesContainer.children.length > 4) {
+                    loaderMessagesContainer.removeChild(loaderMessagesContainer.firstChild);
+                }
+
+                // Пауза перед началом печати следующего сообщения
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            // Общее время выполнения: (8 сообщений * ~0.3 сек) + задержки = около 4 секунд
         }
 
-        function calculateStars() {
-            // Независимо от количества ловушек выдаём от 3 до 7 звёздочек
-            const minStars = 3;
-            const maxStars = 7;
-            const starCount = Math.floor(getRandom(minStars, maxStars + 1));
-            return starCount;
+        /* Функция для эффекта печати текста */
+        function typeWriter(text, element) {
+            return new Promise(resolve => {
+                let i = 0;
+                const typingSpeed = 30; // Скорость печати (мс на символ)
+
+                function type() {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(type, typingSpeed);
+                    } else {
+                        // Завершение печати сообщения
+                        resolve();
+                    }
+                }
+                type();
+            });
         }
 
         async function revealStarsSequentially() {
@@ -1032,6 +1094,14 @@
                     await new Promise(resolve => setTimeout(resolve, getRandom(500, 800)));
                 }
             }
+        }
+
+        function calculateStars() {
+            // Независимо от количества ловушек выдаём от 3 до 7 звёздочек
+            const minStars = 3;
+            const maxStars = 7;
+            const starCount = Math.floor(getRandom(minStars, maxStars + 1));
+            return starCount;
         }
 
         function goToMenu() {
@@ -1079,49 +1149,72 @@
             backButton.addEventListener('click', goToMenu);
         }
 
-        /* Функция для отображения сообщений загрузчика по очереди с эффектом печати */
-        async function displayLoaderMessagesSequentially(messages) {
-            const loaderMessagesContainer = document.getElementById('loaderMessages');
-            for (let i = 0; i < messages.length; i++) {
-                const message = messages[i];
-                const messageElement = document.createElement('div');
-                messageElement.classList.add('loader-message');
-                loaderMessagesContainer.appendChild(messageElement);
-                
-                // Запускаем функцию печати
-                await typeWriter(message, messageElement);
-                
-                // Ограничение на количество отображаемых сообщений (максимум 4)
-                if (loaderMessagesContainer.children.length > 4) {
-                    loaderMessagesContainer.removeChild(loaderMessagesContainer.firstChild);
-                }
+        /* Скрипты для сохранения и загрузки состояния игры */
+        function saveGameState() {
+            const gameState = {
+                currentGrid: gridSize,
+                trapCount: trapCount,
+                cells: grid.map(cell => cell.classList.contains('active'))
+            };
+            localStorage.setItem('gameState', JSON.stringify(gameState));
+        }
 
-                // Пауза перед началом печати следующего сообщения
-                await new Promise(resolve => setTimeout(resolve, 500));
+        function loadGameState() {
+            const savedState = localStorage.getItem('gameState');
+            if (savedState) {
+                const gameState = JSON.parse(savedState);
+                if (gameState.currentGrid) {
+                    // Возможно, добавить логику для изменения размера сетки, если необходимо
+                }
+                if (gameState.cells) {
+                    gameState.cells.forEach((isActive, index) => {
+                        if (isActive && index < grid.length) {
+                            grid[index].classList.add('active');
+                            // Добавляем анимацию без временных задержек
+                            addSignalParticles(grid[index]);
+                        }
+                    });
+                }
+                trapCount = gameState.trapCount || 3;
+                document.getElementById('trapCounter').textContent = trapCount;
+            }
+        }
+
+        /* Функция для добавления частиц сигнала */
+        function addSignalParticles(cell) {
+            const particleContainer = document.createElement('div');
+            particleContainer.style.position = 'absolute';
+            particleContainer.style.top = '50%';
+            particleContainer.style.left = '50%';
+            particleContainer.style.transform = 'translate(-50%, -50%)';
+            particleContainer.style.pointerEvents = 'none';
+
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('signal-particle');
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDuration = '0.6s';
+                particle.style.backgroundColor = `rgba(0, 255, 153, ${Math.random() * 0.6 + 0.4})`;
+                particle.style.setProperty('--rand-x', Math.random());
+                particle.style.setProperty('--rand-y', Math.random());
+                particleContainer.appendChild(particle);
             }
 
-            // Общее время выполнения: (7 сообщений * ~0.3 сек) + задержки = около 3 секунд
-        }
-
-        /* Функция для эффекта печати текста */
-        function typeWriter(text, element) {
-            return new Promise(resolve => {
-                let i = 0;
-                const typingSpeed = 30; // Скорость печати (мс на символ)
-
-                function type() {
-                    if (i < text.length) {
-                        element.textContent += text.charAt(i);
-                        i++;
-                        setTimeout(type, typingSpeed);
-                    } else {
-                        // Завершение печати сообщения
-                        resolve();
-                    }
+            cell.appendChild(particleContainer);
+            setTimeout(() => {
+                if (cell.contains(particleContainer)) {
+                    cell.removeChild(particleContainer);
                 }
-                type();
-            });
+            }, 600);
         }
+
+        window.onbeforeunload = () => saveGameState();
+
+        // Добавляем обработчик события изменения размера окна
+        window.addEventListener('resize', () => {
+            createGrid();
+        });
     </script>
 </body>
 </html>
