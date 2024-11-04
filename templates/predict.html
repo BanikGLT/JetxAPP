@@ -3,7 +3,7 @@
 <head>
     <!-- Мета-теги и подключение стилей -->
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title data-i18n="title">Mines Game — Epic Stars</title>
     <!-- Подключение шрифта Montserrat и Font Awesome для иконок -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
@@ -15,6 +15,7 @@
             height: 100%;
             margin: 0;
             padding: 0;
+            touch-action: manipulation; /* Предотвращает жесты масштабирования */
         }
 
         body {
@@ -1215,6 +1216,16 @@
         window.addEventListener('resize', () => {
             createGrid();
         });
+
+        /* Предотвращение двойного нажатия для увеличения */
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
 </body>
 </html>
